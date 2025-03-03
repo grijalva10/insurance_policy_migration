@@ -1,115 +1,107 @@
-# Insurance Policy Migration Script
+# Insurance Policy Migration
 
-This script processes insurance policies from CSV files, checks their existence in an AMS system, and prepares them for upload via an API.
+This script migrates insurance policy data from CSV files to an AMS (Agency Management System) via a Frappe API.
 
-## Features
+## Project Structure
 
-- Loads policies from CSV files in the `data/input/` directory
-- Validates and normalizes policy data
-- Fetches existing policy numbers from AMS to identify new vs. existing policies
-- Splits valid policies into new and existing ones
-- Generates detailed reports in the `data/reports/` directory
-- Automatically uploads log files and reports to GitHub repository for easy sharing
-- Secure handling of API tokens via environment variables
-- Creates private GitHub repositories by default for data security
+```
+insurance_policy_migration/
+├── data/
+│   ├── input/      # Place CSV files here for processing
+│   ├── cache/      # Temporary cache files
+│   └── reports/    # Generated report files
+├── policy_migration.py    # Main script
+├── setup_env.py          # Environment setup script
+├── init_git_repo.py      # Git repository initialization
+├── requirements.txt      # Python dependencies
+├── policy_upload_log.txt # Processing log
+└── .gitignore           # Git ignore rules
+```
 
-## Requirements
+## Prerequisites
 
-- Python 3.6+
-- Required packages: pandas, requests, python-dateutil
-- Git (for repository initialization)
+- Python 3.7+
+- Git
+- AMS API access token
+- GitHub token (for repository management)
 
 ## Installation
 
-1. Clone this repository
-   ```
+1. Clone the repository:
+   ```bash
    git clone https://github.com/grijalva10/insurance_policy_migration.git
    cd insurance_policy_migration
    ```
 
-2. Install dependencies:
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   # OR
+   .\venv\Scripts\activate   # Windows
    ```
+
+3. Install dependencies:
+   ```bash
    pip install -r requirements.txt
    ```
 
-3. Set up environment variables:
+4. Set up environment variables:
+   ```bash
+   python setup_env.py
    ```
-   python setup_env.py --github-token YOUR_GITHUB_TOKEN --ams-token YOUR_AMS_TOKEN
-   ```
-
-   Then load the environment variables:
-   - Windows (PowerShell):
-     ```
-     $env:GITHUB_TOKEN = (Get-Content .env | Select-String GITHUB_TOKEN).ToString().Split('=')[1]
-     $env:AMS_API_TOKEN = (Get-Content .env | Select-String AMS_API_TOKEN).ToString().Split('=')[1]
-     ```
-   - Linux/Mac:
-     ```
-     export $(grep -v '^#' .env | xargs)
-     ```
 
 ## Usage
 
-Basic usage:
-```
-python policy_migration.py
-```
+1. Place your CSV files in the `data/input/` directory.
 
-### Command Line Options
+2. Run the script:
+   ```bash
+   python policy_migration.py [options]
+   ```
 
-- `--dry-run`: Run without making API calls
-- `--no-cache`: Don't use cached data
-- `--upload-log`: Upload log file to GitHub repository
-- `--upload-script`: Upload script file to GitHub repository
-- `--github-token TOKEN`: GitHub API token for repository upload
-- `--ams-token TOKEN`: AMS API token for AMS API calls
-- `--skip-ams-fetch`: Skip fetching policies from AMS
-- `--include-all-files`: Include all files in the repository when uploading
+   Options:
+   - `--dry-run`: Run without making API calls
+   - `--no-cache`: Don't use cached data
+   - `--ams-token TOKEN`: Specify AMS API token
+   - `--github-token TOKEN`: Specify GitHub token
+   - `--skip-ams-fetch`: Skip fetching policies from AMS
 
-### Environment Variables
+3. Check the results:
+   - Valid policies: `data/reports/valid_policies.csv`
+   - Invalid policies: `data/reports/invalid_policies.csv`
+   - New policies: `data/reports/new_policies.csv`
+   - Existing policies: `data/reports/existing_policies.csv`
+   - Processing log: `policy_upload_log.txt`
 
-- `GITHUB_TOKEN`: GitHub API token for repository upload (alternative to `--github-token`)
-- `AMS_API_TOKEN`: AMS API token for AMS API calls (alternative to `--ams-token`)
+## Policy Type Mapping
 
-## Output Files
+The script maps policy types to standardized values:
 
-The script generates the following output files in the `data/reports/` directory:
+- Bond
+- Builders Risk
+- Commercial Auto
+- Commercial Property
+- Excess
+- General Liability
+- Inland Marine
+- Pollution Liability
+- Professional Liability
+- Workers Compensation
+- Endorsement
+- General Liability + Excess
+- General Liability + Inland Marine
+- General Liability + Builders Risk
+- Other
 
-- `valid_policies.csv`: All valid policies
-- `invalid_policies.csv`: Policies with validation issues
-- `new_policies.csv`: Valid policies not found in AMS
-- `existing_policies.csv`: Valid policies already in AMS
+## Contributing
 
-## Log File
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-The script generates a detailed log file (`policy_upload_log.txt`) that can be automatically uploaded to GitHub repository for easy sharing.
+## License
 
-## GitHub Repository
-
-The script can create or update a GitHub repository named `insurance_policy_migration` with all the necessary files. This provides a centralized location for all policy migration data and makes it easy to share with team members.
-
-The repository is created as private by default to ensure the security of sensitive insurance policy data. Only users with explicit access to the repository will be able to view or download the files.
-
-## Git Repository Setup
-
-To initialize a local Git repository for this project:
-
-```
-python init_git_repo.py
-```
-
-This will create a Git repository with appropriate `.gitignore` settings and make an initial commit.
-
-## Example
-
-```
-python policy_migration.py --upload-log --upload-script --include-all-files
-```
-
-This will process all policies, split them into new and existing, and upload all files to the GitHub repository.
-
-## Security
-
-- API tokens are stored as environment variables rather than hardcoded in the script
-- The `.env` file containing sensitive tokens is excluded from Git via `.gitignore`
-- Use the `setup_env.py` script to securely manage your environment variables 
+This project is licensed under the MIT License - see the LICENSE file for details. 

@@ -13,12 +13,21 @@ venv.bak/
 # Environment variables
 .env
 
-# Logs
-*.log
+# Data directories
+data/input/*
+data/cache/*
+data/reports/*
+!data/input/.gitkeep
+!data/cache/.gitkeep
+!data/reports/.gitkeep
 
-# Cache
-.cache/
+# Keep log file in repo
+!policy_upload_log.txt
 
-# Sensitive data
-data/input/*.csv
-# data/reports/*.csv  # Commented out to allow report files to be included
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

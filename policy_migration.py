@@ -938,384 +938,185 @@ def save_policies_to_csv(policies, filename, logger):
     except Exception as e:
         logger.error(f"Error saving policies to {filename}: {str(e)}")
 
-def upload_files_to_gist(files_dict, description, public=True, logger=None):
+def normalize_policy_type(policy_type):
     """
-    Upload multiple files to GitHub Gist and return the URL
-    
-    Args:
-        files_dict: Dictionary mapping filenames to file paths
-        description: Description of the Gist
-        public: Whether the Gist should be public
-        logger: Logger instance
-        
-    Returns:
-        URL of the created Gist or None if upload failed
+    Normalize policy type to match AMS-allowed options.
+    Uses pattern matching to handle variations, typos, and manual entry differences.
     """
-    if logger is None:
-        logger = logging.getLogger()
+    if not policy_type or not isinstance(policy_type, str):
+        return "Other"
     
-    # Get GitHub token from environment variable if not set
-    github_token = GITHUB_TOKEN or os.environ.get("GITHUB_TOKEN")
-    if not github_token:
-        logger.error("GitHub token not found. Set GITHUB_TOKEN environment variable.")
-        return None
+    # Clean up the input
+    policy_type = policy_type.strip().lower()
     
-    try:
-        # Prepare the Gist data with multiple files
-        gist_files = {}
-        
-        for file_name, file_path in files_dict.items():
-            try:
-                # Read the file with error handling for encoding issues
-                try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                except UnicodeDecodeError:
-                    # If UTF-8 fails, try with errors='replace' to handle invalid characters
-                    with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
-                        content = f.read()
-                        logger.warning(f"Some characters in the file {file_name} could not be decoded with UTF-8 and were replaced.")
-                
-                gist_files[file_name] = {"content": content}
-            except Exception as e:
-                logger.error(f"Error reading file {file_path}: {str(e)}")
-                # Continue with other files even if one fails
-        
-        if not gist_files:
-            logger.error("No files could be read for upload")
-            return None
-            
-        gist_data = {
-            "description": description,
-            "public": public,
-            "files": gist_files
-        }
-        
-        # Set up authentication headers
-        headers = {
-            "Authorization": f"token {github_token}",
-            "Accept": "application/vnd.github.v3+json"
-        }
-        
-        # Create the Gist
-        response = requests.post(
-            f"{GITHUB_API_URL}/gists",
-            headers=headers,
-            json=gist_data
-        )
-        response.raise_for_status()
-        
-        # Get the Gist URL
-        gist_data = response.json()
-        gist_url = gist_data.get("html_url")
-        
-        logger.info(f"Files uploaded to GitHub Gist: {gist_url}")
-        return gist_url
+    # Skip invalid/special cases
+    invalid_types = {
+        "test", "2nd payment", "refund", "broker fee", "payment", 
+        "monthly payment", "audit", "voided", "nan", "state endorsement",
+        "limits endorsement", "comp ops endorsement", "house of worship",
+        "per project endors", "ai endorsement", "non-eroding endors",
+        "multi unit endorsement", "class codes endors", "wos endorsement",
+        "state endorsement", "limits + comp ops endorsement", "gross & subs endorsement",
+        "med limit endorsement", "water endorsement", "non eroding limits",
+        "per project", "blanket ai endors", "states endorsement", "2nd paymet",
+        "borker fee", "gl monthly payment", "audit payment", "full refund",
+        "payment to carrier", "additional broker fee", "payment declined",
+        "second payment", "gl endorsement", "cg2010", "cg2010 endors",
+        "non-eroding limints", "specific endorsement", "single ai"
+    }
+    if policy_type in invalid_types or any(term in policy_type for term in ["payment", "endorsement", "endors", "limits"]):
+        return "Other"
     
-    except Exception as e:
-        logger.error(f"Error uploading files to GitHub Gist: {str(e)}")
-        return None
-
-def create_github_repo(repo_name, description, files_dict, private=True, logger=None, include_all_files=False):
-    """
-    Create a GitHub repository and upload files to it.
-    
-    Args:
-        repo_name (str): Name of the repository
-        description (str): Repository description
-        files_dict (dict): Dictionary of files to upload {filename: content}
-        private (bool): Whether the repository should be private (default: True)
-        logger (logging.Logger): Logger instance
-        include_all_files (bool): Whether to include all files in the directory
-        
-    Returns:
-        str: URL of the created repository
-    """
-    if logger is None:
-        logger = logging.getLogger()
-    
-    # Get GitHub token from environment variable if not set
-    github_token = GITHUB_TOKEN or os.environ.get("GITHUB_TOKEN")
-    if not github_token:
-        logger.error("GitHub token not found. Set GITHUB_TOKEN environment variable.")
-        return None
-    
-    try:
-        # Set up authentication headers
-        headers = {
-            "Authorization": f"token {github_token}",
-            "Accept": "application/vnd.github.v3+json"
-        }
-        
-        # Create the repository
-        repo_data = {
-            "name": repo_name,
-            "description": description,
-            "private": private,
-            "auto_init": True  # Initialize with a README
-        }
-        
-        # Check if repository already exists
-        try:
-            response = requests.get(
-                f"{GITHUB_API_URL}/repos/{GITHUB_USERNAME}/{repo_name}",
-                headers=headers
-            )
-            
-            if response.status_code == 200:
-                logger.info(f"Repository {repo_name} already exists, using existing repository")
-                repo_info = response.json()
-                repo_url = repo_info.get("html_url")
-                repo_api_url = repo_info.get("url")
-            else:
-                # Create the repository
-                response = requests.post(
-                    f"{GITHUB_API_URL}/user/repos",
-                    headers=headers,
-                    json=repo_data
-                )
-                response.raise_for_status()
-                
-                # Get the repository details
-                repo_info = response.json()
-                repo_url = repo_info.get("html_url")
-                repo_api_url = repo_info.get("url")
-                
-                logger.info(f"Created GitHub repository: {repo_url}")
-                
-                # Wait a moment for the repository to be fully created
-                time.sleep(2)
-        except Exception as e:
-            logger.error(f"Error checking/creating repository: {str(e)}")
-            return None
-        
-        # If include_all_files is True, add all files in the directory
-        if include_all_files:
-            # Add all files in the current directory and subdirectories
-            for root, dirs, files in os.walk('.'):
-                # Skip virtual environment and __pycache__ directories
-                if 'venv' in dirs:
-                    dirs.remove('venv')
-                if '__pycache__' in dirs:
-                    dirs.remove('__pycache__')
-                if '.git' in dirs:
-                    dirs.remove('.git')
-                
-                for file in files:
-                    # Skip the log file if it's already in files_dict
-                    if file == os.path.basename(LOG_FILE) and os.path.basename(LOG_FILE) in files_dict:
-                        continue
-                    
-                    # Skip hidden files
-                    if file.startswith('.'):
-                        continue
-                    
-                    file_path = os.path.join(root, file)
-                    # Use relative path for the file name in the repository
-                    repo_file_path = file_path.replace('\\', '/').lstrip('./')
-                    files_dict[repo_file_path] = file_path
-        
-        # Upload each file to the repository
-        for file_name, file_path in files_dict.items():
-            try:
-                # Read the file with error handling for encoding issues
-                try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                except UnicodeDecodeError:
-                    # If UTF-8 fails, try with errors='replace' to handle invalid characters
-                    with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
-                        content = f.read()
-                        logger.warning(f"Some characters in the file {file_name} could not be decoded with UTF-8 and were replaced.")
-                except Exception as e:
-                    # Try reading as binary for non-text files
-                    try:
-                        with open(file_path, 'rb') as f:
-                            content_bytes = f.read()
-                            base64_content = base64.b64encode(content_bytes).decode('utf-8')
-                            
-                            # Prepare the file data
-                            file_data = {
-                                "message": f"Add {file_name}",
-                                "content": base64_content
-                            }
-                            
-                            # Create the file in the repository
-                            file_response = requests.put(
-                                f"{repo_api_url}/contents/{file_name}",
-                                headers=headers,
-                                json=file_data
-                            )
-                            file_response.raise_for_status()
-                            
-                            logger.info(f"Uploaded binary file {file_name} to repository")
-                            continue
-                    except Exception as inner_e:
-                        logger.error(f"Error reading file {file_path}: {str(inner_e)}")
-                        continue
-                
-                # Encode content to base64
-                content_bytes = content.encode('utf-8')
-                base64_content = base64.b64encode(content_bytes).decode('utf-8')
-                
-                # Prepare the file data
-                file_data = {
-                    "message": f"Add {file_name}",
-                    "content": base64_content
-                }
-                
-                # Create the file in the repository
-                file_response = requests.put(
-                    f"{repo_api_url}/contents/{file_name}",
-                    headers=headers,
-                    json=file_data
-                )
-                file_response.raise_for_status()
-                
-                logger.info(f"Uploaded {file_name} to repository")
-                
-            except Exception as e:
-                logger.error(f"Error uploading file {file_path} to repository: {str(e)}")
-                # Continue with other files even if one fails
-        
-        # Create a .gitignore file if it doesn't exist
-        gitignore_content = """
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-ENV/
-env/
-env.bak/
-venv.bak/
-
-# Environment variables
-.env
-
-# Logs
-*.log
-
-# Cache
-.cache/
-"""
-        gitignore_data = {
-            "message": "Add .gitignore",
-            "content": base64.b64encode(gitignore_content.encode('utf-8')).decode('utf-8')
-        }
-        
-        try:
-            gitignore_response = requests.put(
-                f"{repo_api_url}/contents/.gitignore",
-                headers=headers,
-                json=gitignore_data
-            )
-            if gitignore_response.status_code == 201:
-                logger.info("Added .gitignore file to repository")
-        except Exception as e:
-            logger.error(f"Error adding .gitignore file: {str(e)}")
-        
-        return repo_url
-    
-    except Exception as e:
-        logger.error(f"Error creating GitHub repository: {str(e)}")
-        return None
-
-def upload_log_to_gist(log_file_path, description, public=True, logger=None):
-    """Upload a log file to GitHub Gist and return the URL"""
-    if logger is None:
-        logger = logging.getLogger()
-    
-    # Get GitHub token from environment variable if not set
-    github_token = GITHUB_TOKEN or os.environ.get("GITHUB_TOKEN")
-    if not github_token:
-        logger.error("GitHub token not found. Set GITHUB_TOKEN environment variable.")
-        return None
-    
-    try:
-        # Read the log file with error handling for encoding issues
-        try:
-            with open(log_file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-        except UnicodeDecodeError:
-            # If UTF-8 fails, try with errors='replace' to handle invalid characters
-            with open(log_file_path, 'r', encoding='utf-8', errors='replace') as f:
-                content = f.read()
-                logger.warning("Some characters in the log file could not be decoded with UTF-8 and were replaced.")
-        
-        # Prepare the Gist data
-        filename = os.path.basename(log_file_path)
-        gist_data = {
-            "description": description,
-            "public": public,
-            "files": {
-                filename: {
-                    "content": content
-                }
-            }
-        }
-        
-        # Set up authentication headers
-        headers = {
-            "Authorization": f"token {github_token}",
-            "Accept": "application/vnd.github.v3+json"
-        }
-        
-        # Create the Gist
-        response = requests.post(
-            f"{GITHUB_API_URL}/gists",
-            headers=headers,
-            json=gist_data
-        )
-        response.raise_for_status()
-        
-        # Get the Gist URL
-        gist_data = response.json()
-        gist_url = gist_data.get("html_url")
-        
-        logger.info(f"Log file uploaded to GitHub Gist: {gist_url}")
-        return gist_url
-    
-    except Exception as e:
-        logger.error(f"Error uploading log to GitHub Gist: {str(e)}")
-        return None
-
-def setup_ams_api_token(token=None, logger=None):
-    """Set up the AMS API token and headers with proper validation"""
-    global AMS_API_TOKEN, AMS_API_HEADERS
-    
-    # Try command line argument first, then environment variable
-    token = token or os.environ.get("AMS_API_TOKEN")
-    
-    if not token:
-        if logger:
-            logger.error("AMS API token not found in arguments or environment variables")
-        return False
-    
-    # Clean up the token
-    token = token.strip()
-    
-    # Check if token already has 'Token ' prefix
-    if token.lower().startswith('token '):
-        formatted_token = token
-    else:
-        formatted_token = f"Token {token}"
-    
-    if logger:
-        # Log token presence (not the actual token)
-        logger.debug("AMS API token found and formatted")
-        logger.debug(f"Token format check: starts with 'Token ': {formatted_token.startswith('Token ')}")
-    
-    # Set global variables
-    AMS_API_TOKEN = formatted_token
-    AMS_API_HEADERS = {
-        "Authorization": formatted_token,
-        "Content-Type": "application/json"
+    # Direct matches (case-insensitive)
+    policy_type_map = {
+        "bond": "Bond",
+        "simple bonds": "Bond",
+        "bond express": "Bond",
+        "bound": "Bond",
+        "sipmle bonds": "Bond",  # Handle typo found in CSV
+        "bonds express": "Bond",
+        "commercial auto": "Commercial Auto",
+        "auto": "Commercial Auto",
+        "automobile": "Commercial Auto",
+        "bolt access": "Commercial Auto",
+        "commercial property": "Commercial Property",
+        "excess": "Excess",
+        "excess policy": "Excess",
+        "general liability": "General Liability",
+        "gl": "General Liability",
+        "gl renewal": "General Liability",
+        "gl rewrite": "General Liability",
+        "general libaility": "General Liability",
+        "inland marine": "Inland Marine",
+        "equipment": "Inland Marine",
+        "equipment renewal": "Inland Marine",
+        "pollution liability": "Pollution Liability",
+        "professional liability": "Professional Liability",
+        "workers comp": "Workers Compensation",
+        "workers compensation": "Workers Compensation",
+        "wc renewal": "Workers Compensation",
+        "worker comp": "Workers Compensation",
+        "wc limits endorsement": "Workers Compensation"
     }
     
-    return True
+    # Check for direct matches first
+    if policy_type in policy_type_map:
+        return policy_type_map[policy_type]
+    
+    # Handle common variations and combinations
+    if "workers" in policy_type and ("comp" in policy_type or "compensation" in policy_type):
+        return "Workers Compensation"
+    elif "general" in policy_type and "liability" in policy_type:
+        if "excess" in policy_type:
+            return "General Liability + Excess"
+        elif "inland" in policy_type and "marine" in policy_type:
+            return "General Liability + Inland Marine"
+        elif "builders" in policy_type and "risk" in policy_type:
+            return "General Liability + Builders Risk"
+        else:
+            return "General Liability"
+    elif policy_type.startswith("gl ") or policy_type == "gl":
+        return "General Liability"
+    elif "builders" in policy_type and "risk" in policy_type:
+        return "Builders Risk"
+    elif "inland" in policy_type and "marine" in policy_type:
+        return "Inland Marine"
+    elif "commercial" in policy_type and "auto" in policy_type:
+        return "Commercial Auto"
+    elif "commercial" in policy_type and "property" in policy_type:
+        return "Commercial Property"
+    elif "professional" in policy_type and "liability" in policy_type:
+        return "Professional Liability"
+    elif "pollution" in policy_type and "liability" in policy_type:
+        return "Pollution Liability"
+    elif "bond" in policy_type:
+        return "Bond"
+    elif "excess" in policy_type:
+        return "Excess"
+    elif "auto" in policy_type or "automobile" in policy_type:
+        return "Commercial Auto"
+    elif "equipment" in policy_type:
+        return "Inland Marine"
+    
+    # Default to "Other" if no match found
+    return "Other"
+
+def upload_to_ams(policy, logger):
+    """
+    Upload a policy to the AMS system via API.
+    
+    Args:
+        policy: Dictionary containing policy data
+        logger: Logger instance
+    
+    Returns:
+        bool: True if upload successful, False otherwise
+    """
+    if not AMS_API_HEADERS:
+        logger.error("AMS API headers not configured")
+        return False
+    
+    try:
+        # Prepare the payload
+        payload = {
+            "doctype": "Policy",
+            "policy_number": policy["policy_number"],
+            "effective_date": policy.get("effective_date"),
+            "expiration_date": policy.get("expiration_date"),
+            "status": policy.get("status", "Active"),
+            "premium": policy.get("premium", 0.0),
+            "broker": policy.get("broker_email", ""),  # Use broker email directly
+            "policy_type": normalize_policy_type(policy.get("policy_type")),
+            "carrier": policy.get("carrier"),
+            "commission_amount": policy.get("commission_amount", 0.0),
+            "broker_fee": policy.get("broker_fee_amount", 0.0)
+        }
+        
+        # Make API request with retry logic
+        max_retries = 3
+        retry_delay = 2  # seconds
+        
+        for attempt in range(max_retries):
+            try:
+                response = requests.post(
+                    f"{AMS_API_URL}/policies",
+                    headers=AMS_API_HEADERS,
+                    json=payload
+                )
+                
+                if response.status_code == 201:
+                    logger.info(f"Successfully uploaded policy {policy['policy_number']}")
+                    return True
+                else:
+                    error_msg = f"Failed to upload policy {policy['policy_number']}"
+                    try:
+                        error_data = response.json()
+                        error_msg = f"{error_msg}: {error_data.get('error', 'Unknown error')}"
+                    except:
+                        error_msg = f"{error_msg}: HTTP {response.status_code}"
+                    
+                    if attempt < max_retries - 1:
+                        logger.warning(f"{error_msg}. Retrying in {retry_delay} seconds...")
+                        time.sleep(retry_delay)
+                        retry_delay *= 2
+                    else:
+                        logger.error(error_msg)
+                        return False
+            
+            except requests.exceptions.RequestException as e:
+                if attempt < max_retries - 1:
+                    logger.warning(f"Request failed: {str(e)}. Retrying in {retry_delay} seconds...")
+                    time.sleep(retry_delay)
+                    retry_delay *= 2
+                else:
+                    logger.error(f"Failed to upload policy after {max_retries} attempts: {str(e)}")
+                    return False
+        
+        return False
+    
+    except Exception as e:
+        logger.error(f"Error uploading policy {policy.get('policy_number', 'unknown')}: {str(e)}")
+        return False
 
 def push_to_github(logger):
     """Push all changes to GitHub repository"""
@@ -1445,6 +1246,15 @@ def main():
     save_policies_to_csv(invalid_policies, invalid_policies_file, logger)
     save_policies_to_csv(new_policies, new_policies_file, logger)
     save_policies_to_csv(existing_policies, existing_policies_file, logger)
+    
+    # Upload new policies to AMS if not in dry run mode
+    if not args.dry_run:
+        logger.info("Uploading new policies to AMS...")
+        upload_count = 0
+        for policy in new_policies:
+            if upload_to_ams(policy, logger):
+                upload_count += 1
+        logger.info(f"Successfully uploaded {upload_count} out of {len(new_policies)} new policies to AMS")
     
     # Push changes to GitHub
     push_to_github(logger)
