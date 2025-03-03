@@ -25,11 +25,8 @@ import base64  # For GitHub API authentication
 
 # Constants
 AMS_API_URL = "https://ams.jmggo.com/api/method"
-AMS_API_TOKEN = os.environ.get("AMS_API_TOKEN")  # Get token from environment variable
-AMS_API_HEADERS = {
-    "Authorization": f"Token {AMS_API_TOKEN}",
-    "Content-Type": "application/json"
-}
+AMS_API_TOKEN = None  # Will be set later
+AMS_API_HEADERS = None  # Will be set later
 
 # GitHub API settings
 GITHUB_API_URL = "https://api.github.com"
@@ -148,12 +145,9 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Insurance Policy Migration Script")
     parser.add_argument("--dry-run", action="store_true", help="Run in dry-run mode (no API calls)")
     parser.add_argument("--no-cache", action="store_true", help="Don't use cached data")
-    parser.add_argument("--upload-log", action="store_true", help="Upload log file to GitHub")
-    parser.add_argument("--upload-script", action="store_true", help="Upload script file to GitHub")
-    parser.add_argument("--github-token", help="GitHub API token for GitHub upload")
+    parser.add_argument("--github-token", help="GitHub API token")
     parser.add_argument("--ams-token", help="AMS API token for AMS API calls")
     parser.add_argument("--skip-ams-fetch", action="store_true", help="Skip fetching policies from AMS")
-    parser.add_argument("--include-all-files", action="store_true", help="Include all files in the repository")
     return parser.parse_args()
 
 # Parse date with multiple formats
@@ -796,6 +790,12 @@ def fetch_ams_policies(logger, use_cache=True):
     """Fetch existing policy numbers from AMS API"""
     cache_file = os.path.join(CACHE_DIR, "ams_policies.csv")
     policy_numbers = set()
+    
+    # Check if AMS API is properly configured
+    if not AMS_API_HEADERS:
+        logger.error("AMS API headers not configured. Please check token setup.")
+        return policy_numbers
+    
     if use_cache and os.path.exists(cache_file):
         try:
             logger.debug(f"Loading policies from cache: {cache_file}")
@@ -805,25 +805,34 @@ def fetch_ams_policies(logger, use_cache=True):
             return policy_numbers
         except Exception as e:
             logger.error(f"Error loading policies from cache: {str(e)}")
+    
     logger.info("Fetching policy numbers from AMS API")
     try:
         all_policies = []
         page = 0
         page_size = 1000
         more_data = True
+        
+        # Log API configuration
+        logger.debug(f"API URL: {AMS_API_URL}")
+        logger.debug(f"API Headers: {json.dumps({k: ('***' if k == 'Authorization' else v) for k, v in AMS_API_HEADERS.items()})}")
+        logger.debug(f"Authorization header format check: {AMS_API_HEADERS.get('Authorization', '').startswith('Token ')}")
+        
         while more_data:
             page += 1
             logger.debug(f"Fetching AMS policies, page {page}...")
+            
             payload = {
                 "doctype": "Policy",
                 "fields": ["policy_number"],
                 "limit_start": (page - 1) * page_size,
                 "limit_page_length": page_size
             }
-            logger.debug(f"Request payload: {json.dumps(payload, indent=2)}")
-            logger.debug(f"Request headers: {json.dumps(AMS_API_HEADERS, indent=2)}")
+            logger.debug(f"Request payload: {json.dumps(payload)}")
+            
             max_retries = 3
             retry_delay = 2
+            
             for attempt in range(max_retries):
                 try:
                     response = requests.post(
@@ -832,30 +841,60 @@ def fetch_ams_policies(logger, use_cache=True):
                         json=payload,
                         timeout=30
                     )
-                    logger.debug(f"API Response Status: {response.status_code}")
-                    logger.debug(f"API Response Headers: {dict(response.headers)}")
-                    logger.debug(f"API Response Content: {response.text}")
+                    
+                    # Log detailed response information
+                    logger.debug(f"Response status code: {response.status_code}")
+                    logger.debug(f"Response headers: {dict(response.headers)}")
+                    
+                    # Try to parse response as JSON first
+                    try:
+                        response_data = response.json()
+                        logger.debug(f"Response data: {json.dumps(response_data)}")
+                    except json.JSONDecodeError:
+                        logger.debug(f"Raw response text: {response.text}")
+                        raise
+                    
                     response.raise_for_status()
-                    data = response.json()
-                    if "message" in data and isinstance(data["message"], list):
-                        policies = data["message"]
+                    
+                    if "message" in response_data and isinstance(response_data["message"], list):
+                        policies = response_data["message"]
                         all_policies.extend(policies)
                         logger.debug(f"Retrieved {len(policies)} policies on page {page}")
+                        
                         if len(policies) < page_size:
                             more_data = False
                             break
                     else:
-                        logger.warning(f"Unexpected API response format: {data}")
+                        error_msg = response_data.get("error", "Unknown error")
+                        logger.warning(f"Unexpected API response format. Error: {error_msg}")
                         more_data = False
                     break
+                    
                 except requests.exceptions.RequestException as e:
+                    error_msg = str(e)
+                    if hasattr(e.response, 'text'):
+                        try:
+                            error_data = e.response.json()
+                            error_msg = error_data.get('error', error_msg)
+                        except:
+                            error_msg = e.response.text
+                    
                     if attempt < max_retries - 1:
-                        logger.warning(f"API request failed (attempt {attempt+1}/{max_retries}): {str(e)}. Retrying in {retry_delay} seconds...")
+                        logger.warning(f"API request failed (attempt {attempt+1}/{max_retries}): {error_msg}. Retrying in {retry_delay} seconds...")
                         time.sleep(retry_delay)
                         retry_delay *= 2
                     else:
-                        logger.error(f"Failed to fetch policies after retries: {str(e)}")
-                        return set()
+                        logger.error(f"Failed to fetch policies after {max_retries} retries: {error_msg}")
+                        return policy_numbers
+                        
+                except json.JSONDecodeError as e:
+                    logger.error(f"Failed to parse API response as JSON: {str(e)}")
+                    if attempt < max_retries - 1:
+                        time.sleep(retry_delay)
+                        retry_delay *= 2
+                    else:
+                        return policy_numbers
+        
         if all_policies:
             try:
                 df = pd.DataFrame(all_policies)
@@ -864,12 +903,14 @@ def fetch_ams_policies(logger, use_cache=True):
                 logger.debug(f"Saved {len(all_policies)} policies to cache")
             except Exception as e:
                 logger.error(f"Error saving policies to cache: {str(e)}")
+        
         policy_numbers = set(policy.get("policy_number") for policy in all_policies if policy.get("policy_number"))
         logger.info(f"Fetched {len(policy_numbers)} policy numbers from AMS")
         return policy_numbers
+        
     except Exception as e:
         logger.error(f"Error fetching policies: {str(e)}")
-        return set()
+        return policy_numbers
 
 def save_policies_to_csv(policies, filename, logger):
     """
@@ -1241,6 +1282,97 @@ def upload_log_to_gist(log_file_path, description, public=True, logger=None):
         logger.error(f"Error uploading log to GitHub Gist: {str(e)}")
         return None
 
+def setup_ams_api_token(token=None, logger=None):
+    """Set up the AMS API token and headers with proper validation"""
+    global AMS_API_TOKEN, AMS_API_HEADERS
+    
+    # Try command line argument first, then environment variable
+    token = token or os.environ.get("AMS_API_TOKEN")
+    
+    if not token:
+        if logger:
+            logger.error("AMS API token not found in arguments or environment variables")
+        return False
+    
+    # Clean up the token
+    token = token.strip()
+    
+    # Check if token already has 'Token ' prefix
+    if token.lower().startswith('token '):
+        formatted_token = token
+    else:
+        formatted_token = f"Token {token}"
+    
+    if logger:
+        # Log token presence (not the actual token)
+        logger.debug("AMS API token found and formatted")
+        logger.debug(f"Token format check: starts with 'Token ': {formatted_token.startswith('Token ')}")
+    
+    # Set global variables
+    AMS_API_TOKEN = formatted_token
+    AMS_API_HEADERS = {
+        "Authorization": formatted_token,
+        "Content-Type": "application/json"
+    }
+    
+    return True
+
+def push_to_github(logger):
+    """Push all changes to GitHub repository"""
+    try:
+        # Create a list of files to push
+        files_to_push = {
+            # Core files
+            "policy_migration.py": "policy_migration.py",
+            "README.md": "README.md",
+            "requirements.txt": "requirements.txt",
+            ".gitignore": ".gitignore",
+            "setup_env.py": "setup_env.py",
+            "init_git_repo.py": "init_git_repo.py",
+            
+            # Output files in data/reports
+            "data/reports/valid_policies.csv": os.path.join(OUTPUT_DIR, "valid_policies.csv"),
+            "data/reports/invalid_policies.csv": os.path.join(OUTPUT_DIR, "invalid_policies.csv"),
+            "data/reports/new_policies.csv": os.path.join(OUTPUT_DIR, "new_policies.csv"),
+            "data/reports/existing_policies.csv": os.path.join(OUTPUT_DIR, "existing_policies.csv"),
+            
+            # Log file
+            "logs/policy_upload_log.txt": LOG_FILE
+        }
+        
+        # Create logs directory if it doesn't exist
+        os.makedirs("logs", exist_ok=True)
+        
+        # Copy log file to logs directory
+        import shutil
+        if os.path.exists(LOG_FILE):
+            shutil.copy2(LOG_FILE, "logs/policy_upload_log.txt")
+        
+        # Fixed repository name and description
+        repo_name = "insurance_policy_migration"
+        description = f"Insurance Policy Migration - Updated {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        
+        # Push to GitHub
+        repo_url = create_github_repo(
+            repo_name=repo_name,
+            description=description,
+            files_dict=files_to_push,
+            private=False,
+            logger=logger,
+            include_all_files=True  # This will include all files in the workspace
+        )
+        
+        if repo_url:
+            logger.info(f"Successfully pushed changes to GitHub: {repo_url}")
+            return True
+        else:
+            logger.error("Failed to push changes to GitHub")
+            return False
+            
+    except Exception as e:
+        logger.error(f"Error pushing to GitHub: {str(e)}")
+        return False
+
 def main():
     """Main function"""
     # Parse arguments
@@ -1253,19 +1385,9 @@ def main():
     logger.info("Insurance Policy Migration Script - Started")
     logger.info(f"Dry run mode: {args.dry_run}")
     
-    # Set AMS API token from command line argument if provided
-    if args.ams_token:
-        global AMS_API_TOKEN
-        AMS_API_TOKEN = args.ams_token
-        global AMS_API_HEADERS
-        AMS_API_HEADERS = {
-            "Authorization": f"Token {AMS_API_TOKEN}",
-            "Content-Type": "application/json"
-        }
-    
-    # Check if AMS API token is set
-    if not AMS_API_TOKEN:
-        logger.error("AMS API token not found. Set AMS_API_TOKEN environment variable or use --ams-token.")
+    # Setup AMS API token
+    if not setup_ams_api_token(args.ams_token, logger):
+        logger.error("Failed to set up AMS API token. Exiting.")
         return None, None, None, None, None, None, None
     
     # Load CSV files
@@ -1285,7 +1407,7 @@ def main():
     
     logger.info(f"Fetched {len(insureds_map)} insureds, {len(carriers_map)} carriers, {len(brokers_map)} brokers, and {len(existing_policy_numbers)} existing policies")
     
-    # Process policies (premium calculation, status assignment, deduplication)
+    # Process policies
     valid_policies, invalid_policies = process_policies(policies, carriers_map, brokers_map, logger)
     
     # Split valid policies into new and existing
@@ -1306,10 +1428,9 @@ def main():
     logger.info(f"Existing policies in AMS: {len(existing_policies)}")
     logger.info(f"Invalid policies for review: {len(invalid_policies)}")
     
-    # Always print a sample policy, not just in dry-run mode
+    # Print sample policies
     if valid_policies:
         logger.info(f"Sample valid policy: {json.dumps(valid_policies[0], indent=2)}")
-    
     if invalid_policies:
         logger.info(f"Sample invalid policy: {json.dumps(invalid_policies[0], indent=2)}")
     
@@ -1325,35 +1446,8 @@ def main():
     save_policies_to_csv(new_policies, new_policies_file, logger)
     save_policies_to_csv(existing_policies, existing_policies_file, logger)
     
-    # Upload log file and/or script to GitHub
-    if args.upload_log or args.upload_script:
-        # Set GitHub token from command line argument if provided
-        if args.github_token:
-            global GITHUB_TOKEN
-            GITHUB_TOKEN = args.github_token
-            
-        # Use fixed repository name
-        repo_name = "insurance_policy_migration"
-        description = f"Insurance Policy Migration - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-        
-        files_to_upload = {}
-        if args.upload_log:
-            files_to_upload[os.path.basename(LOG_FILE)] = LOG_FILE
-        
-        if args.upload_script:
-            script_path = os.path.abspath(__file__)
-            files_to_upload[os.path.basename(script_path)] = script_path
-            
-        # Add CSV files to upload
-        files_to_upload["valid_policies.csv"] = valid_policies_file
-        files_to_upload["invalid_policies.csv"] = invalid_policies_file
-        files_to_upload["new_policies.csv"] = new_policies_file
-        files_to_upload["existing_policies.csv"] = existing_policies_file
-        
-        if files_to_upload:
-            repo_url = create_github_repo(repo_name, description, files_to_upload, private=False, logger=logger, include_all_files=args.include_all_files)
-            if repo_url:
-                logger.info(f"Files uploaded to GitHub repository: {repo_url}")
+    # Push changes to GitHub
+    push_to_github(logger)
     
     logger.info("Insurance Policy Migration Script - Completed")
     return valid_policies, invalid_policies, new_policies, existing_policies, insureds_map, carriers_map, brokers_map
