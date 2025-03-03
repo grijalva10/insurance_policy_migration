@@ -70,6 +70,34 @@ BROKER_TO_EMAIL = {
     "Randall": "randall@jmgia.com", "Randall/Sean": "randall@jmgia.com", "Adrian/Eduardo": "adrian@jmgia.com"
 }
 
+# Add broker name standardization mapping
+BROKER_NAME_STANDARDIZATION = {
+    "JMG/Ranall": "JMG/Randall",
+    "JMG/Randal": "JMG/Randall",
+    "JMH/Randall": "JMG/Randall",
+    "JMH/Randall ": "JMG/Randall",
+    "Julie": "Julie Smith",
+    "nan": None
+}
+
+# Update broker email mapping
+BROKER_EMAIL_MAPPING = {
+    "JMG/Randall": "randall@jmgia.com",
+    "Julie Smith": "julie@jmgia.com",
+    "Clint": "clint@jmgia.com",
+    "Mark": "mark@jmgia.com",
+    "Mike": "mike@jmgia.com",
+    "Bryan": "bryan@jmgia.com",
+    "Chelsea": "chelsea@jmgia.com",
+    "Cara": "cara@jmgia.com",
+    "Eduardo": "eduardo@jmgia.com",
+    "Grey": "grey@jmgia.com",
+    "Collin": "collin@jmgia.com",
+    "Jon": "randall@jmgia.com",
+    "Chris": "randall@jmgia.com",
+    "Adrian": "adrian@jmgia.com"
+}
+
 # Policy types
 POLICY_TYPES = [
     "Bond", "Builders Risk", "Commercial Auto", "Commercial Property", 
@@ -557,6 +585,29 @@ def fetch_close_brokers(logger):
     logger.info(f"Loaded {len(brokers_map)} brokers from static mapping")
     return brokers_map
 
+def standardize_broker_name(broker):
+    """Standardize broker names to handle variations and typos"""
+    if pd.isna(broker) or broker is None:
+        return None
+    broker = str(broker).strip()
+    return BROKER_NAME_STANDARDIZATION.get(broker, broker)
+
+def get_broker_email(broker):
+    """Get broker email with standardized name mapping"""
+    if pd.isna(broker) or broker is None:
+        return None
+    
+    # Standardize broker name first
+    std_broker = standardize_broker_name(broker)
+    if std_broker is None:
+        return None
+        
+    # Get email from mapping
+    email = BROKER_EMAIL_MAPPING.get(std_broker)
+    if email is None:
+        logger.warning(f"No email mapping found for broker '{broker}' (standardized: '{std_broker}')")
+    return email
+
 def process_policies(policies, carriers_map, brokers_map, logger):
     logger.info("Processing policies (premium calculation, status assignment, deduplication)")
     
@@ -769,6 +820,8 @@ def fetch_ams_policies(logger, use_cache=True):
                 "limit_start": (page - 1) * page_size,
                 "limit_page_length": page_size
             }
+            logger.debug(f"Request payload: {json.dumps(payload, indent=2)}")
+            logger.debug(f"Request headers: {json.dumps(AMS_API_HEADERS, indent=2)}")
             max_retries = 3
             retry_delay = 2
             for attempt in range(max_retries):
@@ -779,6 +832,9 @@ def fetch_ams_policies(logger, use_cache=True):
                         json=payload,
                         timeout=30
                     )
+                    logger.debug(f"API Response Status: {response.status_code}")
+                    logger.debug(f"API Response Headers: {dict(response.headers)}")
+                    logger.debug(f"API Response Content: {response.text}")
                     response.raise_for_status()
                     data = response.json()
                     if "message" in data and isinstance(data["message"], list):
@@ -799,7 +855,7 @@ def fetch_ams_policies(logger, use_cache=True):
                         retry_delay *= 2
                     else:
                         logger.error(f"Failed to fetch policies after retries: {str(e)}")
-                        return set()  # Return empty set only on final failure
+                        return set()
         if all_policies:
             try:
                 df = pd.DataFrame(all_policies)
