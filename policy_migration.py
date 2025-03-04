@@ -637,14 +637,41 @@ async def main():
         existing_policy_numbers = await fetch_ams_data("policies", "Policy", ["policy_number"], 
                                                      CACHE_DIR / "ams_policies.csv", logger, True)
     
-    # Categorize policies
+    # Debug logging for policy categorization
+    logger.info(f"Total valid policies: {len(valid_policies)}")
+    logger.info(f"Existing policy numbers in AMS: {len(existing_policy_numbers)}")
+    
+    # Log sample of valid policies
+    if valid_policies:
+        logger.info("Sample of valid policies:")
+        for p in valid_policies[:5]:
+            logger.info(f"Policy: {p['policy_number']}, Premium: {p['premium']}, Type: {p['policy_type']}")
+    
+    # Categorize policies with detailed logging
     now = datetime.now().date()
-    new_policies = [
-        p for p in valid_policies 
-        if p["policy_number"] not in existing_policy_numbers 
-        and p["premium"] > 0
-    ]
-    existing_policies = [p for p in valid_policies if p["policy_number"] in existing_policy_numbers]
+    new_policies = []
+    existing_policies = []
+    
+    for policy in valid_policies:
+        policy_number = policy["policy_number"]
+        premium = policy["premium"]
+        is_existing = policy_number in existing_policy_numbers
+        
+        logger.debug(f"Processing policy {policy_number}:")
+        logger.debug(f"  Premium: {premium}")
+        logger.debug(f"  Exists in AMS: {is_existing}")
+        
+        if not is_existing and premium > 0:
+            new_policies.append(policy)
+            logger.debug(f"  Added to new_policies")
+        elif is_existing:
+            existing_policies.append(policy)
+            logger.debug(f"  Added to existing_policies")
+        else:
+            logger.debug(f"  Skipped - premium <= 0")
+    
+    logger.info(f"New policies: {len(new_policies)}")
+    logger.info(f"Existing policies: {len(existing_policies)}")
     
     # Save reports
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -655,6 +682,7 @@ async def main():
         ("existing_policies", existing_policies)
     ]:
         pd.DataFrame(data).to_csv(OUTPUT_DIR / f"{name}.csv", index=False)
+        logger.info(f"Saved {len(data)} policies to {name}.csv")
     
     # Upload and push to GitHub if needed
     if not args.dry_run:
