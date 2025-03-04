@@ -281,6 +281,38 @@ async def fetch_ams_data(endpoint: str, doctype: str, fields: List[str], cache_f
             result[key] = {k: item.get(k, 0.0) for k in fields}
     return result
 
+def clean_value(value: str) -> str:
+    """Clean and normalize a value for mapping lookup."""
+    if not value or pd.isna(value):
+        return ""
+    
+    # Convert to string and clean
+    value = str(value).strip()
+    
+    # Remove all types of whitespace and normalize to single space
+    value = ' '.join(value.split())
+    
+    # Remove common suffixes and prefixes
+    value = re.sub(r'\s*/\s*.*$', '', value)  # Remove everything after /
+    value = re.sub(r'^\s*.*?\s*/\s*', '', value)  # Remove everything before /
+    value = re.sub(r'\s*\(.*?\)', '', value)  # Remove parenthetical text
+    value = re.sub(r'\s*,\s*.*$', '', value)  # Remove everything after comma
+    
+    # Remove leading/trailing special characters
+    value = re.sub(r'^[\s\-_\.]+|[\s\-_\.]+$', '', value)
+    
+    # Normalize common variations
+    value = value.replace('&', 'and')
+    value = value.replace('+', 'and')
+    
+    # Normalize case
+    value = ' '.join(word.capitalize() for word in value.split())
+    
+    # Remove any remaining multiple spaces
+    value = re.sub(r'\s+', ' ', value)
+    
+    return value.strip()
+
 def validate_policy(policy: Dict, carriers_map: Dict, logger: logging.Logger) -> bool:
     """Validate a single policy."""
     policy_number = str(policy.get('policy_number', '')).strip()
@@ -288,12 +320,12 @@ def validate_policy(policy: Dict, carriers_map: Dict, logger: logging.Logger) ->
         logger.debug(f"Invalid policy number: {policy_number}")
         return False
     
-    carrier = str(policy.get('carrier', '')).strip()
+    carrier = clean_value(policy.get('carrier', ''))
     if not carrier or carrier in NON_CARRIER_ENTRIES or CARRIER_MAPPING.get(carrier) is None:
         logger.debug(f"Invalid or excluded carrier: {carrier}")
         return False
     
-    policy_type = str(policy.get('policy_type', '')).strip()
+    policy_type = clean_value(policy.get('policy_type', ''))
     if policy_type in NON_POLICY_TYPES or POLICY_TYPE_MAPPING.get(policy_type) is None:
         logger.debug(f"Invalid or excluded policy type: {policy_type}")
         return False
@@ -306,14 +338,18 @@ def validate_policy(policy: Dict, carriers_map: Dict, logger: logging.Logger) ->
 
 def normalize_policy_fields(policy: Dict, carriers_map: Dict, logger: logging.Logger) -> Dict:
     """Normalize policy fields using mappings."""
-    policy['carrier'] = CARRIER_MAPPING.get(policy['carrier'], policy['carrier'])
-    policy_type = policy.get('policy_type', '')
+    # Clean values before mapping
+    carrier = clean_value(policy.get('carrier', ''))
+    policy_type = clean_value(policy.get('policy_type', ''))
+    broker = clean_value(policy.get('broker', ''))
+    
+    policy['carrier'] = CARRIER_MAPPING.get(carrier, carrier)
+    
     if any(endors in str(policy['policy_number']).lower() for endors in ['endorsement', 'endors']):
         policy['policy_type'] = 'Endorsement'
     else:
         policy['policy_type'] = POLICY_TYPE_MAPPING.get(policy_type, 'Other')
     
-    broker = policy.get('broker', '')
     policy['broker_email'] = BROKER_MAPPING.get(broker, None)
     policy['broker'] = policy['broker_email']
     
