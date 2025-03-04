@@ -153,7 +153,15 @@ def load_csv_files(logger: logging.Logger) -> List[Dict]:
     logger.info(f"Processing {len(csv_files)} CSV files")
     for file_path in csv_files:
         try:
+            # Read CSV and clean headers immediately
             df = pd.read_csv(file_path)
+            df.columns = [col.strip() for col in df.columns]
+            
+            # Clean all string columns immediately
+            for col in df.columns:
+                if df[col].dtype == 'object':  # Only clean string columns
+                    df[col] = df[col].apply(lambda x: str(x).strip() if pd.notna(x) else x)
+            
             # Log available columns for debugging
             logger.debug(f"Available columns in {file_path.name}: {', '.join(df.columns)}")
             
