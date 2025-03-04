@@ -185,12 +185,16 @@ def load_csv_files(logger: logging.Logger) -> List[Dict]:
                 logger.error(f"Missing required columns in {file_path.name}: {missing_required}")
                 continue
             
-            # Map columns with variations
+            # Map columns with variations and clean data immediately
             mapped_df = pd.DataFrame()
             for field, variations in {**required, **optional}.items():
                 for var in variations:
                     if var in column_map:
-                        mapped_df[field] = df[column_map[var]]
+                        # Clean string values immediately after loading
+                        if field in ['broker', 'policy_type', 'carrier']:
+                            mapped_df[field] = df[column_map[var]].apply(clean_value)
+                        else:
+                            mapped_df[field] = df[column_map[var]]
                         break
             
             if 'effective_date' in mapped_df:
@@ -382,11 +386,11 @@ def process_policies(policies: List[Dict], carriers_map: Dict, logger: logging.L
         try:
             normalized = normalize_policy_fields(policy.copy(), carriers_map, logger)
             if normalized['policy_type'] == 'Other':
-                unmapped['policy_types'].add(policy['policy_type'])
+                unmapped['policy_types'].add(clean_value(policy['policy_type']))
             if normalized['carrier'] not in carriers_map:
-                unmapped['carriers'].add(policy['carrier'])
+                unmapped['carriers'].add(clean_value(policy['carrier']))
             if not normalized['broker_email']:
-                unmapped['brokers'].add(policy['broker'])
+                unmapped['brokers'].add(clean_value(policy['broker']))
             return normalized
         except Exception as e:
             logger.error(f"Error normalizing policy {policy.get('policy_number', 'unknown')}: {e}")
@@ -410,9 +414,12 @@ def process_policies(policies: List[Dict], carriers_map: Dict, logger: logging.L
             with unmatched_path.open('r') as f:
                 existing = json.load(f)
         
-        # Merge new unmapped values
+        # Clean existing values and merge with new unmapped values
         for category, values in unmapped.items():
-            existing[category] = sorted(list(set(existing.get(category, []) + list(values))))
+            existing[category] = sorted(list(set(
+                clean_value(v) for v in existing.get(category, []) + list(values)
+                if clean_value(v)  # Only include non-empty cleaned values
+            )))
         
         with unmatched_path.open('w') as f:
             json.dump(existing, f, indent=4)
