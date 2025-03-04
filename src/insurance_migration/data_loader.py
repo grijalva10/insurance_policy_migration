@@ -6,7 +6,7 @@ Handles CSV file loading and initial data transformation.
 import pandas as pd
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import re
@@ -54,131 +54,122 @@ def normalize_column_name(col: str) -> str:
     col = col.replace(' ', '_')  # Replace spaces with underscores
     return col
 
-def load_csv_files(input_dir: Path) -> List[Dict]:
-    """Load CSV files into policy dictionaries with enhanced field mapping."""
-    if not input_dir.exists():
-        logger.error(f"Input directory {input_dir} does not exist")
-        return []
+def load_csv_files(input_dir: Path, logger: logging.Logger) -> List[Dict[str, Any]]:
+    """
+    Load and parse CSV files from input directory.
     
+    Args:
+        input_dir: Directory containing CSV files
+        logger: Logger instance
+    
+    Returns:
+        List of policy dictionaries
+    """
+    policies = []
     csv_files = list(input_dir.glob('*.csv'))
+    
     if not csv_files:
-        logger.error(f"No CSV files found in {input_dir}")
-        return []
+        logger.warning(f"No CSV files found in {input_dir}")
+        return policies
     
     logger.info(f"Found {len(csv_files)} CSV files to process")
     
-    # Define field mappings
-    field_mappings = {
-        'client': 'insured_name',
-        'email': 'insured_email',
-        'transaction_id': 'transaction_id',
-        'charge_amount': 'premium',
-        'date': 'effective_date',
-        'batch_id': 'batch_id',
-        'carrier': 'carrier',
-        'policy_type': 'policy_type',
-        'paid_in_full': 'paid_in_full',
-        'broker_fee': 'broker_fee',
-        'commission': 'commission_amount',
-        'pay_ins_company': 'pay_ins_company',
-        'card_fee': 'card_fee',
-        'refund': 'refund',
-        'difference': 'difference',
-        'agent': 'broker',
-        'policy_number': 'policy_number',
-        'month': 'month',
-        'cancellation_date': 'cancellation_date',
-        'returned': 'returned_amount',
-        'company': 'company',
-        'uec_bop': 'uec_bop'
-    }
-    
-    all_policies = []
-    
     for csv_file in csv_files:
-        logger.debug(f"Processing file: {csv_file}")
-        
         try:
-            # Read CSV file with appropriate data types
-            # Force string type for fields that should be strings
-            dtype = {
-                'email': str,
-                'insured_email': str,
-                'policy_number': str,
-                'carrier': str,
-                'policy_type': str,
-                'broker': str,
-                'agent': str,
-                'client': str,
-                'insured_name': str
-            }
-            
             # Read CSV file
-            df = pd.read_csv(csv_file, encoding='utf-8', dtype=dtype, na_values=['nan', 'NaN', 'NA', ''], keep_default_na=False)
+            df = pd.read_csv(csv_file)
             
             # Normalize column names
             df.columns = [normalize_column_name(col) for col in df.columns]
             
-            # Map column names to standardized field names
-            column_mapping = {}
-            for col in df.columns:
-                if col in field_mappings:
-                    column_mapping[col] = field_mappings[col]
-                else:
-                    # Try to find a match in field_mappings keys
-                    for key in field_mappings:
-                        if key in col:
-                            column_mapping[col] = field_mappings[key]
-                            break
+            # Define required and optional fields with their variations
+            required = {
+                'policy_number': ['policy_number', 'policy_no', 'policy_id', 'policy'],
+                'insured_name': ['insured_name', 'insured', 'customer_name', 'client_name', 'policyholder', 'client']
+            }
+            optional = {
+                'effective_date': ['effective_date', 'start_date', 'policy_date', 'date'],
+                'broker_fee': ['broker_fee', 'broker_fee_amount', 'brokerfee'],
+                'commission': ['commission', 'commission_amount', 'comm'],
+                'broker': ['agent', 'broker', 'agent_name', 'broker_name'],
+                'policy_type': ['policy_type', 'type', 'policy_category', 'policy type'],
+                'carrier': ['carrier', 'carrier_name', 'insurance_company'],
+                'premium': ['charge_amount', 'premium', 'amount', 'policy_amount', 'total_premium', 'premium_amount']
+            }
             
-            logger.debug(f"Column mapping for {csv_file.name}: {column_mapping}")
+            # Create a mapping of normalized column names
+            column_map = {}
+            for target, variations in {**required, **optional}.items():
+                for var in variations:
+                    normalized = normalize_column_name(var)
+                    if normalized in df.columns:
+                        column_map[target] = normalized
+                        break
             
-            # Rename columns
-            df = df.rename(columns=column_mapping)
+            # Check for missing required fields
+            missing_required = [field for field in required.keys() if field not in column_map]
+            if missing_required:
+                logger.error(f"Missing required columns in {csv_file.name}: {missing_required}")
+                continue
             
-            # Ensure email fields are strings
-            for email_field in ['insured_email', 'email']:
-                if email_field in df.columns:
-                    df[email_field] = df[email_field].astype(str)
-                    # Replace 'nan' strings with empty strings
-                    df[email_field] = df[email_field].replace('nan', '')
+            # Rename columns to standardized names
+            df = df.rename(columns={v: k for k, v in column_map.items()})
             
-            # Handle dates
-            date_columns = ['effective_date', 'expiration_date', 'cancellation_date']
+            # Convert date columns
+            date_columns = ['effective_date', 'expiration_date', 'transaction_date']
             for col in date_columns:
                 if col in df.columns:
-                    df[col] = df[col].apply(parse_date)
+                    try:
+                        df[col] = pd.to_datetime(df[col], errors='coerce')
+                        invalid_dates = df[col].isna().sum()
+                        if invalid_dates > 0:
+                            logger.warning(f"Skipped {invalid_dates} rows with invalid dates in {csv_file.name}")
+                    except Exception as e:
+                        logger.error(f"Error converting dates in column {col}: {e}")
             
-            # Calculate expiration date if not present
-            if 'effective_date' in df.columns and 'expiration_date' not in df.columns:
-                # Default to 1 year policy term
-                df['expiration_date'] = df['effective_date'].apply(
-                    lambda x: (datetime.strptime(x, '%Y-%m-%d') + relativedelta(years=1)).strftime('%Y-%m-%d') if x else None
-                )
+            # Convert DataFrame to list of dictionaries
+            file_policies = df.to_dict('records')
             
-            # Handle currency fields
-            currency_columns = ['premium', 'broker_fee', 'commission_amount', 'card_fee', 'returned_amount']
-            for col in currency_columns:
-                if col in df.columns:
-                    df[col] = df[col].apply(parse_currency)
+            # Clean up NaN values and ensure required fields are not empty
+            for policy in file_policies:
+                for key, value in policy.items():
+                    if pd.isna(value):
+                        policy[key] = None if key in ['premium', 'broker_fee', 'commission_amount'] else ''
+                
+                # Ensure required fields are not empty
+                if not policy.get('insured_name'):
+                    logger.warning(f"Empty insured_name for policy {policy.get('policy_number')} in {csv_file.name}")
+                    continue
+                
+                policies.append(policy)
             
-            # Filter out rows with invalid dates
-            invalid_dates = df['effective_date'].isna()
-            if invalid_dates.any():
-                logger.warning(f"Skipped {invalid_dates.sum()} rows with invalid dates in {csv_file.name}")
-                df = df[~invalid_dates]
-            
-            # Convert to list of dictionaries
-            policies = df.to_dict('records')
-            logger.debug(f"Extracted {len(policies)} policies from {csv_file.name}")
-            
-            all_policies.extend(policies)
+            logger.debug(f"Loaded {len(file_policies)} policies from {csv_file.name}")
             
         except Exception as e:
-            logger.error(f"Error processing {csv_file.name}: {e}")
+            logger.error(f"Error loading {csv_file.name}: {e}")
+            continue
     
-    logger.info(f"Total policies loaded: {len(all_policies)}")
-    return all_policies
+    return policies
 
-# Add a static method to convert policies to DataFrame
-load_csv_files.policies_to_dataframe = lambda policies: pd.DataFrame(policies) 
+def policies_to_dataframe(policies: List[Dict[str, Any]]) -> pd.DataFrame:
+    """
+    Convert list of policy dictionaries to DataFrame.
+    
+    Args:
+        policies: List of policy dictionaries
+    
+    Returns:
+        DataFrame containing policy data
+    """
+    if not policies:
+        return pd.DataFrame()
+    
+    df = pd.DataFrame(policies)
+    
+    # Convert date columns to datetime
+    date_columns = ['effective_date', 'expiration_date', 'transaction_date']
+    for col in date_columns:
+        if col in df.columns:
+            df[col] = pd.to_datetime(df[col], errors='coerce')
+    
+    return df 
