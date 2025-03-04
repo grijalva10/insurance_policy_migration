@@ -344,6 +344,8 @@ def clean_value(value: str, field_type: str = 'default') -> str:
 def validate_policy(policy: Dict, carriers_map: Dict, logger: logging.Logger) -> bool:
     """Validate a single policy."""
     policy_number = clean_policy_number(policy.get('policy_number', ''))
+    logger.debug(f"Validating policy {policy_number}")
+    
     # Allow endorsement variations as valid policy numbers
     if policy_number.lower() in {'endorsement', 'endorsements', 'limits endorsement'}:
         policy_number = 'Endorsement'  # Standardize to "Endorsement"
@@ -352,11 +354,23 @@ def validate_policy(policy: Dict, carriers_map: Dict, logger: logging.Logger) ->
         return False
     
     carrier = clean_value(policy.get('carrier', ''))
+    logger.debug(f"Carrier validation:")
+    logger.debug(f"  Original carrier: {policy.get('carrier', '')}")
+    logger.debug(f"  Cleaned carrier: {carrier}")
+    logger.debug(f"  In NON_CARRIER_ENTRIES: {carrier in NON_CARRIER_ENTRIES}")
+    logger.debug(f"  In CARRIER_MAPPING: {carrier in CARRIER_MAPPING}")
+    
     if not carrier or carrier in NON_CARRIER_ENTRIES or CARRIER_MAPPING.get(carrier) is None:
         logger.debug(f"Invalid or excluded carrier: {carrier}")
         return False
     
     policy_type = clean_value(policy.get('policy_type', ''))
+    logger.debug(f"Policy type validation:")
+    logger.debug(f"  Original policy type: {policy.get('policy_type', '')}")
+    logger.debug(f"  Cleaned policy type: {policy_type}")
+    logger.debug(f"  In NON_POLICY_TYPES: {policy_type in NON_POLICY_TYPES}")
+    logger.debug(f"  In POLICY_TYPE_MAPPING: {policy_type in POLICY_TYPE_MAPPING}")
+    
     if policy_type in NON_POLICY_TYPES or POLICY_TYPE_MAPPING.get(policy_type) is None:
         logger.debug(f"Invalid or excluded policy type: {policy_type}")
         return False
@@ -365,6 +379,7 @@ def validate_policy(policy: Dict, carriers_map: Dict, logger: logging.Logger) ->
         logger.debug(f"Missing dates for policy {policy_number}")
         return False
     
+    logger.debug(f"Policy {policy_number} passed all validations")
     return True
 
 def normalize_policy_fields(policy: Dict, carriers_map: Dict, logger: logging.Logger) -> Dict:
