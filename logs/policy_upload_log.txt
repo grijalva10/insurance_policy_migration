@@ -1,729 +1,729 @@
-2025-03-04 10:14:38,299 - INFO - Starting Insurance Policy Migration
-2025-03-04 10:14:38,299 - INFO - Loaded mappings: 33 brokers, 435 carriers, 230 policy types
-2025-03-04 10:14:38,299 - INFO - Processing 2 CSV files
-2025-03-04 10:14:38,330 - DEBUG - Available columns in Sales Epay 2024 - Sheet1.csv: Client, Email, Transaction ID, Charge Amount, Date        , Batch ID, Carrier       ,  Policy Type , Paid In Full , Broker Fee, Commission        , Pay Ins Company, Card Fee, Refund, Difference, Unnamed: 15, AGENT, Unnamed: 17, Policy Number, Unnamed: 19, Month, Cancellation Date, Returned $$, Company, UEC/BOP
-2025-03-04 10:14:38,330 - DEBUG - Normalized column map: {'client': 'Client', 'email': 'Email', 'transaction_id': 'Transaction ID', 'charge_amount': 'Charge Amount', 'date': 'Date        ', 'batch_id': 'Batch ID', 'carrier': 'Carrier       ', 'policy_type': ' Policy Type ', 'paid_in_full': 'Paid In Full ', 'broker_fee': 'Broker Fee', 'commission': 'Commission        ', 'pay_ins_company': 'Pay Ins Company', 'card_fee': 'Card Fee', 'refund': 'Refund', 'difference': 'Difference', 'unnamed__15': 'Unnamed: 15', 'agent': 'AGENT', 'unnamed__17': 'Unnamed: 17', 'policy_number': 'Policy Number', 'unnamed__19': 'Unnamed: 19', 'month': 'Month', 'cancellation_date': 'Cancellation Date', 'returned___': 'Returned $$', 'company': 'Company', 'uec_bop': 'UEC/BOP'}
-2025-03-04 10:14:38,521 - INFO - Loaded 7220 policies from Sales Epay 2024 - Sheet1.csv
-2025-03-04 10:14:38,535 - DEBUG - Available columns in Sales Epay 2025 - Sheet1.csv: Client, Email, Transaction ID, Charge Amount, Date        , Batch ID, Carrier       ,  Policy Type , Paid In Full , Broker Fee, Commission        , Pay Ins Company, Card Fee, Refund, Difference, Unnamed: 15, AGENT, Unnamed: 17, Policy Number, Unnamed: 19, Cancellation Date, Returned $$, Company, UEC/BOP, Month
-2025-03-04 10:14:38,535 - DEBUG - Normalized column map: {'client': 'Client', 'email': 'Email', 'transaction_id': 'Transaction ID', 'charge_amount': 'Charge Amount', 'date': 'Date        ', 'batch_id': 'Batch ID', 'carrier': 'Carrier       ', 'policy_type': ' Policy Type ', 'paid_in_full': 'Paid In Full ', 'broker_fee': 'Broker Fee', 'commission': 'Commission        ', 'pay_ins_company': 'Pay Ins Company', 'card_fee': 'Card Fee', 'refund': 'Refund', 'difference': 'Difference', 'unnamed__15': 'Unnamed: 15', 'agent': 'AGENT', 'unnamed__17': 'Unnamed: 17', 'policy_number': 'Policy Number', 'unnamed__19': 'Unnamed: 19', 'cancellation_date': 'Cancellation Date', 'returned___': 'Returned $$', 'company': 'Company', 'uec_bop': 'UEC/BOP', 'month': 'Month'}
-2025-03-04 10:14:38,570 - INFO - Loaded 1057 policies from Sales Epay 2025 - Sheet1.csv
-2025-03-04 10:14:38,570 - INFO - Loaded 8277 total policies
-2025-03-04 10:14:38,724 - INFO - Loaded 7098 Insureds from cache
-2025-03-04 10:14:38,729 - INFO - Loaded 146 Carriers from cache
-2025-03-04 10:14:38,729 - DEBUG - Processing batch 1 (1000 policies)
-2025-03-04 10:14:38,729 - DEBUG - Invalid or excluded policy type: Monthly Payment
-2025-03-04 10:14:38,729 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,729 - DEBUG - Invalid or excluded policy type: GL 2nd Payment
-2025-03-04 10:14:38,729 - DEBUG - Invalid or excluded carrier: Monthly Payment
-2025-03-04 10:14:38,732 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,732 - DEBUG - Invalid or excluded carrier: Multi-Residential End.
-2025-03-04 10:14:38,732 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,732 - DEBUG - Invalid or excluded carrier: Audit Payment
-2025-03-04 10:14:38,733 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
-2025-03-04 10:14:38,733 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,733 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,735 - DEBUG - Invalid or excluded policy type: 2nd Payment
-2025-03-04 10:14:38,735 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,735 - DEBUG - Invalid or excluded policy type: Monthly Payment
-2025-03-04 10:14:38,736 - DEBUG - Invalid policy number: Partial refund
-2025-03-04 10:14:38,736 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,736 - DEBUG - Invalid or excluded policy type: Monthly Payment
-2025-03-04 10:14:38,737 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,737 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,737 - DEBUG - Invalid or excluded policy type: GL 2nd Payment
-2025-03-04 10:14:38,737 - DEBUG - Invalid or excluded policy type: Monthly Payment
-2025-03-04 10:14:38,738 - DEBUG - Invalid or excluded carrier: Snow/Plow Endorsement
-2025-03-04 10:14:38,738 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,738 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,738 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,738 - DEBUG - Invalid or excluded carrier: Comp Ops Endorsement
-2025-03-04 10:14:38,738 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Comp Ops Endorsement
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Full Refund
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Refund
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: AI+WOS
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Full Refund
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Per Project Endors
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Monthly payment
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Specific Endorsement
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Monthly Payment
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: AI+WOS
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: House Of Worship
-2025-03-04 10:14:38,739 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,739 - DEBUG - Invalid or excluded carrier: WC limits endorsement
-2025-03-04 10:14:38,749 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,749 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,749 - DEBUG - Invalid or excluded carrier: Endorsement to 50K
-2025-03-04 10:14:38,749 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,751 - DEBUG - Invalid or excluded carrier: Bond
-2025-03-04 10:14:38,751 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,751 - DEBUG - Invalid or excluded carrier: Test
-2025-03-04 10:14:38,751 - DEBUG - Processing batch 2 (1000 policies)
-2025-03-04 10:14:38,751 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,751 - DEBUG - Invalid or excluded carrier: AI+WOS
-2025-03-04 10:14:38,752 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,752 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,752 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,753 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,753 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,753 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,753 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,753 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,753 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,754 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,754 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,754 - DEBUG - Invalid or excluded carrier: Endorsement Limits endorsement
-2025-03-04 10:14:38,754 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,754 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,754 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,755 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,755 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,755 - DEBUG - Invalid or excluded carrier: Comp Ops
-2025-03-04 10:14:38,756 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,756 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,757 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
-2025-03-04 10:14:38,758 - DEBUG - Invalid or excluded carrier: Bond Renewal
-2025-03-04 10:14:38,758 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,758 - DEBUG - Invalid or excluded carrier: Limits+AI Endorsement
-2025-03-04 10:14:38,758 - DEBUG - Invalid or excluded carrier: Single AI
-2025-03-04 10:14:38,758 - DEBUG - Invalid or excluded carrier: Payment to Carrier
-2025-03-04 10:14:38,758 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
-2025-03-04 10:14:38,758 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
-2025-03-04 10:14:38,759 - DEBUG - Invalid or excluded carrier: Second payment
-2025-03-04 10:14:38,759 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,760 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,761 - DEBUG - Invalid or excluded carrier: Completed Ops En.
-2025-03-04 10:14:38,763 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,763 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,764 - DEBUG - Invalid or excluded carrier: Second payment
-2025-03-04 10:14:38,764 - DEBUG - Invalid policy number: Full refund
-2025-03-04 10:14:38,764 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,764 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,764 - DEBUG - Invalid or excluded carrier: Limits endorsement
-2025-03-04 10:14:38,764 - DEBUG - Invalid or excluded carrier: Second payment
-2025-03-04 10:14:38,764 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,764 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,764 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,764 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,764 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,764 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
-2025-03-04 10:14:38,764 - DEBUG - Invalid or excluded carrier: Non-eroding Endors.
-2025-03-04 10:14:38,764 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,764 - DEBUG - Invalid policy number: Full refund
-2025-03-04 10:14:38,764 - DEBUG - Invalid or excluded carrier: Comp Ops/Per project
-2025-03-04 10:14:38,764 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,764 - DEBUG - Invalid policy number: Full refund
-2025-03-04 10:14:38,768 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,769 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: State endorsement
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Non-eroding Endors.
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Multi Unit Endorsement
-2025-03-04 10:14:38,770 - DEBUG - Processing batch 3 (1000 policies)
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Bound
-2025-03-04 10:14:38,770 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Endorsement + AI+WOS
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: AI+Wos+PW
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: Bond
-2025-03-04 10:14:38,770 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,770 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,774 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,774 - DEBUG - Invalid or excluded carrier: Limits Endorsements
-2025-03-04 10:14:38,774 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,774 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,774 - DEBUG - Invalid or excluded carrier: Per Project Endors
-2025-03-04 10:14:38,774 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,774 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,774 - DEBUG - Invalid or excluded carrier: State Endorsement
-2025-03-04 10:14:38,774 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,774 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,777 - DEBUG - Invalid or excluded carrier: Auto
-2025-03-04 10:14:38,777 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,777 - DEBUG - Invalid or excluded carrier: Ai+Wos+Per project
-2025-03-04 10:14:38,778 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,778 - DEBUG - Invalid or excluded carrier: AI+Wos+PW
-2025-03-04 10:14:38,778 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,778 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,778 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,778 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,778 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,778 - DEBUG - Invalid or excluded carrier: Class Codes Endors
-2025-03-04 10:14:38,779 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,779 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,779 - DEBUG - Invalid or excluded carrier: General Liability
-2025-03-04 10:14:38,779 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
-2025-03-04 10:14:38,779 - DEBUG - Invalid or excluded carrier: Blanket Ai+WOS
-2025-03-04 10:14:38,779 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,779 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,779 - DEBUG - Invalid or excluded carrier: Per Project Endorsement
-2025-03-04 10:14:38,779 - DEBUG - Invalid or excluded carrier: Water Endorsement
-2025-03-04 10:14:38,779 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,779 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,779 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,779 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,779 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,779 - DEBUG - Invalid or excluded carrier: CG2010 Endors
-2025-03-04 10:14:38,779 - DEBUG - Invalid or excluded carrier: AI+WOS+30 day notice
-2025-03-04 10:14:38,782 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,782 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,783 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,783 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,783 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,783 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,784 - DEBUG - Invalid or excluded carrier: CG2010
-2025-03-04 10:14:38,784 - DEBUG - Invalid or excluded carrier: AI + PW + WOS Endorsement
-2025-03-04 10:14:38,784 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,784 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,784 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,784 - DEBUG - Invalid or excluded carrier: House of Worship
-2025-03-04 10:14:38,784 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,784 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,784 - DEBUG - Invalid or excluded carrier: EndorsementCG 2010
-2025-03-04 10:14:38,784 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,789 - DEBUG - Processing batch 4 (1000 policies)
-2025-03-04 10:14:38,789 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,789 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,789 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,791 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,791 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,791 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,791 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,791 - DEBUG - Invalid or excluded carrier: Payment Declined
-2025-03-04 10:14:38,792 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,792 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,792 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,792 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,792 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,792 - DEBUG - Invalid or excluded carrier: AI + PW + WOS Endorsement
-2025-03-04 10:14:38,792 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,792 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,792 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,792 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,792 - DEBUG - Invalid policy number: Full refund
-2025-03-04 10:14:38,792 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,792 - DEBUG - Invalid or excluded carrier: Comp Ops
-2025-03-04 10:14:38,796 - DEBUG - Invalid or excluded carrier: AI+WOS+Per project
-2025-03-04 10:14:38,796 - DEBUG - Invalid or excluded carrier: AI+WOS
-2025-03-04 10:14:38,796 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,796 - DEBUG - Invalid or excluded carrier: CG2010
-2025-03-04 10:14:38,796 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,797 - DEBUG - Invalid policy number: Full refund
-2025-03-04 10:14:38,797 - DEBUG - Invalid or excluded policy type: new GL 2nd payment
-2025-03-04 10:14:38,797 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,797 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,797 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,797 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,799 - DEBUG - Invalid or excluded carrier: 2nd Payment
-2025-03-04 10:14:38,799 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,799 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,799 - DEBUG - Invalid or excluded carrier: Non-Eroding Limints
-2025-03-04 10:14:38,799 - DEBUG - Invalid or excluded carrier: Blanket AI Endors
-2025-03-04 10:14:38,799 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,799 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,799 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,799 - DEBUG - Invalid or excluded carrier: States Endorsement
-2025-03-04 10:14:38,799 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,799 - DEBUG - Invalid or excluded carrier: Limits + Comp ops Endorsement
-2025-03-04 10:14:38,799 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,799 - DEBUG - Invalid policy number: Full refund
-2025-03-04 10:14:38,799 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,799 - DEBUG - Invalid or excluded carrier: State Endorsement
-2025-03-04 10:14:38,799 - DEBUG - Invalid or excluded carrier: Class Codes Endors.
-2025-03-04 10:14:38,799 - DEBUG - Invalid or excluded carrier: Limits
-2025-03-04 10:14:38,799 - DEBUG - Invalid or excluded carrier: Non Eroding Limits
-2025-03-04 10:14:38,804 - DEBUG - Invalid or excluded carrier: Limits
-2025-03-04 10:14:38,804 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,804 - DEBUG - Invalid or excluded policy type: GL Monthly Payment
-2025-03-04 10:14:38,804 - DEBUG - Invalid or excluded carrier: Per Project
-2025-03-04 10:14:38,804 - DEBUG - Invalid or excluded carrier: Limits endorsement
-2025-03-04 10:14:38,805 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,806 - DEBUG - Invalid or excluded carrier: WOS Endorsement
-2025-03-04 10:14:38,806 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,806 - DEBUG - Invalid or excluded carrier: Limits endorsement
-2025-03-04 10:14:38,806 - DEBUG - Invalid or excluded carrier: Non Eroding Limits
-2025-03-04 10:14:38,806 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,806 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,806 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,806 - DEBUG - Invalid or excluded carrier: Payment to carrier
-2025-03-04 10:14:38,806 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,806 - DEBUG - Processing batch 5 (1000 policies)
-2025-03-04 10:14:38,806 - DEBUG - Invalid policy number: Full Refund
-2025-03-04 10:14:38,806 - DEBUG - Invalid policy number: Full Refund
-2025-03-04 10:14:38,806 - DEBUG - Invalid or excluded carrier: Gross & Subs endorsement
-2025-03-04 10:14:38,806 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,809 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,809 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,810 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,810 - DEBUG - Invalid or excluded carrier: Non eroding Limits
-2025-03-04 10:14:38,810 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,810 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,810 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Med Limit Endorsement
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Completed Ops
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Limit Endorsements
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Bond Renewal
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Comp Ops
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Non Eroding Endors.
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Per Project Endors
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Amendment Endors
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,811 - DEBUG - Invalid or excluded carrier: Additional Broker Fee
-2025-03-04 10:14:38,811 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,818 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,818 - DEBUG - Invalid or excluded carrier: Bond Renewal
-2025-03-04 10:14:38,818 - DEBUG - Invalid or excluded carrier: Non Eording limits
-2025-03-04 10:14:38,818 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,818 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,819 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,819 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,819 - DEBUG - Invalid or excluded carrier: Additional Broker Fee
-2025-03-04 10:14:38,819 - DEBUG - Invalid or excluded carrier: GL Endorsement CG2010
-2025-03-04 10:14:38,819 - DEBUG - Invalid policy number: VOIDED
-2025-03-04 10:14:38,819 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,819 - DEBUG - Invalid or excluded policy type: nan
-2025-03-04 10:14:38,819 - DEBUG - Invalid or excluded carrier: Additional Broker Fee
-2025-03-04 10:14:38,819 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,819 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,819 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,819 - DEBUG - Invalid or excluded carrier: Payroll Endorsement
-2025-03-04 10:14:38,819 - DEBUG - Invalid or excluded carrier: 2nd Payment
-2025-03-04 10:14:38,819 - DEBUG - Invalid or excluded carrier: Class Code Endors.
-2025-03-04 10:14:38,819 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,824 - DEBUG - Invalid or excluded carrier: Broker Fee
-2025-03-04 10:14:38,824 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,825 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,825 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,825 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,825 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,825 - DEBUG - Invalid or excluded carrier: Declined
-2025-03-04 10:14:38,825 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,825 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,825 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,825 - DEBUG - Invalid or excluded carrier: State Compensation
-2025-03-04 10:14:38,825 - DEBUG - Processing batch 6 (1000 policies)
-2025-03-04 10:14:38,825 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,829 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,829 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,829 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,829 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,829 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,829 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,829 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,829 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,829 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,829 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,829 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,829 - DEBUG - Invalid or excluded carrier: GL endorsement
-2025-03-04 10:14:38,829 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,832 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,832 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,832 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,832 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,832 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,833 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,833 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,833 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,834 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,834 - DEBUG - Invalid or excluded carrier: Comp Ops
-2025-03-04 10:14:38,834 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,834 - DEBUG - Invalid or excluded carrier: nan
-2025-03-04 10:14:38,834 - DEBUG - Invalid or excluded policy type: GL+Excess 2nd payment
-2025-03-04 10:14:38,835 - DEBUG - Invalid or excluded carrier: States Endorsement
-2025-03-04 10:14:38,835 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,835 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,835 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,835 - DEBUG - Invalid or excluded carrier: Payment to Carrier
-2025-03-04 10:14:38,835 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,835 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,835 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,835 - DEBUG - Invalid or excluded carrier: Limits+AI Endors
-2025-03-04 10:14:38,835 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,835 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,835 - DEBUG - Invalid or excluded policy type: 2nd payment
-2025-03-04 10:14:38,835 - DEBUG - Invalid or excluded carrier: WC Endorsement
-2025-03-04 10:14:38,838 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,838 - DEBUG - Invalid or excluded carrier: Additional Insured
-2025-03-04 10:14:38,838 - DEBUG - Invalid or excluded carrier: Gross Receips Endor
-2025-03-04 10:14:38,838 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,838 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,839 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,839 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,839 - DEBUG - Invalid or excluded carrier: Additional Insured
-2025-03-04 10:14:38,839 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,839 - DEBUG - Invalid or excluded carrier: Payment disputed
-2025-03-04 10:14:38,840 - DEBUG - Invalid or excluded carrier: Blanket AI Endors
-2025-03-04 10:14:38,840 - DEBUG - Invalid or excluded carrier: BTIS / Endorsement
-2025-03-04 10:14:38,840 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,840 - DEBUG - Invalid or excluded carrier: Endorsement 1
-2025-03-04 10:14:38,840 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,840 - DEBUG - Invalid or excluded carrier: Non-Eroding Endors
-2025-03-04 10:14:38,840 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,840 - DEBUG - Invalid or excluded carrier: Second Payment
-2025-03-04 10:14:38,840 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,840 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,840 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,840 - DEBUG - Invalid or excluded carrier: Gross receipts
-2025-03-04 10:14:38,840 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,840 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,840 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,840 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,843 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,843 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,843 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: Class Code Endors
-2025-03-04 10:14:38,843 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: Endorsement 1
-2025-03-04 10:14:38,843 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: Endorsement 2
-2025-03-04 10:14:38,843 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,843 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,843 - DEBUG - Processing batch 7 (1000 policies)
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: October Installment
-2025-03-04 10:14:38,843 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: Blanket AI Endors
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: Class Code Endors
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: CG2010 Endors
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: Class Code Endors
-2025-03-04 10:14:38,843 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: Additional Premium
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,843 - DEBUG - Invalid or excluded carrier: Payment to carrier
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: Payment to carrier
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded policy type: 2nd payment
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: Limist Endorsement
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: Limits/AI Endorsement
-2025-03-04 10:14:38,849 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,849 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,849 - DEBUG - Invalid or excluded carrier: Completed Ops End.
-2025-03-04 10:14:38,852 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,852 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: State Endors
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: Limits Endorsemenet
-2025-03-04 10:14:38,852 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: Payment to carrier
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: Additional Broker Fee
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: 2nd Payment
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: Limits +AI Endors
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: Completed Ops End.
-2025-03-04 10:14:38,852 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,852 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,854 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,854 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: Completed Ops End.
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: CG 2010 Endors
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: Payment to carrier
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: Single AI
-2025-03-04 10:14:38,854 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: Endorsement 4
-2025-03-04 10:14:38,854 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,854 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,854 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,854 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,854 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: Endorsement 1
-2025-03-04 10:14:38,854 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,859 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,859 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,859 - DEBUG - Invalid or excluded carrier: Single AI Endors
-2025-03-04 10:14:38,859 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,859 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,859 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,859 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,859 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Class Codes Endors.
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Non-owed Auto End.
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Per Project Endors
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Gross Sales Endors
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Limits/AI Endors
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded policy type: Payment to carrier
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Limits/AI Endorsement
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,860 - DEBUG - Processing batch 8 (1000 policies)
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Limits Endors
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: AI Endorsement
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Endrosement
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Non-eroding Endors
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: CG2010
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Gross Receipts Endors
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Limts Endorsement
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,860 - DEBUG - Invalid or excluded carrier: Completed Ops
-2025-03-04 10:14:38,860 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,868 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,869 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,869 - DEBUG - Invalid or excluded carrier: Class Code Endors
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,869 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,869 - DEBUG - Invalid or excluded carrier: Completed Ops End.
-2025-03-04 10:14:38,869 - DEBUG - Invalid or excluded carrier: Gross Receipts End
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,869 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,869 - DEBUG - Invalid or excluded carrier: Limits Endorsement
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: Refund
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,869 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,869 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,869 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,874 - DEBUG - Invalid or excluded carrier: nan
-2025-03-04 10:14:38,874 - DEBUG - Invalid or excluded carrier: GL+Equipment
-2025-03-04 10:14:38,874 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,874 - DEBUG - Invalid or excluded carrier: Payment to carrier
-2025-03-04 10:14:38,874 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,874 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,874 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,874 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,874 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,874 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,874 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,874 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,874 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,874 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,874 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,874 - DEBUG - Invalid or excluded carrier: 3rd payment
-2025-03-04 10:14:38,874 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,874 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,874 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: Additional Insured
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: Class Codes
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: Payment to carrier
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: General Liability
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: General Liability
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: 2nd payment
-2025-03-04 10:14:38,879 - DEBUG - Processing batch 9 (277 policies)
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Voided
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Refunded
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: Payment to carrier
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: Payment to carrier
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: GL Endorsement
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: Endorsement
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded carrier: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid or excluded policy type: GL 2nd Paymnet
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: Audit
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - DEBUG - Invalid policy number: nan
-2025-03-04 10:14:38,879 - WARNING - Unmapped policy_types:  GL Renewal ,  WC Renewal , 11 GLs, Auto , Auto Insurance , Auto Renewal , Automobile , Automobile Renewal , BR Renewal , Bond , Bond Renewal , Bond renewal , Bonds , Bonds Renewal , E&O Renewal , Equipment , Equipment Insurance , Excess , GL + Ex Renewal , GL + Excess , GL + Excess Renewal , GL +EX Renewal , GL Intermitent , GL Intermittent , GL Renewal , GL Renewal  , GL Rewrite , GL intermitent , GL renewal , GL+ Excess , GL+ Excess Rewrite , GL+ Inland Marine , GL+EX Intermitent , GL+EX Rewrite , GL+Eq Renewal , GL+Excess , GL+Excess Renewal , General Liabiity , General Liability , General Liabilty , General Liabitliy , General Liabity , General Libaility , General liability , Genneral Liability , Inland Marine , Non-Profit Director, Professional Liability , WC , WC Intermitent , WC Renewal , WC intermitent , WC renewal , Workers Comp 
-2025-03-04 10:14:38,889 - WARNING - Unmapped carriers:  OSIC, AERO, AERO/ Accredited , AMWINS, Aappalachian, Accidend Fund , Accident Fund, Accident Fund , Accident Insurance Co, Accredited Surety, Acreddited, Aero, Aero/American Builders Insurance Company, AmTrust, American Zurich Insurance Company, Ammtrust, Amtrust, Amtrust , Amwins, Apapalchian/Aero, App/Certain Lloyds, Appaalchian/Aero, Appalachian, Appalachian , Appalachian  , Appalachian/, Appalachian/ Accredited Surety and Casualty , Appalachian/ Crum, Appalachian/AERO, Appalachian/Accredited, Appalachian/Aero, Appalachian/American, Appalachian/Amtrust, Appalachian/Biberk, Appalachian/Crum, Appalachian/Crum & Forster, Appalachian/Crum and Forster, Appalachian/Hamilton, Appalachian/Kinsale, Appalachian/Maxum, Appalachian/Nautilus, Appalacian/Aero, Appalahcian, Appalchian, Appalkachian, BTIS, BTIS , BTIS/ Clear Spring, BTIS/ Clear Spring Property and Casualty, BTIS/ Continental Casualty Company, BTIS/CNA, BTIS/Certain Underwiters, BTIS/Continental, BTIS/Employers, BTIS/Great, BTIS/Great American, BTIS/Great American Ins. Co, BTIS/Hiscox, BTIS/Navigators, BTIS/Navigators Insurance Company, BTIS/Starr, BTIS/Starr Ind & Liab Co, BTIS/The Pie, BTIS/Wesco , BTUS, Bberk, BiBerk, Biberk, Biberk , Biberk (TBD), Biberk/National Liability, Biberk/Wellfleet, Biberk/Wellfleet , Bibertk, Bibker, Bolt, Bolt , Bolt Access, Bolt Access/Progressive, Bolt/Progressive, Bolt/Progressive , Bond Express, Bonds Express, Bonds Express , Bristol West, CAOM, Certain, Certain U. , Certain Underwriters, Certain Underwriters at Lloyd's, London
+2025-03-04 10:26:23,795 - INFO - Starting Insurance Policy Migration
+2025-03-04 10:26:23,796 - INFO - Loaded mappings: 33 brokers, 435 carriers, 230 policy types
+2025-03-04 10:26:23,796 - INFO - Processing 2 CSV files
+2025-03-04 10:26:23,824 - DEBUG - Available columns in Sales Epay 2024 - Sheet1.csv: Client, Email, Transaction ID, Charge Amount, Date        , Batch ID, Carrier       ,  Policy Type , Paid In Full , Broker Fee, Commission        , Pay Ins Company, Card Fee, Refund, Difference, Unnamed: 15, AGENT, Unnamed: 17, Policy Number, Unnamed: 19, Month, Cancellation Date, Returned $$, Company, UEC/BOP
+2025-03-04 10:26:23,824 - DEBUG - Normalized column map: {'client': 'Client', 'email': 'Email', 'transaction_id': 'Transaction ID', 'charge_amount': 'Charge Amount', 'date': 'Date        ', 'batch_id': 'Batch ID', 'carrier': 'Carrier       ', 'policy_type': ' Policy Type ', 'paid_in_full': 'Paid In Full ', 'broker_fee': 'Broker Fee', 'commission': 'Commission        ', 'pay_ins_company': 'Pay Ins Company', 'card_fee': 'Card Fee', 'refund': 'Refund', 'difference': 'Difference', 'unnamed__15': 'Unnamed: 15', 'agent': 'AGENT', 'unnamed__17': 'Unnamed: 17', 'policy_number': 'Policy Number', 'unnamed__19': 'Unnamed: 19', 'month': 'Month', 'cancellation_date': 'Cancellation Date', 'returned___': 'Returned $$', 'company': 'Company', 'uec_bop': 'UEC/BOP'}
+2025-03-04 10:26:24,010 - INFO - Loaded 7220 policies from Sales Epay 2024 - Sheet1.csv
+2025-03-04 10:26:24,020 - DEBUG - Available columns in Sales Epay 2025 - Sheet1.csv: Client, Email, Transaction ID, Charge Amount, Date        , Batch ID, Carrier       ,  Policy Type , Paid In Full , Broker Fee, Commission        , Pay Ins Company, Card Fee, Refund, Difference, Unnamed: 15, AGENT, Unnamed: 17, Policy Number, Unnamed: 19, Cancellation Date, Returned $$, Company, UEC/BOP, Month
+2025-03-04 10:26:24,020 - DEBUG - Normalized column map: {'client': 'Client', 'email': 'Email', 'transaction_id': 'Transaction ID', 'charge_amount': 'Charge Amount', 'date': 'Date        ', 'batch_id': 'Batch ID', 'carrier': 'Carrier       ', 'policy_type': ' Policy Type ', 'paid_in_full': 'Paid In Full ', 'broker_fee': 'Broker Fee', 'commission': 'Commission        ', 'pay_ins_company': 'Pay Ins Company', 'card_fee': 'Card Fee', 'refund': 'Refund', 'difference': 'Difference', 'unnamed__15': 'Unnamed: 15', 'agent': 'AGENT', 'unnamed__17': 'Unnamed: 17', 'policy_number': 'Policy Number', 'unnamed__19': 'Unnamed: 19', 'cancellation_date': 'Cancellation Date', 'returned___': 'Returned $$', 'company': 'Company', 'uec_bop': 'UEC/BOP', 'month': 'Month'}
+2025-03-04 10:26:24,054 - INFO - Loaded 1057 policies from Sales Epay 2025 - Sheet1.csv
+2025-03-04 10:26:24,054 - INFO - Loaded 8277 total policies
+2025-03-04 10:26:24,060 - INFO - Loaded 146 Carriers from cache
+2025-03-04 10:26:24,060 - DEBUG - Processing batch 1 (1000 policies)
+2025-03-04 10:26:24,060 - DEBUG - Invalid or excluded policy type: Monthly Payment
+2025-03-04 10:26:24,060 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,060 - DEBUG - Invalid or excluded policy type: GL 2nd Payment
+2025-03-04 10:26:24,064 - DEBUG - Invalid or excluded carrier: Monthly Payment
+2025-03-04 10:26:24,065 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,065 - DEBUG - Invalid or excluded carrier: Multi-Residential End.
+2025-03-04 10:26:24,065 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,065 - DEBUG - Invalid or excluded carrier: Audit Payment
+2025-03-04 10:26:24,065 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
+2025-03-04 10:26:24,066 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,066 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,067 - DEBUG - Invalid or excluded policy type: 2nd Payment
+2025-03-04 10:26:24,067 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,067 - DEBUG - Invalid or excluded policy type: Monthly Payment
+2025-03-04 10:26:24,067 - DEBUG - Invalid policy number: Partial refund
+2025-03-04 10:26:24,067 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,067 - DEBUG - Invalid or excluded policy type: Monthly Payment
+2025-03-04 10:26:24,069 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,069 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,070 - DEBUG - Invalid or excluded policy type: GL 2nd Payment
+2025-03-04 10:26:24,070 - DEBUG - Invalid or excluded policy type: Monthly Payment
+2025-03-04 10:26:24,070 - DEBUG - Invalid or excluded carrier: Snow/Plow Endorsement
+2025-03-04 10:26:24,070 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,070 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,070 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,070 - DEBUG - Invalid or excluded carrier: Comp Ops Endorsement
+2025-03-04 10:26:24,070 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,071 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,072 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,072 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,072 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,072 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,072 - DEBUG - Invalid or excluded carrier: Comp Ops Endorsement
+2025-03-04 10:26:24,072 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,072 - DEBUG - Invalid policy number: Full Refund
+2025-03-04 10:26:24,072 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,072 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,072 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,072 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,074 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,075 - DEBUG - Invalid or excluded carrier: Refund
+2025-03-04 10:26:24,075 - DEBUG - Invalid or excluded carrier: AI+WOS
+2025-03-04 10:26:24,075 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,075 - DEBUG - Invalid policy number: Full Refund
+2025-03-04 10:26:24,076 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,076 - DEBUG - Invalid or excluded carrier: Per Project Endors
+2025-03-04 10:26:24,076 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,076 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,077 - DEBUG - Invalid or excluded carrier: Monthly payment
+2025-03-04 10:26:24,077 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,078 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,078 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,078 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,080 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,080 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,080 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,080 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,080 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,080 - DEBUG - Invalid or excluded carrier: Specific Endorsement
+2025-03-04 10:26:24,080 - DEBUG - Invalid or excluded carrier: Monthly Payment
+2025-03-04 10:26:24,080 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,081 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: AI+WOS
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: House Of Worship
+2025-03-04 10:26:24,081 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: WC limits endorsement
+2025-03-04 10:26:24,081 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Endorsement to 50K
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Bond
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Test
+2025-03-04 10:26:24,081 - DEBUG - Processing batch 2 (1000 policies)
+2025-03-04 10:26:24,081 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: AI+WOS
+2025-03-04 10:26:24,081 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,081 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,081 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,081 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Endorsement Limits endorsement
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,081 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,081 - DEBUG - Invalid or excluded carrier: Comp Ops
+2025-03-04 10:26:24,081 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,090 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,090 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
+2025-03-04 10:26:24,090 - DEBUG - Invalid or excluded carrier: Bond Renewal
+2025-03-04 10:26:24,090 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,090 - DEBUG - Invalid or excluded carrier: Limits+AI Endorsement
+2025-03-04 10:26:24,090 - DEBUG - Invalid or excluded carrier: Single AI
+2025-03-04 10:26:24,090 - DEBUG - Invalid or excluded carrier: Payment to Carrier
+2025-03-04 10:26:24,090 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
+2025-03-04 10:26:24,090 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
+2025-03-04 10:26:24,090 - DEBUG - Invalid or excluded carrier: Second payment
+2025-03-04 10:26:24,090 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,090 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,095 - DEBUG - Invalid or excluded carrier: Completed Ops En.
+2025-03-04 10:26:24,095 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,095 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,095 - DEBUG - Invalid or excluded carrier: Second payment
+2025-03-04 10:26:24,095 - DEBUG - Invalid policy number: Full refund
+2025-03-04 10:26:24,095 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,095 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,095 - DEBUG - Invalid or excluded carrier: Limits endorsement
+2025-03-04 10:26:24,095 - DEBUG - Invalid or excluded carrier: Second payment
+2025-03-04 10:26:24,095 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,095 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,095 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,095 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,095 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,100 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
+2025-03-04 10:26:24,100 - DEBUG - Invalid or excluded carrier: Non-eroding Endors.
+2025-03-04 10:26:24,100 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,100 - DEBUG - Invalid policy number: Full refund
+2025-03-04 10:26:24,100 - DEBUG - Invalid or excluded carrier: Comp Ops/Per project
+2025-03-04 10:26:24,100 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,100 - DEBUG - Invalid policy number: Full refund
+2025-03-04 10:26:24,100 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,102 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,102 - DEBUG - Invalid or excluded carrier: State endorsement
+2025-03-04 10:26:24,102 - DEBUG - Invalid or excluded carrier: Non-eroding Endors.
+2025-03-04 10:26:24,102 - DEBUG - Invalid or excluded carrier: Multi Unit Endorsement
+2025-03-04 10:26:24,102 - DEBUG - Processing batch 3 (1000 policies)
+2025-03-04 10:26:24,102 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,102 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,102 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: Bound
+2025-03-04 10:26:24,105 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: Endorsement + AI+WOS
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: AI+Wos+PW
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: Bond
+2025-03-04 10:26:24,105 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,107 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,108 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,109 - DEBUG - Invalid or excluded carrier: Limits Endorsements
+2025-03-04 10:26:24,109 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,109 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,109 - DEBUG - Invalid or excluded carrier: Per Project Endors
+2025-03-04 10:26:24,109 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,109 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,110 - DEBUG - Invalid or excluded carrier: State Endorsement
+2025-03-04 10:26:24,110 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,110 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,110 - DEBUG - Invalid or excluded carrier: Auto
+2025-03-04 10:26:24,111 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,111 - DEBUG - Invalid or excluded carrier: Ai+Wos+Per project
+2025-03-04 10:26:24,111 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,111 - DEBUG - Invalid or excluded carrier: AI+Wos+PW
+2025-03-04 10:26:24,111 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,111 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,112 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,112 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,113 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,113 - DEBUG - Invalid or excluded carrier: Class Codes Endors
+2025-03-04 10:26:24,113 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,113 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,114 - DEBUG - Invalid or excluded carrier: General Liability
+2025-03-04 10:26:24,114 - DEBUG - Invalid or excluded carrier: AI+WOS+PW
+2025-03-04 10:26:24,114 - DEBUG - Invalid or excluded carrier: Blanket Ai+WOS
+2025-03-04 10:26:24,114 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,114 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,114 - DEBUG - Invalid or excluded carrier: Per Project Endorsement
+2025-03-04 10:26:24,114 - DEBUG - Invalid or excluded carrier: Water Endorsement
+2025-03-04 10:26:24,114 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,114 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,114 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,114 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,114 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,116 - DEBUG - Invalid or excluded carrier: CG2010 Endors
+2025-03-04 10:26:24,116 - DEBUG - Invalid or excluded carrier: AI+WOS+30 day notice
+2025-03-04 10:26:24,116 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,116 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,116 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,116 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,116 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,116 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,119 - DEBUG - Invalid or excluded carrier: CG2010
+2025-03-04 10:26:24,119 - DEBUG - Invalid or excluded carrier: AI + PW + WOS Endorsement
+2025-03-04 10:26:24,119 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,120 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: House of Worship
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: EndorsementCG 2010
+2025-03-04 10:26:24,121 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,121 - DEBUG - Processing batch 4 (1000 policies)
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,121 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,121 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,121 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,121 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: Payment Declined
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,121 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,121 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,121 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: AI + PW + WOS Endorsement
+2025-03-04 10:26:24,121 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,121 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,121 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: Full refund
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Comp Ops
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: AI+WOS+Per project
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: AI+WOS
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: CG2010
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: Full refund
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded policy type: new GL 2nd payment
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: 2nd Payment
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Non-Eroding Limints
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Blanket AI Endors
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: States Endorsement
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Limits + Comp ops Endorsement
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: Full refund
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: State Endorsement
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Class Codes Endors.
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Limits
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Non Eroding Limits
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Limits
+2025-03-04 10:26:24,130 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded policy type: GL Monthly Payment
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Per Project
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Limits endorsement
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: WOS Endorsement
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,130 - DEBUG - Invalid or excluded carrier: Limits endorsement
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: Non Eroding Limits
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,140 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,140 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: Payment to carrier
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,140 - DEBUG - Processing batch 5 (1000 policies)
+2025-03-04 10:26:24,140 - DEBUG - Invalid policy number: Full Refund
+2025-03-04 10:26:24,140 - DEBUG - Invalid policy number: Full Refund
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: Gross & Subs endorsement
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,140 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,140 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: Non eroding Limits
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,140 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,140 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,145 - DEBUG - Invalid or excluded carrier: Med Limit Endorsement
+2025-03-04 10:26:24,145 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,145 - DEBUG - Invalid or excluded carrier: Completed Ops
+2025-03-04 10:26:24,145 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,146 - DEBUG - Invalid or excluded carrier: Limit Endorsements
+2025-03-04 10:26:24,146 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,146 - DEBUG - Invalid or excluded carrier: Bond Renewal
+2025-03-04 10:26:24,146 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,146 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,146 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,146 - DEBUG - Invalid or excluded carrier: Comp Ops
+2025-03-04 10:26:24,146 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,146 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,146 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,146 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,146 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,146 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,146 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,146 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,146 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,146 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,150 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,150 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,150 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Non Eroding Endors.
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Per Project Endors
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Amendment Endors
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Additional Broker Fee
+2025-03-04 10:26:24,150 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Bond Renewal
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Non Eording limits
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,150 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,150 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Additional Broker Fee
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: GL Endorsement CG2010
+2025-03-04 10:26:24,150 - DEBUG - Invalid policy number: VOIDED
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded policy type: nan
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Additional Broker Fee
+2025-03-04 10:26:24,150 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,150 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Payroll Endorsement
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: 2nd Payment
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Class Code Endors.
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,150 - DEBUG - Invalid or excluded carrier: Broker Fee
+2025-03-04 10:26:24,150 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,157 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,157 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,157 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,157 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,157 - DEBUG - Invalid or excluded carrier: Declined
+2025-03-04 10:26:24,157 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,157 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,160 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,160 - DEBUG - Invalid or excluded carrier: State Compensation
+2025-03-04 10:26:24,160 - DEBUG - Processing batch 6 (1000 policies)
+2025-03-04 10:26:24,160 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,160 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,160 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,160 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,160 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,160 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,160 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: GL endorsement
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: Comp Ops
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: nan
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded policy type: GL+Excess 2nd payment
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: States Endorsement
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: Payment to Carrier
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: Limits+AI Endors
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,163 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded policy type: 2nd payment
+2025-03-04 10:26:24,163 - DEBUG - Invalid or excluded carrier: WC Endorsement
+2025-03-04 10:26:24,170 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,170 - DEBUG - Invalid or excluded carrier: Additional Insured
+2025-03-04 10:26:24,170 - DEBUG - Invalid or excluded carrier: Gross Receips Endor
+2025-03-04 10:26:24,170 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,171 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,171 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,171 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,171 - DEBUG - Invalid or excluded carrier: Additional Insured
+2025-03-04 10:26:24,171 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,171 - DEBUG - Invalid or excluded carrier: Payment disputed
+2025-03-04 10:26:24,171 - DEBUG - Invalid or excluded carrier: Blanket AI Endors
+2025-03-04 10:26:24,171 - DEBUG - Invalid or excluded carrier: BTIS / Endorsement
+2025-03-04 10:26:24,174 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,174 - DEBUG - Invalid or excluded carrier: Endorsement 1
+2025-03-04 10:26:24,174 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,174 - DEBUG - Invalid or excluded carrier: Non-Eroding Endors
+2025-03-04 10:26:24,174 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,174 - DEBUG - Invalid or excluded carrier: Second Payment
+2025-03-04 10:26:24,174 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,174 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,174 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,174 - DEBUG - Invalid or excluded carrier: Gross receipts
+2025-03-04 10:26:24,174 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,174 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,174 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,174 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,174 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,174 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,174 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,174 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,174 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,174 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: Class Code Endors
+2025-03-04 10:26:24,177 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: Endorsement 1
+2025-03-04 10:26:24,177 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: Endorsement 2
+2025-03-04 10:26:24,177 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,177 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,177 - DEBUG - Processing batch 7 (1000 policies)
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: October Installment
+2025-03-04 10:26:24,177 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: Blanket AI Endors
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: Class Code Endors
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: CG2010 Endors
+2025-03-04 10:26:24,177 - DEBUG - Invalid or excluded carrier: Class Code Endors
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Additional Premium
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Payment to carrier
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Payment to carrier
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded policy type: 2nd payment
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limist Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limits/AI Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Completed Ops End.
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: State Endors
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limits Endorsemenet
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Payment to carrier
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Additional Broker Fee
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: 2nd Payment
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limits +AI Endors
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Completed Ops End.
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Completed Ops End.
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: CG 2010 Endors
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Payment to carrier
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Single AI
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,180 - DEBUG - Invalid or excluded carrier: Endorsement 4
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,180 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,190 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,190 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,190 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,190 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,190 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,190 - DEBUG - Invalid or excluded carrier: Endorsement 1
+2025-03-04 10:26:24,190 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,190 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,190 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,190 - DEBUG - Invalid or excluded carrier: Single AI Endors
+2025-03-04 10:26:24,190 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,190 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,190 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,190 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,190 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,190 - DEBUG - Invalid or excluded carrier: Class Codes Endors.
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: Non-owed Auto End.
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: Per Project Endors
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: Gross Sales Endors
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: Limits/AI Endors
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded policy type: Payment to carrier
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: Limits/AI Endorsement
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,193 - DEBUG - Processing batch 8 (1000 policies)
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: Limits Endors
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: AI Endorsement
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: Endrosement
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: Non-eroding Endors
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: CG2010
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,193 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,193 - DEBUG - Invalid or excluded carrier: Gross Receipts Endors
+2025-03-04 10:26:24,200 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,200 - DEBUG - Invalid or excluded carrier: Limts Endorsement
+2025-03-04 10:26:24,200 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,200 - DEBUG - Invalid or excluded carrier: Completed Ops
+2025-03-04 10:26:24,200 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,200 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,200 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,200 - DEBUG - Invalid or excluded carrier: Class Code Endors
+2025-03-04 10:26:24,200 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,200 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,200 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,200 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,200 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,200 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,200 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: Completed Ops End.
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: Gross Receipts End
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: Limits Endorsement
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: Refund
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: nan
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: GL+Equipment
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: Payment to carrier
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,202 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,202 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,210 - DEBUG - Invalid or excluded carrier: 3rd payment
+2025-03-04 10:26:24,210 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,210 - DEBUG - Invalid or excluded carrier: Additional Insured
+2025-03-04 10:26:24,210 - DEBUG - Invalid or excluded carrier: Class Codes
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,210 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,213 - DEBUG - Invalid or excluded carrier: Payment to carrier
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,213 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,213 - DEBUG - Invalid or excluded carrier: General Liability
+2025-03-04 10:26:24,213 - DEBUG - Invalid or excluded carrier: General Liability
+2025-03-04 10:26:24,213 - DEBUG - Invalid or excluded carrier: 2nd payment
+2025-03-04 10:26:24,213 - DEBUG - Processing batch 9 (277 policies)
+2025-03-04 10:26:24,213 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: Voided
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: Refunded
+2025-03-04 10:26:24,213 - DEBUG - Invalid or excluded carrier: Payment to carrier
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,213 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,216 - DEBUG - Invalid or excluded carrier: Payment to carrier
+2025-03-04 10:26:24,216 - DEBUG - Invalid or excluded carrier: GL Endorsement
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,216 - DEBUG - Invalid or excluded carrier: Endorsement
+2025-03-04 10:26:24,216 - DEBUG - Invalid or excluded carrier: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid or excluded carrier: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid or excluded carrier: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid or excluded carrier: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid or excluded policy type: GL 2nd Paymnet
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: Audit
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,216 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,220 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,220 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,220 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,220 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,220 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,220 - DEBUG - Invalid policy number: nan
+2025-03-04 10:26:24,220 - INFO - Updated unmatched values in data\mappings\unmatched_values.json
+2025-03-04 10:26:24,220 - WARNING - Unmapped policy_types:  GL Renewal ,  WC Renewal , 11 GLs, Auto , Auto Insurance , Auto Renewal , Automobile , Automobile Renewal , BR Renewal , Bond , Bond Renewal , Bond renewal , Bonds , Bonds Renewal , E&O Renewal , Equipment , Equipment Insurance , Excess , GL + Ex Renewal , GL + Excess , GL + Excess Renewal , GL +EX Renewal , GL Intermitent , GL Intermittent , GL Renewal , GL Renewal  , GL Rewrite , GL intermitent , GL renewal , GL+ Excess , GL+ Excess Rewrite , GL+ Inland Marine , GL+EX Intermitent , GL+EX Rewrite , GL+Eq Renewal , GL+Excess , GL+Excess Renewal , General Liabiity , General Liability , General Liabilty , General Liabitliy , General Liabity , General Libaility , General liability , Genneral Liability , Inland Marine , Non-Profit Director, Professional Liability , WC , WC Intermitent , WC Renewal , WC intermitent , WC renewal , Workers Comp 
+2025-03-04 10:26:24,220 - WARNING - Unmapped carriers:  OSIC, AERO, AERO/ Accredited , AMWINS, Aappalachian, Accidend Fund , Accident Fund, Accident Fund , Accident Insurance Co, Accredited Surety, Acreddited, Aero, Aero/American Builders Insurance Company, AmTrust, American Zurich Insurance Company, Ammtrust, Amtrust, Amtrust , Amwins, Apapalchian/Aero, App/Certain Lloyds, Appaalchian/Aero, Appalachian, Appalachian , Appalachian  , Appalachian/, Appalachian/ Accredited Surety and Casualty , Appalachian/ Crum, Appalachian/AERO, Appalachian/Accredited, Appalachian/Aero, Appalachian/American, Appalachian/Amtrust, Appalachian/Biberk, Appalachian/Crum, Appalachian/Crum & Forster, Appalachian/Crum and Forster, Appalachian/Hamilton, Appalachian/Kinsale, Appalachian/Maxum, Appalachian/Nautilus, Appalacian/Aero, Appalahcian, Appalchian, Appalkachian, BTIS, BTIS , BTIS/ Clear Spring, BTIS/ Clear Spring Property and Casualty, BTIS/ Continental Casualty Company, BTIS/CNA, BTIS/Certain Underwiters, BTIS/Continental, BTIS/Employers, BTIS/Great, BTIS/Great American, BTIS/Great American Ins. Co, BTIS/Hiscox, BTIS/Navigators, BTIS/Navigators Insurance Company, BTIS/Starr, BTIS/Starr Ind & Liab Co, BTIS/The Pie, BTIS/Wesco , BTUS, Bberk, BiBerk, Biberk, Biberk , Biberk (TBD), Biberk/National Liability, Biberk/Wellfleet, Biberk/Wellfleet , Bibertk, Bibker, Bolt, Bolt , Bolt Access, Bolt Access/Progressive, Bolt/Progressive, Bolt/Progressive , Bond Express, Bonds Express, Bonds Express , Bristol West, CAOM, Certain, Certain U. , Certain Underwriters, Certain Underwriters at Lloyd's, London
 , Certain Underwriters at Lloyd's, London , Coast National Insurance Company, Coterie, Coterie , Great American, Great American Alliance Insurance Company, HCC Tokio Marine , HISCOX, Hartfoord , Hartford , Hull, ICRB, IS Wholesale, ISC, ISC / Certain Underwriters at Lloyd's, London, ISC /LIO Insurance Company, ISC /SSIC, ISC Marine, ISC SSIC, ISC Whole/Kinsale, ISC Whole/Pie, ISC Whole/Pie Ins, ISC Wholesale, ISC Wholesale/Kinsale, ISC Wholesale/LIO, ISC Wholesale/Lio, ISC Wholesale/Old Rep, ISC Wholesale/Pie, ISC'TCIC, ISC-OSIC, ISC-SSIC, ISC-TCIC, ISC/, ISC/ Certain Underwriters at Lloyd's, London, ISC/ Mesa Underwriters Specialty , ISC/ OSIC, ISC/ SSIC, ISC/ TCIC_SSIC, ISC/ The Pie Insurance, ISC/ The Pie Insurance Co, ISC/Biberk, ISC/Certain, ISC/Certain , ISC/Certain Underwriters at Lloyd's, London, ISC/Kinsale, ISC/LIO, ISC/OSC, ISC/OSCI, ISC/OSIC, ISC/OSIC , ISC/OSIC & Inland Marine, ISC/OSIC+SSIC, ISC/OSIC/SSIC, ISC/PCIC, ISC/PIE, ISC/Pie, ISC/SIC, ISC/SSC, ISC/SSIC, ISC/StarStone National , ISC/TCIC, ISC/TCIC , ISC/TCIC+SSIC, ISC/TCIC-SSIC, ISC/TCIC/SSIC, ISC/TCIS, ISC/TSSIC, ISC/The PIE Ins Co, ISC/The PIE Ins. CO, ISC/The PIE Insurance Co, ISC/The Pie, ISC/The Pie Ins, ISC/The Pie Ins Co, ISC/The Pie Insurance, ISC/The Pie Insurance Co, ISC/The Pie Insurance Company, ISC/The Pie Insurance co, ISC/The Pied Insurance Co, ISC/Westchester, ISCC/OSIC, ISCTCIC, ISCWholesale/Pie, ISC\/TCIC, KEMI, Kemi, Kinsale Insurance Company, LIO, LIO , Liberty Mutual, Liberty Mutual , Lio Specialty Ins. CO, Lio Specialty Insurance C, MWCARP, Markel , Michigan State Fund, Michigan/Liberty, NCC, NCC/Liberty Mutual, NCCI, NCCI , NCCI /Liberty Mutual, NCCI-Accident Fund, NCCI/AF, NCCI/Accident, NCCI/Accident Fund, NCCI/Ace, NCCI/American, NCCI/Amguard, NCCI/BUILDERS MUTUAL INS CO, NCCI/Builder's Mutual, NCCI/Builders , NCCI/Continental Indemity , NCCI/Hartford , NCCI/Liberty, NCCI/Liberty Mutual, NCCI/New Mexico, NCCI/PA MANUFACTURERS ASSN INS CO, NCCI/PA MANUFACTURERS ASSN INS CO
 , NCCI/PA Manu, NCCI/Pending, NCCI/TECHNOLOGY INSURANCE CO, NCCI/Technology, NCCI/Travelers, NCCI/Travelers , NCCI/Vertigo, NCCIAccredited, NCRB, NCRB , NCRB/Amguard, NCRB/Liberty, NCRB/Liberty Mutual, NCRB/Travelers, NCRIB, NCRIB/Accident Fund, NEXT, NEXT/SNIC, NJCRB, NJCRIB, NJCRIB , NJCRIB/CNA, NJCRIB/Hardfort, NJRIB, NYSIF, National General, Nationwide, New Mexico, Next, Next , Nysif, OISC, OSC, OSC/OSIC, OSIC, OSIC , OSIC + Certain, OSIC + SSIC, OSIC/Cerain Under, OSIC/Certain Underwiter, OSIC/Certain Underwriters, OSIC/OSIC, OSIC/SSIC, PA Manu, PA Manufacturer's, PCIC, PIE, PIE , PIE Insurance , Pathpoint, Pathpoint/Crum, Pathpoint/Crum , Pathpoints, Pie, Pie Insurance, Pie Insurance , Pouch, Progressie, Progressive, Progressive , Propeller, Propeller , Propeller Bonds, Puch , Risk Transfer, Risk Transfer Partners, SIC, SISC, SSI, SSIC, SSIC , SSIC + Certain U. Lloyd's, SSIC, Certain , SSIC/Certain Under, SSIC/Certain Under., SSIC/Certain Underwriters, SSOC, Shied, Shield, Shield , Shield/Endorsement, Shield/Scottsdale, Shiled , Simpel Bonds, Simple Bond, Simple Bond , Simple Bonds, Simple Bonds , Simple Business, Simple bonds, Simplre Bond, Sipmle Bonds, Solepro, State Fund, Sunz Ins Co, Superior Point, TCC, TCI, TCIC, TCIC , TCIC & SSIC, TCIC +Certain, TCIC / SSIC, TCIC+SSIC, TCIC/Certain Underwriters at Lloyd's, London, TCIC/SSIC, TCIIC, TCOC, TICIC, Technology , Texas Mutual, Texas Mutual , The Pie Insurance, The Pie Insurance Co, The Pie Insurnace Co, The Pied Insurance, Tokio, Tokio , Tokio Marine, Tokio Marine , Tokio/US Specialty, Travelers, Travelers , U.S. Specialty Insurance Company, USG, USG , USG/Hiscox, USG/Kinsale Insurance Company, Underwriter at Lloyd's, London, Vertigo, WCRB, Wellfleet , Wesco, Zoom, Zoom , bIBERK, biberk
-2025-03-04 10:14:38,890 - WARNING - Unmapped brokers: Adrian , Alexis , Anthony , Brennan , Bryan , Chelsea , Chris H , Clint , Collin , Dale , Eduardo , Gerardo , Grey , JMG/Randall , JMH/Randall , Justin , Mark , Mike , Sean , Ted 
-2025-03-04 10:14:38,890 - INFO - Processed 7605 valid, 672 invalid policies
-2025-03-04 10:14:39,069 - INFO - Loaded 8265 Policys from cache
-2025-03-04 10:14:39,119 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:39,439 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration HTTP/1.1" 200 None
-2025-03-04 10:14:39,439 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:39,699 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/policy_migration.py HTTP/1.1" 200 None
-2025-03-04 10:14:39,749 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:41,319 - DEBUG - https://api.github.com:443 "PUT /repos/grijalva10/insurance_policy_migration/contents/policy_migration.py HTTP/1.1" 200 None
-2025-03-04 10:14:41,319 - INFO - Successfully pushed policy_migration.py
-2025-03-04 10:14:41,319 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:41,670 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/data/reports/existing_policies.csv HTTP/1.1" 200 None
-2025-03-04 10:14:41,855 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:43,840 - DEBUG - https://api.github.com:443 "PUT /repos/grijalva10/insurance_policy_migration/contents/data/reports/existing_policies.csv HTTP/1.1" 200 None
-2025-03-04 10:14:43,840 - INFO - Successfully pushed data/reports/existing_policies.csv
-2025-03-04 10:14:43,840 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:44,139 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/data/reports/invalid_policies.csv HTTP/1.1" 200 None
-2025-03-04 10:14:44,179 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:46,812 - DEBUG - https://api.github.com:443 "PUT /repos/grijalva10/insurance_policy_migration/contents/data/reports/invalid_policies.csv HTTP/1.1" 200 None
-2025-03-04 10:14:46,813 - INFO - Successfully pushed data/reports/invalid_policies.csv
-2025-03-04 10:14:46,814 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:47,085 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/data/reports/new_policies.csv HTTP/1.1" 200 None
-2025-03-04 10:14:47,171 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:48,679 - DEBUG - https://api.github.com:443 "PUT /repos/grijalva10/insurance_policy_migration/contents/data/reports/new_policies.csv HTTP/1.1" 200 None
-2025-03-04 10:14:48,679 - INFO - Successfully pushed data/reports/new_policies.csv
-2025-03-04 10:14:48,679 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:48,943 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/data/reports/valid_policies.csv HTTP/1.1" 200 None
-2025-03-04 10:14:48,951 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:51,531 - DEBUG - https://api.github.com:443 "PUT /repos/grijalva10/insurance_policy_migration/contents/data/reports/valid_policies.csv HTTP/1.1" 200 None
-2025-03-04 10:14:51,531 - INFO - Successfully pushed data/reports/valid_policies.csv
-2025-03-04 10:14:51,531 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
-2025-03-04 10:14:51,799 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/logs/policy_upload_log.txt HTTP/1.1" 200 None
+2025-03-04 10:26:24,220 - WARNING - Unmapped brokers: Adrian , Alexis , Anthony , Brennan , Bryan , Chelsea , Chris H , Clint , Collin , Dale , Eduardo , Gerardo , Grey , JMG/Randall , JMH/Randall , Justin , Mark , Mike , Sean , Ted 
+2025-03-04 10:26:24,220 - INFO - Processed 7605 valid, 672 invalid policies
+2025-03-04 10:26:24,423 - INFO - Loaded 8265 Policys from cache
+2025-03-04 10:26:24,471 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:24,802 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration HTTP/1.1" 200 None
+2025-03-04 10:26:24,802 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:25,100 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/policy_migration.py HTTP/1.1" 200 None
+2025-03-04 10:26:25,150 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:25,870 - DEBUG - https://api.github.com:443 "PUT /repos/grijalva10/insurance_policy_migration/contents/policy_migration.py HTTP/1.1" 200 None
+2025-03-04 10:26:25,870 - INFO - Successfully pushed policy_migration.py
+2025-03-04 10:26:25,870 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:26,200 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/data/reports/existing_policies.csv HTTP/1.1" 200 None
+2025-03-04 10:26:26,260 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:26,950 - DEBUG - https://api.github.com:443 "PUT /repos/grijalva10/insurance_policy_migration/contents/data/reports/existing_policies.csv HTTP/1.1" 200 None
+2025-03-04 10:26:26,950 - INFO - Successfully pushed data/reports/existing_policies.csv
+2025-03-04 10:26:26,950 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:27,250 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/data/reports/invalid_policies.csv HTTP/1.1" 200 None
+2025-03-04 10:26:27,310 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:28,110 - DEBUG - https://api.github.com:443 "PUT /repos/grijalva10/insurance_policy_migration/contents/data/reports/invalid_policies.csv HTTP/1.1" 200 None
+2025-03-04 10:26:28,110 - INFO - Successfully pushed data/reports/invalid_policies.csv
+2025-03-04 10:26:28,110 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:28,426 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/data/reports/new_policies.csv HTTP/1.1" 200 None
+2025-03-04 10:26:28,426 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:29,150 - DEBUG - https://api.github.com:443 "PUT /repos/grijalva10/insurance_policy_migration/contents/data/reports/new_policies.csv HTTP/1.1" 200 None
+2025-03-04 10:26:29,150 - INFO - Successfully pushed data/reports/new_policies.csv
+2025-03-04 10:26:29,150 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:29,445 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/data/reports/valid_policies.csv HTTP/1.1" 200 None
+2025-03-04 10:26:29,460 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:30,720 - DEBUG - https://api.github.com:443 "PUT /repos/grijalva10/insurance_policy_migration/contents/data/reports/valid_policies.csv HTTP/1.1" 200 None
+2025-03-04 10:26:30,720 - INFO - Successfully pushed data/reports/valid_policies.csv
+2025-03-04 10:26:30,720 - DEBUG - Starting new HTTPS connection (1): api.github.com:443
+2025-03-04 10:26:31,000 - DEBUG - https://api.github.com:443 "GET /repos/grijalva10/insurance_policy_migration/contents/logs/policy_upload_log.txt HTTP/1.1" 200 None
