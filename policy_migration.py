@@ -396,21 +396,37 @@ def process_policies(policies: List[Dict], carriers_map: Dict, logger: logging.L
         try:
             normalized = normalize_policy_fields(policy.copy(), carriers_map, logger)
             
-            # Log broker matching for debugging
+            # Log all mapping checks for debugging
             original_broker = policy.get('broker', '')
             cleaned_broker = clean_value(original_broker, field_type='broker')
             mapped_broker = BROKER_MAPPING.get(cleaned_broker)
-            logger.debug(f"Broker matching: Original='{original_broker}', Cleaned='{cleaned_broker}', Mapped='{mapped_broker}'")
             
-            if normalized['policy_type'] == 'Other':
-                unmapped['policy_types'].add(clean_value(policy['policy_type']))
-            if normalized['carrier'] not in carriers_map:
-                unmapped['carriers'].add(clean_value(policy['carrier']))
-            if not normalized['broker_email']:
-                # Only add to unmapped if it's not in the mapping and not empty
-                if cleaned_broker and cleaned_broker not in BROKER_MAPPING:
-                    unmapped['brokers'].add(cleaned_broker)
-                    logger.debug(f"Added unmapped broker: '{cleaned_broker}'")
+            original_carrier = policy.get('carrier', '')
+            cleaned_carrier = clean_value(original_carrier)
+            mapped_carrier = CARRIER_MAPPING.get(cleaned_carrier)
+            
+            original_policy_type = policy.get('policy_type', '')
+            cleaned_policy_type = clean_value(original_policy_type)
+            mapped_policy_type = POLICY_TYPE_MAPPING.get(cleaned_policy_type)
+            
+            logger.debug(f"Mapping checks for policy {policy.get('policy_number', 'unknown')}:")
+            logger.debug(f"  Broker: Original='{original_broker}', Cleaned='{cleaned_broker}', Mapped='{mapped_broker}'")
+            logger.debug(f"  Carrier: Original='{original_carrier}', Cleaned='{cleaned_carrier}', Mapped='{mapped_carrier}'")
+            logger.debug(f"  Policy Type: Original='{original_policy_type}', Cleaned='{cleaned_policy_type}', Mapped='{mapped_policy_type}'")
+            
+            # Check for unmapped values
+            if not mapped_policy_type:
+                unmapped['policy_types'].add(cleaned_policy_type)
+                logger.debug(f"Added unmapped policy type: '{cleaned_policy_type}'")
+            
+            if not mapped_carrier:
+                unmapped['carriers'].add(cleaned_carrier)
+                logger.debug(f"Added unmapped carrier: '{cleaned_carrier}'")
+            
+            if not mapped_broker:
+                unmapped['brokers'].add(cleaned_broker)
+                logger.debug(f"Added unmapped broker: '{cleaned_broker}'")
+            
             return normalized
         except Exception as e:
             logger.error(f"Error normalizing policy {policy.get('policy_number', 'unknown')}: {e}")
