@@ -191,7 +191,9 @@ def load_csv_files(logger: logging.Logger) -> List[Dict]:
                 for var in variations:
                     if var in column_map:
                         # Clean string values immediately after loading
-                        if field in ['broker', 'policy_type', 'carrier']:
+                        if field == 'broker':
+                            mapped_df[field] = df[column_map[var]].apply(lambda x: clean_value(x, field_type='broker'))
+                        elif field in ['policy_type', 'carrier']:
                             mapped_df[field] = df[column_map[var]].apply(clean_value)
                         else:
                             mapped_df[field] = df[column_map[var]]
