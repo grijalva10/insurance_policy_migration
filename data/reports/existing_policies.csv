@@ -1,1 +1,213 @@
-
+policy_number,effective_date,broker_fee,commission,broker,policy_type,carrier,expiration_date,broker_fee_amount,commission_amount,source_file,broker_email,status,premium
+66910220,2024-01-08,$200.00,$38.00,randall@jmgia.com,Bond,Simple Bonds,2025-01-08,200.0,38.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
+102146-9-24,2024-01-11,"$2,000.00",$0.00,randall@jmgia.com,Workers Compensation,NJCRIB,2025-01-11,2000.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
+26044537,2024-01-12,$500.00,$0.00,mike@jmgia.com,Workers Compensation,NYSIF,2025-01-12,500.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Expired,0.0
+807179,2024-01-12,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Bolt Insurance,2025-01-12,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
+00840905-1,2024-01-19,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-01-19,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
+833042,2024-01-19,$200.00,$0.00,randall@jmgia.com,Bond,Bonds Express,2025-01-19,200.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
+966096800,2024-01-23,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-01-23,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
+976896474,2024-01-27,$500.00,$0.00,grey@jmgia.com,Commercial Auto,Progressive,2025-01-27,500.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Expired,0.0
+100615136,2024-02-02,$150.00,$0.00,randall@jmgia.com,Bond,Bonds Express,2025-02-02,150.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
+66525262,2024-02-08,$200.00,$0.00,randall@jmgia.com,Bond,Bonds Express,2025-02-08,200.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
+2106352,2024-02-14,$300.28,$0.00,chelsea@jmgia.com,Workers Compensation,Texas Mutual,2025-02-14,300.28,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Expired,0.0
+0100294271-0,2024-02-20,$400.00,$350.00,mike@jmgia.com,General Liability,Appalachian Insurance Company,2025-02-20,400.0,350.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Expired,0.0
+66962107,2024-02-20,$149.00,$23.00,justin@jmgia.com,Bond,Simple Bonds,2025-02-20,149.0,23.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Expired,0.0
+2106774,2024-02-22,$300.00,$0.00,chelsea@jmgia.com,Workers Compensation,Texas Mutual,2025-02-22,300.0,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Expired,0.0
+66964354,2024-02-23,$81.00,$113.00,justin@jmgia.com,Bond,Simple Bonds,2025-02-23,81.0,113.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Expired,0.0
+7901176393,2024-02-27,$150.00,$0.00,grey@jmgia.com,Bond,Nationwide,2025-02-27,150.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Expired,0.0
+978061143,2024-02-28,$480.00,$0.00,mark@jmgia.com,Commercial Auto,Progressive,2025-02-28,480.0,0.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Expired,0.0
+66972774,2024-02-29,$100.00,$23.00,randall@jmgia.com,Bond,Simple Bonds,2025-02-28,100.0,23.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
+0100287319-0,2024-02-29,$300.00,$200.00,mark@jmgia.com,Excess,Appalachian Insurance Company,2025-02-28,300.0,200.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Expired,0.0
+7109625-0000,2024-02-29,$100.00,$0.00,grey@jmgia.com,Bond,Propeller,2025-02-28,100.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Expired,0.0
+972820951,2024-02-29,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-02-28,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
+100840066,2024-03-04,$300.00,$273.00,mike@jmgia.com,Bond,Simple Bonds,2025-03-04,300.0,273.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Expired,0.0
+107997213,2024-03-04,$100.00,$0.00,grey@jmgia.com,Bond,Travelers Casualty Company,2025-03-04,100.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Expired,0.0
+978490737,2024-03-08,$500.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-03-08,500.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+833084,2024-03-08,$98.00,$0.00,mike@jmgia.com,Bond,Bonds Express,2025-03-08,98.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+978660590,2024-03-11,$250.00,$0.00,mike@jmgia.com,Commercial Auto,Progressive,2025-03-11,250.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+66985545,2024-03-11,$0.00,$36.00,mike@jmgia.com,Bond,Simple Bonds,2025-03-11,0.0,36.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+66985514,2024-03-11,$200.00,$113.00,mike@jmgia.com,Bond,Simple Bonds,2025-03-11,200.0,113.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+107997331,2024-03-14,$125.00,$0.00,grey@jmgia.com,Bond,Propeller,2025-03-14,125.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Active,0.0
+66928415/66592049,2024-03-15,$500.00,$413.00,mike@jmgia.com,Bond,Simple Bonds,2025-03-15,500.0,413.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+446358,2024-03-15,$300.00,$0.00,chelsea@jmgia.com,Workers Compensation,KEMI,2025-03-15,300.0,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+2108010,2024-03-18,$400.00,$0.00,justin@jmgia.com,Workers Compensation,Texas Mutual,2025-03-18,400.0,0.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+66996404,2024-03-19,$150.00,$30.00,randall@jmgia.com,Bond,Simple Bonds,2025-03-19,150.0,30.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+2108163,2024-03-20,$400.00,$0.00,randall@jmgia.com,Workers Compensation,Texas Mutual,2025-03-20,400.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+2108301,2024-03-22,$300.00,$0.00,justin@jmgia.com,Workers Compensation,Texas Mutual,2025-03-22,300.0,0.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+2108299,2024-03-22,$300.00,$0.00,mike@jmgia.com,Workers Compensation,Texas Mutual,2025-03-22,300.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+7901180213,2024-03-25,$100.00,$0.00,chrish@jmgia.com,Bond,Nationwide,2025-03-25,100.0,0.0,Sales Epay 2024 - Sheet1.csv,chrish@jmgia.com,Active,0.0
+67007727,2024-03-27,$200.00,$45.00,randall@jmgia.com,Bond,Simple Bonds,2025-03-27,200.0,45.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+0100292963-0,2024-04-02,$300.00,$210.00,chrish@jmgia.com,General Liability,Appalachian Insurance Company,2025-04-02,300.0,210.0,Sales Epay 2024 - Sheet1.csv,chrish@jmgia.com,Active,0.0
+67014511,2024-04-03,$150.00,$30.00,randall@jmgia.com,Bond,Simple Bonds,2025-04-03,150.0,30.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+0100293997-0,2024-04-06,$700.00,$750.00,mike@jmgia.com,General Liability,Appalachian Insurance Company,2025-04-06,700.0,750.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+979760840,2024-04-09,"$1,500.00",$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-04-09,1500.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+100849779,2024-04-12,$110.00,$54.00,justin@jmgia.com,Bond,Simple Bonds,2025-04-12,110.0,54.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+3802609838,2024-04-12,$100.00,$0.00,chrish@jmgia.com,Bond,Propeller,2025-04-12,100.0,0.0,Sales Epay 2024 - Sheet1.csv,chrish@jmgia.com,Active,0.0
+0100295652-0,2024-04-17,$400.00,$210.00,mike@jmgia.com,General Liability,Appalachian Insurance Company,2025-04-17,400.0,210.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+67031930,2024-04-17,$100.00,$64.00,chelsea@jmgia.com,Bond,Simple Bonds,2025-04-17,100.0,64.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+7901183139,2024-04-18,$125.00,$0.00,adrian@jmgia.com,Bond,Propeller,2025-04-18,125.0,0.0,Sales Epay 2024 - Sheet1.csv,adrian@jmgia.com,Active,0.0
+2109593,2024-04-18,$400.00,$0.00,randall@jmgia.com,Workers Compensation,Texas Mutual,2025-04-18,400.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+00509788-0,2024-04-19,$650.00,$0.00,grey@jmgia.com,Commercial Auto,Progressive,2025-04-19,650.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Active,0.0
+67036281,2024-04-22,$100.00,$27.00,mike@jmgia.com,Bond,Simple Bonds,2025-04-22,100.0,27.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+67037837,2024-04-23,$200.00,$38.00,randall@jmgia.com,Bond,Simple Bonds,2025-04-23,200.0,38.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+980629208,2024-04-24,$300.00,$0.00,justin@jmgia.com,Commercial Auto,Progressive,2025-04-24,300.0,0.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+2109980,2024-04-26,$300.00,$0.00,justin@jmgia.com,Workers Compensation,Texas Mutual,2025-04-26,300.0,0.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+980580964,2024-04-29,$453.00,$0.00,eduardo@jmgia.com,Commercial Auto,Progressive,2025-04-29,453.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+0100299044-0,2024-04-30,$500.00,"$1,050.00",eduardo@jmgia.com,General Liability,Appalachian Insurance Company,2025-04-30,500.0,1050.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+980629756,2024-04-30,$611.00,$0.00,eduardo@jmgia.com,Commercial Auto,Progressive,2025-04-30,611.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+0100299536-0,2024-04-30,$977.79,$911.20,collin@jmgia.com,General Liability,Appalachian Insurance Company,2025-04-30,977.79,911.2,Sales Epay 2024 - Sheet1.csv,collin@jmgia.com,Active,0.0
+2110143,2024-04-30,$500.00,$0.00,grey@jmgia.com,Workers Compensation,Texas Mutual,2025-04-30,500.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Active,0.0
+2110164,2024-04-30,$615.43,$0.00,collin@jmgia.com,Workers Compensation,Texas Mutual,2025-04-30,615.43,0.0,Sales Epay 2024 - Sheet1.csv,collin@jmgia.com,Active,0.0
+980743216,2024-05-02,$300.00,$0.00,chelsea@jmgia.com,Commercial Auto,Progressive,2025-05-02,300.0,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+67048555,2024-05-02,$200.00,$75.00,randall@jmgia.com,Bond,Simple Bonds,2025-05-02,200.0,75.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+102853-0-24,2024-05-02,$400.00,$0.00,mark@jmgia.com,Workers Compensation,NJCRIB,2025-05-02,400.0,0.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Active,0.0
+7901186555,2024-05-06,$100.00,$0.00,grey@jmgia.com,Bond,Propeller,2025-05-06,100.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Active,0.0
+2110412,2024-05-06,$349.49,$0.00,dale@jmgia.com,Workers Compensation,Texas Mutual,2025-05-06,349.49,0.0,Sales Epay 2024 - Sheet1.csv,dale@jmgia.com,Active,0.0
+67054650,2024-05-07,$100.00,$56.00,chelsea@jmgia.com,Bond,Simple Bonds,2025-05-07,100.0,56.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+2110483,2024-05-08,$0.00,$0.00,dale@jmgia.com,Workers Compensation,Texas Mutual,2025-05-08,0.0,0.0,Sales Epay 2024 - Sheet1.csv,dale@jmgia.com,Active,0.0
+65494236,2024-05-08,$150.00,$0.00,randall@jmgia.com,Bond,Bonds Express,2025-05-08,150.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+970494342,2024-05-13,$300.00,$0.00,mike@jmgia.com,Commercial Auto,Progressive,2025-05-13,300.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+0100301275-0,2024-05-15,$300.00,$210.00,dale@jmgia.com,General Liability,Appalachian Insurance Company,2025-05-15,300.0,210.0,Sales Epay 2024 - Sheet1.csv,dale@jmgia.com,Active,0.0
+67058660,2024-05-15,$200.00,$38.00,randall@jmgia.com,Bond,Simple Bonds,2025-05-15,200.0,38.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+2110920,2024-05-16,$520.00,$0.00,eduardo@jmgia.com,Workers Compensation,Texas Mutual,2025-05-16,520.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+67062042,2024-05-17,$200.00,$38.00,randall@jmgia.com,Bond,Simple Bonds,2025-05-17,200.0,38.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+67070654,2024-05-21,$200.00,$30.00,randall@jmgia.com,Bond,Simple Bonds,2025-05-21,200.0,30.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+981579461,2024-05-21,$300.00,$0.00,justin@jmgia.com,Commercial Auto,Bolt Insurance,2025-05-21,300.0,0.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+2111096,2024-05-21,$400.00,$0.00,randall@jmgia.com,Workers Compensation,Texas Mutual,2025-05-21,400.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+67069680,2024-05-21,$200.00,$38.00,randall@jmgia.com,Bond,Simple Bonds,2025-05-21,200.0,38.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+2162028,2024-05-21,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Bolt Insurance,2025-05-21,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+26148908,2024-05-24,$450.00,$0.00,chelsea@jmgia.com,Workers Compensation,NYSIF,2025-05-24,450.0,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+2111349,2024-05-28,$400.00,$0.00,randall@jmgia.com,Workers Compensation,Texas Mutual,2025-05-28,400.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+981854182,2024-05-28,$500.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-05-28,500.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+103173-2-24,2024-05-28,$300.00,$0.00,chelsea@jmgia.com,Workers Compensation,NJCRIB,2025-05-28,300.0,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+67085913,2024-06-04,$109.00,$43.00,justin@jmgia.com,Bond,Simple Bonds,2025-06-04,109.0,43.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+982481877,2024-06-05,$399.00,$0.00,eduardo@jmgia.com,Commercial Auto,Progressive,2025-06-05,399.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+2111861,2024-06-06,$300.00,$0.00,mike@jmgia.com,Workers Compensation,Texas Mutual,2025-06-06,300.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+253636,2024-06-06,$430.00,$0.00,mark@jmgia.com,Workers Compensation,NJCRIB,2025-06-06,430.0,0.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Active,0.0
+7901191850,2024-06-06,$150.00,$0.00,eduardo@jmgia.com,Bond,Propeller,2025-06-06,150.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+67089470,2024-06-06,$200.00,$38.00,randall@jmgia.com,Bond,Simple Bonds,2025-06-06,200.0,38.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+101181516,2024-06-06,$200.00,$18.00,mike@jmgia.com,Bond,Simple Bonds,2025-06-06,200.0,18.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+982439935,2024-06-10,"$1,600.00",$0.00,randall@jmgia.com,Commercial Auto,Bolt Insurance,2025-06-10,1600.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+67092424,2024-06-11,$110.00,$36.00,chelsea@jmgia.com,Bond,Simple Bonds,2025-06-11,110.0,36.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+2112074,2024-06-11,$600.00,$0.00,randall@jmgia.com,Workers Compensation,Texas Mutual,2025-06-11,600.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+833164,2024-06-13,$0.00,$0.00,chelsea@jmgia.com,Bond,Bonds Express,2025-06-13,0.0,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+7901192268,2024-06-17,$100.00,$0.00,gerardo@jmgia.com,Bond,Propeller,2025-06-17,100.0,0.0,Sales Epay 2024 - Sheet1.csv,gerardo@jmgia.com,Active,0.0
+982859910,2024-06-18,$700.00,$0.00,grey@jmgia.com,Commercial Auto,Bolt Insurance,2025-06-18,700.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Active,0.0
+2112465,2024-06-19,$0.00,$0.00,grey@jmgia.com,Workers Compensation,Texas Mutual,2025-06-19,0.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Active,0.0
+807179,2024-06-21,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-06-21,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+2112624,2024-06-21,$800.00,$0.00,randall@jmgia.com,Workers Compensation,Texas Mutual,2025-06-21,800.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+0100308642-0,2024-06-24,$727.00,$549.80,eduardo@jmgia.com,Excess,Appalachian Insurance Company,2025-06-24,727.0,549.8,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+9362060-24,2024-06-24,$600.00,$0.00,mark@jmgia.com,Workers Compensation,State Fund,2025-06-24,600.0,0.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Active,0.0
+2112904,2024-06-27,$400.00,$0.00,justin@jmgia.com,Workers Compensation,Texas Mutual,2025-06-27,400.0,0.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+67116152,2024-07-01,$105.00,$18.00,justin@jmgia.com,Bond,Simple Bonds,2025-07-01,105.0,18.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+960131453,2024-07-02,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-07-02,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+67117527,2024-07-02,$100.00,$34.00,mike@jmgia.com,Bond,Simple Bonds,2025-07-02,100.0,34.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+67118338,2024-07-03,$175.00,$34.00,chelsea@jmgia.com,Bond,Simple Bonds,2025-07-03,175.0,34.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+9278357,2024-07-09,$300.00,$0.00,chelsea@jmgia.com,Workers Compensation,State Fund,2025-07-09,300.0,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+2113455,2024-07-10,$300.00,$0.00,mike@jmgia.com,Workers Compensation,Texas Mutual,2025-07-10,300.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+983719373,2024-07-10,$300.00,$0.00,justin@jmgia.com,Commercial Auto,Progressive,2025-07-10,300.0,0.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+0100311856-0,2024-07-10,$297.00,$187.40,mike@jmgia.com,Excess,ISC Insurance,2025-07-10,297.0,187.4,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+0100311032-0,2024-07-10,$250.00,$350.00,gerardo@jmgia.com,General Liability,Appalachian Insurance Company,2025-07-10,250.0,350.0,Sales Epay 2024 - Sheet1.csv,gerardo@jmgia.com,Active,0.0
+0100312489-0,2024-07-10,$200.00,$150.00,eduardo@jmgia.com,Excess,Appalachian Insurance Company,2025-07-10,200.0,150.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+67124537,2024-07-10,$100.00,$68.00,mike@jmgia.com,Bond,Simple Bonds,2025-07-10,100.0,68.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+7901195766,2024-07-11,$150.00,$0.00,adrian@jmgia.com,Bond,Propeller,2025-07-11,150.0,0.0,Sales Epay 2024 - Sheet1.csv,adrian@jmgia.com,Active,0.0
+00461871-0,2024-07-11,$500.00,$0.00,grey@jmgia.com,Commercial Auto,Bolt Insurance,2025-07-11,500.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Active,0.0
+7901196100,2024-07-18,$100.00,$0.00,collin@jmgia.com,Bond,Propeller,2025-07-18,100.0,0.0,Sales Epay 2024 - Sheet1.csv,collin@jmgia.com,Active,0.0
+0100313356-0,2024-07-19,$599.10,$525.00,mike@jmgia.com,General Liability,Appalachian Insurance Company,2025-07-19,599.1,525.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+984163921,2024-07-19,$300.00,$0.00,chelsea@jmgia.com,Commercial Auto,Progressive,2025-07-19,300.0,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+101218335,2024-07-22,$125.00,$18.00,chelsea@jmgia.com,Bond,Bonds Express,2025-07-22,125.0,18.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+2113960,2024-07-23,$399.60,$0.00,mike@jmgia.com,Workers Compensation,Texas Mutual,2025-07-23,399.6,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+2114224,2024-07-26,$300.00,$0.00,justin@jmgia.com,Workers Compensation,Texas Mutual,2025-07-26,300.0,0.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+972212839,2024-07-30,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Bolt Insurance,2025-07-30,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+2114376,2024-07-30,$300.00,$0.00,mike@jmgia.com,Workers Compensation,Texas Mutual,2025-07-30,300.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+2114408,2024-07-30,$300.00,$0.00,mark@jmgia.com,Workers Compensation,Texas Mutual,2025-07-30,300.0,0.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Active,0.0
+972075204,2024-08-02,$300.00,$0.00,mike@jmgia.com,Commercial Auto,Progressive,2025-08-02,300.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+984948440,2024-08-05,$300.00,$0.00,justin@jmgia.com,Commercial Auto,Progressive,2025-08-05,300.0,0.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
+7901197048,2024-08-07,$130.00,$0.00,adrian@jmgia.com,Bond,Propeller,2025-08-07,130.0,0.0,Sales Epay 2024 - Sheet1.csv,adrian@jmgia.com,Active,0.0
+0100317369-0,2024-08-07,$500.00,$500.00,mike@jmgia.com,Excess,Appalachian Insurance Company,2025-08-07,500.0,500.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+985262303,2024-08-12,$400.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-08-12,400.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+67159523,2024-08-13,$188.00,$35.00,randall@jmgia.com,Bond,Simple Bonds,2025-08-13,188.0,35.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+972657817,2024-08-16,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-08-16,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+972923689,2024-08-20,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-08-20,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+972820951,2024-08-21,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-08-21,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+985723077,2024-08-22,$400.00,$0.00,mike@jmgia.com,Commercial Auto,Bolt Insurance,2025-08-22,400.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+972983369,2024-08-22,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-08-22,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+0100319503-0,2024-08-22,$397.00,$350.00,mike@jmgia.com,Excess,ISC Insurance,2025-08-22,397.0,350.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+0100320318-0,2024-08-26,$497.00,$367.50,mike@jmgia.com,General Liability,ISC Insurance,2025-08-26,497.0,367.5,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+2099132,2024-08-27,$300.00,$0.00,randall@jmgia.com,Workers Compensation,Texas Mutual,2025-08-27,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+0100322930-0,2024-09-10,$696.90,$600.00,mike@jmgia.com,General Liability,ISC Insurance,2025-09-10,696.9,600.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+2099255,2024-09-11,$300.13,$0.00,chelsea@jmgia.com,Workers Compensation,Texas Mutual,2025-09-11,300.13,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+67058660,2024-09-13,$200.00,$18.00,randall@jmgia.com,Bond,Simple Bonds,2025-09-13,200.0,18.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+987328100,2024-09-17,$300.00,$0.00,eduardo@jmgia.com,Commercial Auto,Progressive,2025-09-17,300.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+0100324109-0,2024-09-17,$725.00,$525.00,mark@jmgia.com,General Liability,Appalachian Insurance Company,2025-09-17,725.0,525.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Active,0.0
+0100324585-0,2024-09-19,$472.00,"$1,150.00",mike@jmgia.com,General Liability,ISC Insurance,2025-09-19,472.0,1150.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+448496,2024-09-26,$500.00,$0.00,mike@jmgia.com,Workers Compensation,KEMI,2025-09-26,500.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+0100325630-0,2024-09-26,$747.00,$650.00,mike@jmgia.com,Excess,ISC Insurance,2025-09-26,747.0,650.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+67207047,2024-09-27,$150.00,$18.00,eduardo@jmgia.com,Bond,Simple Bonds,2025-09-27,150.0,18.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+0100327747-0,2024-09-27,$600.00,$525.00,mark@jmgia.com,General Liability,Appalachian Insurance Company,2025-09-27,600.0,525.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Active,0.0
+987557520,2024-10-01,$700.00,$0.00,mike@jmgia.com,Commercial Auto,Progressive,2025-10-01,700.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+7901215567,2024-10-01,$100.00,$0.00,cara@jmgia.com,Bond,Propeller,2025-10-01,100.0,0.0,Sales Epay 2024 - Sheet1.csv,cara@jmgia.com,Active,0.0
+987577937,2024-10-01,$500.00,$0.00,mike@jmgia.com,Commercial Auto,Progressive,2025-10-01,500.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+0100326902-0,2024-10-02,$399.70,$210.00,mike@jmgia.com,General Liability,Appalachian Insurance Company,2025-10-02,399.7,210.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+987823078,2024-10-06,$400.00,$0.00,mike@jmgia.com,Commercial Auto,Progressive,2025-10-06,400.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+0100329545-0,2024-10-15,"$1,237.50",$500.00,mark@jmgia.com,General Liability,ISC Insurance,2025-10-15,1237.5,500.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Active,0.0
+0100329616-0,2024-10-15,$347.00,$175.00,mark@jmgia.com,Excess,ISC Insurance,2025-10-15,347.0,175.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Active,0.0
+988666614,2024-10-22,$250.00,$0.00,eduardo@jmgia.com,Commercial Auto,Progressive,2025-10-22,250.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+6106625,2024-10-22,$700.00,$0.00,mike@jmgia.com,Workers Compensation,Appalachian Insurance Company,2025-10-22,700.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+101307768,2024-10-23,$200.00,$90.00,brennan@jmgia.com,Bond,Simple Bonds,2025-10-23,200.0,90.0,Sales Epay 2024 - Sheet1.csv,brennan@jmgia.com,Active,0.0
+100811961,2024-10-23,$100.00,$33.75,chelsea@jmgia.com,Bond,Simple Bonds,2025-10-23,100.0,33.75,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+7901222531,2024-10-25,$200.00,$0.00,eduardo@jmgia.com,Bond,Propeller,2025-10-25,200.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+7901222543,2024-10-25,$200.00,$0.00,eduardo@jmgia.com,Bond,Propeller,2025-10-25,200.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+9369295-24,2024-10-25,$300.00,$0.00,mark@jmgia.com,Workers Compensation,AmWINS,2025-10-25,300.0,0.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Active,0.0
+988761147,2024-10-30,"$1,200.00",$0.00,cara@jmgia.com,Commercial Auto,Progressive,2025-10-30,1200.0,0.0,Sales Epay 2024 - Sheet1.csv,cara@jmgia.com,Active,0.0
+988787056,2024-10-30,$600.00,$0.00,mike@jmgia.com,Commercial Auto,Progressive,2025-10-30,600.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+0100332482-0,2024-10-31,$397.00,$880.80,mike@jmgia.com,Excess,Kinsale Insurance Company,2025-10-31,397.0,880.8,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+7039062293,2024-11-01,$300.00,$0.00,anthony@jmgia.com,Workers Compensation,Btis,2025-11-01,300.0,0.0,Sales Epay 2024 - Sheet1.csv,anthony@jmgia.com,Active,0.0
+0100333093-0,2024-11-04,$500.00,$350.00,cara@jmgia.com,General Liability,Appalachian Insurance Company,2025-11-04,500.0,350.0,Sales Epay 2024 - Sheet1.csv,cara@jmgia.com,Active,0.0
+0100333605-0,2024-11-04,$200.00,$150.00,cara@jmgia.com,Excess,Appalachian Insurance Company,2025-11-04,200.0,150.0,Sales Epay 2024 - Sheet1.csv,cara@jmgia.com,Active,0.0
+1000627754241,2024-11-05,$300.00,$324.00,mike@jmgia.com,General Liability,Btis,2025-11-05,300.0,324.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+1000627755241,2024-11-05,$850.00,$0.00,eduardo@jmgia.com,General Liability,Btis,2025-11-05,850.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+989097962,2024-11-06,$500.00,$0.00,cara@jmgia.com,Commercial Auto,Progressive,2025-11-06,500.0,0.0,Sales Epay 2024 - Sheet1.csv,cara@jmgia.com,Active,0.0
+989433052,2024-11-14,"$1,149.99",$0.00,eduardo@jmgia.com,Commercial Auto,Progressive,2025-11-14,1149.99,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+989891001,2024-11-25,$700.00,$0.00,eduardo@jmgia.com,Commercial Auto,Progressive,2025-11-25,700.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+1000627764241,2024-11-27,$450.00,$0.00,anthony@jmgia.com,General Liability,Btis,2025-11-27,450.0,0.0,Sales Epay 2024 - Sheet1.csv,anthony@jmgia.com,Active,0.0
+1000627766241,2024-12-02,$200.00,$0.00,chelsea@jmgia.com,General Liability,Btis,2025-12-02,200.0,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+990195039,2024-12-03,$250.00,$0.00,eduardo@jmgia.com,Commercial Auto,Progressive,2025-12-03,250.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+990175311,2024-12-04,$300.00,$0.00,chelsea@jmgia.com,Commercial Auto,Progressive,2025-12-04,300.0,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+50020136601,2024-12-05,$800.00,$0.00,grey@jmgia.com,Commercial Auto,Bolt Insurance,2025-12-05,800.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Active,0.0
+108150452,2024-12-05,$100.00,$0.00,clint@jmgia.com,Bond,Propeller,2025-12-05,100.0,0.0,Sales Epay 2024 - Sheet1.csv,clint@jmgia.com,Active,0.0
+975652449,2024-12-05,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2025-12-05,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+0100339699-0,2024-12-12,$200.00,$100.00,chelsea@jmgia.com,Pollution Liability,USG Insurance,2025-12-12,200.0,100.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+0002120845,2024-12-12,$400.00,$0.00,mark@jmgia.com,Workers Compensation,Texas Mutual,2025-12-12,400.0,0.0,Sales Epay 2024 - Sheet1.csv,mark@jmgia.com,Active,0.0
+990679658,2024-12-16,$300.00,$0.00,mike@jmgia.com,Commercial Auto,Bolt Insurance,2025-12-16,300.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Active,0.0
+990658106,2024-12-17,$220.00,$0.00,eduardo@jmgia.com,Commercial Auto,Bolt Insurance,2025-12-17,220.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+990729256,2024-12-17,$300.00,$0.00,anthony@jmgia.com,Commercial Auto,Bolt Insurance,2025-12-17,300.0,0.0,Sales Epay 2024 - Sheet1.csv,anthony@jmgia.com,Active,0.0
+0100340912-0,2024-12-18,$700.00,$500.00,cara@jmgia.com,General Liability,Appalachian Insurance Company,2025-12-18,700.0,500.0,Sales Epay 2024 - Sheet1.csv,cara@jmgia.com,Active,0.0
+67070654,2024-12-23,$85.00,$30.00,randall@jmgia.com,Bond,Simple Bonds,2025-12-23,85.0,30.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+826818,2024-12-27,$147.10,$0.00,randall@jmgia.com,Bond,Bonds Express,2025-12-27,147.1,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+0100343059-0,2024-12-31,$400.00,$525.00,ted@jmgia.com,General Liability,Appalachian Insurance Company,2025-12-31,400.0,525.0,Sales Epay 2024 - Sheet1.csv,ted@jmgia.com,Active,0.0
+991284715,2025-01-03,"$1,000.00",$0.00,eduardo@jmgia.com,Commercial Auto,Bolt Insurance,2026-01-03,1000.0,0.0,Sales Epay 2025 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+991537223,2025-01-08,$750.00,$0.00,chelsea@jmgia.com,Commercial Auto,Bolt Insurance,2026-01-08,750.0,0.0,Sales Epay 2025 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+7039143469,2025-01-13,$300.00,$0.00,cara@jmgia.com,General Liability,Btis,2026-01-13,300.0,0.0,Sales Epay 2025 - Sheet1.csv,cara@jmgia.com,Active,0.0
+7039141530,2025-01-13,$300.00,$0.00,mike@jmgia.com,Workers Compensation,Btis,2026-01-13,300.0,0.0,Sales Epay 2025 - Sheet1.csv,mike@jmgia.com,Active,0.0
+991674832,2025-01-13,$250.00,$0.00,eduardo@jmgia.com,Commercial Auto,Bolt Insurance,2026-01-13,250.0,0.0,Sales Epay 2025 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+0100345376-0,2025-01-14,$600.00,$343.00,mark@jmgia.com,General Liability,Appalachian Insurance Company,2026-01-14,600.0,343.0,Sales Epay 2025 - Sheet1.csv,mark@jmgia.com,Active,0.0
+67320038,2025-01-14,$100.00,$34.00,chelsea@jmgia.com,Bond,Simple Bonds,2026-01-14,100.0,34.0,Sales Epay 2025 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+67323401,2025-01-17,$100.00,$23.00,eduardo@jmgia.com,Bond,Simple Bonds,2026-01-17,100.0,23.0,Sales Epay 2025 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+992012633,2025-01-17,$300.00,$0.00,grey@jmgia.com,Commercial Auto,Progressive,2026-01-17,300.0,0.0,Sales Epay 2025 - Sheet1.csv,grey@jmgia.com,Active,0.0
+0100347512-0,2025-01-21,$500.00,$259.90,clint@jmgia.com,Excess,Appalachian Insurance Company,2026-01-21,500.0,259.9,Sales Epay 2025 - Sheet1.csv,clint@jmgia.com,Active,0.0
+1000627789251,2025-01-22,$300.00,$0.00,mike@jmgia.com,General Liability,Btis,2026-01-22,300.0,0.0,Sales Epay 2025 - Sheet1.csv,mike@jmgia.com,Active,0.0
+0100346681-0,2025-01-22,$600.00,$525.00,mike@jmgia.com,General Liability,Appalachian Insurance Company,2026-01-22,600.0,525.0,Sales Epay 2025 - Sheet1.csv,mike@jmgia.com,Active,0.0
+0100348335-0,2025-01-23,$397.00,$387.20,mike@jmgia.com,Excess,ISC Insurance,2026-01-23,397.0,387.2,Sales Epay 2025 - Sheet1.csv,mike@jmgia.com,Active,0.0
+966096800,2025-01-29,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2026-01-29,300.0,0.0,Sales Epay 2025 - Sheet1.csv,randall@jmgia.com,Active,0.0
+108193922,2025-02-05,$200.00,$0.00,eduardo@jmgia.com,Bond,Propeller,2026-02-05,200.0,0.0,Sales Epay 2025 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+0002123228,2025-02-06,$500.00,$0.00,bryan@jmgia.com,Workers Compensation,Texas Mutual,2026-02-06,500.0,0.0,Sales Epay 2025 - Sheet1.csv,bryan@jmgia.com,Active,0.0
+0002123408,2025-02-07,$200.00,$0.00,eduardo@jmgia.com,Workers Compensation,Texas Mutual,2026-02-07,200.0,0.0,Sales Epay 2025 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
+992862147,2025-02-07,$400.00,$0.00,cara@jmgia.com,Commercial Auto,Progressive,2026-02-07,400.0,0.0,Sales Epay 2025 - Sheet1.csv,cara@jmgia.com,Active,0.0
+7039182868,2025-02-10,$300.00,$0.00,chelsea@jmgia.com,Workers Compensation,Btis,2026-02-10,300.0,0.0,Sales Epay 2025 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
+1000627799251,2025-02-11,$600.00,$489.00,clint@jmgia.com,General Liability,Btis,2026-02-11,600.0,489.0,Sales Epay 2025 - Sheet1.csv,clint@jmgia.com,Active,0.0
+0100351801-0,2025-02-13,$600.00,$525.00,mike@jmgia.com,General Liability,Appalachian Insurance Company,2026-02-13,600.0,525.0,Sales Epay 2025 - Sheet1.csv,mike@jmgia.com,Active,0.0
+0100351301-0,2025-02-14,$137.77,$150.00,bryan@jmgia.com,Excess,Appalachian Insurance Company,2026-02-14,137.77,150.0,Sales Epay 2025 - Sheet1.csv,bryan@jmgia.com,Active,0.0
+993471984,2025-02-20,$400.00,$0.00,mike@jmgia.com,Commercial Auto,Progressive,2026-02-20,400.0,0.0,Sales Epay 2025 - Sheet1.csv,mike@jmgia.com,Active,0.0
+978061143,2025-02-20,$300.00,$0.00,randall@jmgia.com,Commercial Auto,Progressive,2026-02-20,300.0,0.0,Sales Epay 2025 - Sheet1.csv,randall@jmgia.com,Active,0.0
+14-80411-25052-360488,2025-02-21,$300.00,$0.00,eduardo@jmgia.com,Workers Compensation,NCCI,2026-02-21,300.0,0.0,Sales Epay 2025 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
