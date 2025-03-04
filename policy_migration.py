@@ -344,7 +344,10 @@ def clean_value(value: str, field_type: str = 'default') -> str:
 def validate_policy(policy: Dict, carriers_map: Dict, logger: logging.Logger) -> bool:
     """Validate a single policy."""
     policy_number = str(policy.get('policy_number', '')).strip()
-    if not policy_number or policy_number.lower() in {'nan', 'none', 'null', 'refunded', 'voided', 'audit'} or 'refund' in policy_number.lower():
+    # Allow endorsement variations as valid policy numbers
+    if policy_number.lower() in {'endorsement', 'endorsements', 'limits endorsement'}:
+        policy_number = 'Endorsement'  # Standardize to "Endorsement"
+    elif not policy_number or policy_number.lower() in {'nan', 'none', 'null', 'refunded', 'voided', 'audit'} or 'refund' in policy_number.lower():
         logger.debug(f"Invalid policy number: {policy_number}")
         return False
     
@@ -373,7 +376,12 @@ def normalize_policy_fields(policy: Dict, carriers_map: Dict, logger: logging.Lo
     
     policy['carrier'] = CARRIER_MAPPING.get(carrier, carrier)
     
-    if any(endors in str(policy['policy_number']).lower() for endors in ['endorsement', 'endors']):
+    # Handle endorsement variations
+    policy_number = str(policy['policy_number']).strip()
+    if policy_number.lower() in {'endorsement', 'endorsements', 'limits endorsement'}:
+        policy['policy_number'] = 'Endorsement'
+        policy['policy_type'] = 'Endorsement'
+    elif any(endors in policy_number.lower() for endors in ['endorsement', 'endors']):
         policy['policy_type'] = 'Endorsement'
     else:
         policy['policy_type'] = POLICY_TYPE_MAPPING.get(policy_type, 'Other')
