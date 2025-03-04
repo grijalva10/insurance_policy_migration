@@ -395,12 +395,22 @@ def process_policies(policies: List[Dict], carriers_map: Dict, logger: logging.L
             return None
         try:
             normalized = normalize_policy_fields(policy.copy(), carriers_map, logger)
+            
+            # Log broker matching for debugging
+            original_broker = policy.get('broker', '')
+            cleaned_broker = clean_value(original_broker, field_type='broker')
+            mapped_broker = BROKER_MAPPING.get(cleaned_broker)
+            logger.debug(f"Broker matching: Original='{original_broker}', Cleaned='{cleaned_broker}', Mapped='{mapped_broker}'")
+            
             if normalized['policy_type'] == 'Other':
                 unmapped['policy_types'].add(clean_value(policy['policy_type']))
             if normalized['carrier'] not in carriers_map:
                 unmapped['carriers'].add(clean_value(policy['carrier']))
             if not normalized['broker_email']:
-                unmapped['brokers'].add(clean_value(policy['broker']))
+                # Only add to unmapped if it's not in the mapping and not empty
+                if cleaned_broker and cleaned_broker not in BROKER_MAPPING:
+                    unmapped['brokers'].add(cleaned_broker)
+                    logger.debug(f"Added unmapped broker: '{cleaned_broker}'")
             return normalized
         except Exception as e:
             logger.error(f"Error normalizing policy {policy.get('policy_number', 'unknown')}: {e}")
@@ -426,10 +436,21 @@ def process_policies(policies: List[Dict], carriers_map: Dict, logger: logging.L
         
         # Clean existing values and merge with new unmapped values
         for category, values in unmapped.items():
-            existing[category] = sorted(list(set(
-                clean_value(v) for v in existing.get(category, []) + list(values)
-                if clean_value(v)  # Only include non-empty cleaned values
-            )))
+            # For brokers, use the special broker cleaning
+            if category == 'brokers':
+                cleaned_values = {clean_value(v, field_type='broker') for v in existing.get(category, []) + list(values)}
+            else:
+                cleaned_values = {clean_value(v) for v in existing.get(category, []) + list(values)}
+            
+            # Only include non-empty values that aren't in the mapping
+            if category == 'brokers':
+                cleaned_values = {v for v in cleaned_values if v and v not in BROKER_MAPPING}
+            elif category == 'carriers':
+                cleaned_values = {v for v in cleaned_values if v and v not in CARRIER_MAPPING}
+            elif category == 'policy_types':
+                cleaned_values = {v for v in cleaned_values if v and v not in POLICY_TYPE_MAPPING}
+            
+            existing[category] = sorted(list(cleaned_values))
         
         with unmatched_path.open('w') as f:
             json.dump(existing, f, indent=4)
