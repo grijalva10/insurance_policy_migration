@@ -13,6 +13,9 @@ venv.bak/
 # Environment variables
 .env
 
+# Logs
+*.log
+
 # Data directories
 data/input/*
 data/cache/*
@@ -21,8 +24,12 @@ data/reports/*
 !data/cache/.gitkeep
 !data/reports/.gitkeep
 
-# Keep log file in repo
-!policy_upload_log.txt
+# Ensure critical mapping files are preserved
+!data/mappings/
+!data/mappings/broker_mapping.json
+!data/mappings/carrier_mapping.json
+!data/mappings/policy_type_mapping.json
+!data/mappings/unmatched_values.json
 
 # IDE
 .vscode/
