@@ -417,8 +417,15 @@ def normalize_policy_fields(policy: Dict, carriers_map: Dict, logger: logging.Lo
     
     # Calculate commission based on carrier rate
     policy['commission_amount'] = raw_premium * (carrier_commission / 100.0) if carrier_commission else 0.0
-    policy['premium'] = raw_premium
+    policy['premium'] = raw_premium  # Keep the original premium value
     policy['broker_fee_amount'] = parse_currency(policy.get('broker_fee', 0))
+    
+    # Log the premium calculation for debugging
+    logger.debug(f"Premium calculation for policy {policy_number}:")
+    logger.debug(f"  Raw premium: {raw_premium}")
+    logger.debug(f"  Carrier: {policy['carrier']}")
+    logger.debug(f"  Carrier commission rate: {carrier_commission}%")
+    logger.debug(f"  Calculated commission: {policy['commission_amount']}")
     
     return policy
 
