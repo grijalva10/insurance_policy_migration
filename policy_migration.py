@@ -411,14 +411,17 @@ def normalize_policy_fields(policy: Dict, carriers_map: Dict, logger: logging.Lo
     policy['expiration_date'] = expiration_date.strftime('%Y-%m-%d')
     policy['status'] = 'Active' if expiration_date > datetime.now().date() else 'Expired'
     
-    # Calculate premium and commission based on carrier mapping
+    # Parse currency values
     raw_premium = parse_currency(policy.get('premium', 0))
+    raw_broker_fee = parse_currency(policy.get('broker_fee', 0))
+    
+    # Get carrier commission rate
     carrier_commission = carriers_map.get(policy['carrier'], {}).get('commission', 0.0)
     
     # Calculate commission based on carrier rate
     policy['commission_amount'] = raw_premium * (carrier_commission / 100.0) if carrier_commission else 0.0
-    policy['premium'] = raw_premium  # Keep the original premium value
-    policy['broker_fee_amount'] = parse_currency(policy.get('broker_fee', 0))
+    policy['premium'] = raw_premium  # Store the parsed premium value
+    policy['broker_fee_amount'] = raw_broker_fee
     
     # Log the premium calculation for debugging
     logger.debug(f"Premium calculation for policy {policy_number}:")
