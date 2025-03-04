@@ -2,12 +2,10 @@
 """
 Insurance Policy Migration Script
 
-This script migrates insurance policy data from CSV files to an AMS via a Frappe API.
-Part 1: Setup and CSV loading
-Part 2: AMS lookups for insureds and carriers
-Part 3: Static broker mapping
-Part 4: Policy processing (premium calculation, status assignment, deduplication)
-Part 5: Save processed policies to CSV files for reporting
+Migrates insurance policy data from CSV files to an AMS via Frappe API.
+- Uses precomputed mappings from ./data/mappings/
+- Excludes non-policy/non-carrier scenarios
+- Optimized for performance and maintainability
 """
 
 import os
@@ -21,1246 +19,526 @@ from dateutil.relativedelta import relativedelta
 import requests
 import re
 import time
-import base64  # For GitHub API authentication
+import base64
+from typing import Dict, List, Set, Optional, Tuple
+from pathlib import Path
+import asyncio
+import aiohttp
 
-# Constants
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
+
+# Constants (move to config later)
+INPUT_DIR = Path("./data/input/")
+OUTPUT_DIR = Path("./data/reports/")
+CACHE_DIR = Path("./data/cache/")
+MAPPINGS_DIR = Path("./data/mappings/")
+LOG_FILE = Path("policy_upload_log.txt")
 AMS_API_URL = "https://ams.jmggo.com/api/method"
-AMS_API_TOKEN = None  # Will be set later
-AMS_API_HEADERS = None  # Will be set later
-
-# GitHub API settings
 GITHUB_API_URL = "https://api.github.com"
-GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")  # Get token from environment variable
-GITHUB_USERNAME = "grijalva10"  # Your GitHub username
+GITHUB_USERNAME = "grijalva10"
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")  # Get GitHub token from environment
 
-# Directory structure
-INPUT_DIR = "./data/input/"
-OUTPUT_DIR = "./data/reports/"
-CACHE_DIR = "./data/cache/"
-LOG_FILE = "policy_upload_log.txt"
+# Initialize mappings as None
+BROKER_MAPPING = None
+CARRIER_MAPPING = None
+POLICY_TYPE_MAPPING = None
+NON_POLICY_TYPES = None
+NON_CARRIER_ENTRIES = None
 
-# Cache files
-INSUREDS_CACHE_FILE = os.path.join(CACHE_DIR, "ams_insureds.csv")
-CARRIERS_CACHE_FILE = os.path.join(CACHE_DIR, "ams_carriers.csv")
+def load_mappings() -> Tuple[Dict[str, str], Dict[str, str], Dict[str, str], Set[str], Set[str]]:
+    """Load mapping files and exclusion sets with validation."""
+    try:
+        # Load broker mapping
+        broker_path = MAPPINGS_DIR / "broker_mapping.json"
+        if not broker_path.exists():
+            logger.error(f"Broker mapping file {broker_path} not found")
+            return {}, {}, {}, set(), set()
+        with broker_path.open('r') as f:
+            broker_mapping = json.load(f)
+            
+        # Load carrier mapping
+        carrier_path = MAPPINGS_DIR / "carrier_mapping.json"
+        if not carrier_path.exists():
+            logger.error(f"Carrier mapping file {carrier_path} not found")
+            return {}, {}, {}, set(), set()
+        with carrier_path.open('r') as f:
+            carrier_mapping = json.load(f)
+            
+        # Load policy type mapping
+        policy_type_path = MAPPINGS_DIR / "policy_type_mapping.json"
+        if not policy_type_path.exists():
+            logger.error(f"Policy type mapping file {policy_type_path} not found")
+            return {}, {}, {}, set(), set()
+        with policy_type_path.open('r') as f:
+            policy_type_mapping = json.load(f)
+            
+        # Exclusion sets from mapping script
+        NON_POLICY_TYPES = {
+            "2nd Payment", "2nd payment", "3rd payment", "Additional Broker Fee", "Additional Premium",
+            "Audit Payment", "Broker Fee", "Declined", "Full Refund", "Full refund", "GL 2nd Payment",
+            "GL 2nd Paymnet", "GL Monthly Payment", "GL+Excess 2nd payment", "Monthly Payment",
+            "Partial refund", "Payment Declined", "Payment disputed", "Payment to carrier", "Redunded",
+            "Refund", "Refunded", "VOIDED", "Voided", "new GL 2nd payment", "October Installment",
+            "Payment to Carrier", "Second Payment", "Second payment"
+        }
+        NON_CARRIER_ENTRIES = {
+            "2nd Payment", "2nd payment", "3rd payment", "Additional Broker Fee", "Additional Premium",
+            "Audit Payment", "Broker Fee", "Declined", "Full Refund", "Full refund", "Monthly Payment",
+            "Monthly payment", "October Installment", "Partial refund", "Payment Declined",
+            "Payment disputed", "Payment to Carrier", "Payment to carrier", "Refund", "Refunded",
+            "Second Payment", "Second payment", "VOIDED", "Voided"
+        }
+        
+        logger.info(f"Loaded mappings: {len(broker_mapping)} brokers, {len(carrier_mapping)} carriers, {len(policy_type_mapping)} policy types")
+        return broker_mapping, carrier_mapping, policy_type_mapping, NON_POLICY_TYPES, NON_CARRIER_ENTRIES
+        
+    except json.JSONDecodeError as e:
+        logger.error(f"Failed to parse mapping file: {e}")
+        return {}, {}, {}, set(), set()
+    except Exception as e:
+        logger.error(f"Error loading mappings: {e}")
+        return {}, {}, {}, set(), set()
 
-# Broker to email mapping
-BROKER_TO_EMAIL = {
-    "JMG/Randall": "randall@jmgia.com", "Grey": "grey@jmgia.com", "Grey Zwilling": "grey@jmgia.com",
-    "Chelsea": "chelsea@jmgia.com", "Mike": "mike@jmgia.com", "Mke": "mike@jmgia.com", "MIke": "mike@jmgia.com",
-    "Justin": "justin@jmgia.com", "Mark": "mark@jmgia.com", "Mark Gomez": "mark@jmgia.com", "Jon": "randall@jmgia.com",
-    "Chris": "randall@jmgia.com", "JMG/Ramdall": "randall@jmgia.com", "JMG Randall": "randall@jmgia.com",
-    "JMG /Randall": "randall@jmgia.com", "JMGRandall": "randall@jmgia.com", "JMG/ Randall": "randall@jmgia.com",
-    "JGM/Randall": "randall@jmgia.com", "JMG/Randalll": "randall@jmgia.com", "JMG/Radall ": "randall@jmgia.com",
-    "JMGI/Randall": "randall@jmgia.com", "JMG/Radall": "randall@jmgia.com", "Adrian": "adrian@jmgia.com",
-    "Eduardo": "eduardo@jmgia.com", "Eduardo ": "eduardo@jmgia.com", "Eduardo/Mike": "eduardo@jmgia.com",
-    "Eduardo/Chelsea": "eduardo@jmgia.com", "JMG/Eduado": "eduardo@jmgia.com", "Jeff": "jeff@jmgia.com",
-    "Chalsea": "chelsea@jmgia.com", "Ted": "ted@jmgia.com", "Brennan": "brennan@jmgia.com",
-    "JMG/Eduardo": "eduardo@jmgia.com", "JMG/Justin": "justin@jmgia.com", "JMG/Adrian": "adrian@jmgia.com",
-    "JMG/ Adrian": "adrian@jmgia.com", "Chris H": "chrish@jmgia.com", "Sean": "sean@jmgia.com",
-    "Collin": "collin@jmgia.com", "Collin ": "collin@jmgia.com", "Colin ": "collin@jmgia.com",
-    "Colin": "collin@jmgia.com", "Collin Daly": "collin@jmgia.com", "Brian": "bryan@jmgia.com",
-    "Brian ": "bryan@jmgia.com", "Bryan": "bryan@jmgia.com", "Bryan ": "bryan@jmgia.com",
-    "Bryan Otten": "bryan@jmgia.com", "Anthony": "anthony@jmgia.com", "Dale": "dale@jmgia.com",
-    "Brennan Clinebell": "bryan@jmgia.com", "Justin Angevine": "justin@jmgia.com", "Addison": "addison@jmgia.com",
-    "Alexis": "alexis@jmgia.com", "Gerardo ": "gerardo@jmgia.com", "Gerardo": "gerardo@jmgia.com",
-    "Gerardo Perales": "gerardo@jmgia.com", "Clint": "clint@jmgia.com", "Cara": "cara@jmgia.com",
-    "Randall": "randall@jmgia.com", "Randall/Sean": "randall@jmgia.com", "Adrian/Eduardo": "adrian@jmgia.com"
-}
+def initialize_mappings():
+    """Initialize global mapping variables."""
+    global BROKER_MAPPING, CARRIER_MAPPING, POLICY_TYPE_MAPPING, NON_POLICY_TYPES, NON_CARRIER_ENTRIES
+    BROKER_MAPPING, CARRIER_MAPPING, POLICY_TYPE_MAPPING, NON_POLICY_TYPES, NON_CARRIER_ENTRIES = load_mappings()
 
-# Add broker name standardization mapping
-BROKER_NAME_STANDARDIZATION = {
-    "JMG/Ranall": "JMG/Randall",
-    "JMG/Randal": "JMG/Randall",
-    "JMH/Randall": "JMG/Randall",
-    "JMH/Randall ": "JMG/Randall",
-    "Julie": "Julie Smith",
-    "nan": None
-}
+# AMS API setup
+AMS_API_TOKEN = None
+AMS_API_HEADERS = None
 
-# Update broker email mapping
-BROKER_EMAIL_MAPPING = {
-    "JMG/Randall": "randall@jmgia.com",
-    "Julie Smith": "julie@jmgia.com",
-    "Clint": "clint@jmgia.com",
-    "Mark": "mark@jmgia.com",
-    "Mike": "mike@jmgia.com",
-    "Bryan": "bryan@jmgia.com",
-    "Chelsea": "chelsea@jmgia.com",
-    "Cara": "cara@jmgia.com",
-    "Eduardo": "eduardo@jmgia.com",
-    "Grey": "grey@jmgia.com",
-    "Collin": "collin@jmgia.com",
-    "Jon": "randall@jmgia.com",
-    "Chris": "randall@jmgia.com",
-    "Adrian": "adrian@jmgia.com"
-}
-
-# Policy types
-POLICY_TYPES = [
-    "Bond", "Builders Risk", "Commercial Auto", "Commercial Property", 
-    "Excess", "General Liability", "Inland Marine", "Pollution Liability", 
-    "Professional Liability", "Workers Compensation", "Endorsement", 
-    "General Liability + Excess", "General Liability + Inland Marine", 
-    "General Liability + Builders Risk", "Other"
-]
-
-# Setup logging
-def setup_logging():
-    """Configure logging to file and console with debug level"""
-    # Create directories if they don't exist
-    os.makedirs(INPUT_DIR, exist_ok=True)
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    os.makedirs(CACHE_DIR, exist_ok=True)
-    
-    # Configure logging
+def setup_logging() -> logging.Logger:
+    """Configure logging with file and console handlers."""
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    
-    # File handler
     file_handler = logging.FileHandler(LOG_FILE, mode='w')
     file_handler.setLevel(logging.DEBUG)
-    file_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    file_handler.setFormatter(file_format)
-    
-    # Console handler
+    file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.DEBUG)
-    console_format = logging.Formatter('%(levelname)s: %(message)s')
-    console_handler.setFormatter(console_format)
-    
-    # Add handlers
-    logger.addHandler(file_handler)
-    logger.addHandler(console_handler)
-    
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(logging.Formatter('%(levelname)s: %(message)s'))
+    logger.handlers = [file_handler, console_handler]
     return logger
 
-# Normalize column names
-def normalize_column_name(column_name):
-    """Normalize column names to be case-insensitive and strip spaces"""
-    return column_name.lower().strip()
-
-# Parse arguments
-def parse_arguments():
-    """Parse command line arguments"""
+def parse_arguments() -> argparse.Namespace:
+    """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Insurance Policy Migration Script")
-    parser.add_argument("--dry-run", action="store_true", help="Run in dry-run mode (no API calls)")
-    parser.add_argument("--no-cache", action="store_true", help="Don't use cached data")
+    parser.add_argument("--dry-run", action="store_true", default=True, help="Run without API calls")
+    parser.add_argument("--no-cache", action="store_true", help="Ignore cached data")
     parser.add_argument("--github-token", help="GitHub API token")
-    parser.add_argument("--ams-token", help="AMS API token for AMS API calls")
-    parser.add_argument("--skip-ams-fetch", action="store_true", help="Skip fetching policies from AMS")
+    parser.add_argument("--ams-token", help="AMS API token")
+    parser.add_argument("--skip-ams-fetch", action="store_true", help="Skip AMS policy fetch")
     return parser.parse_args()
 
-# Parse date with multiple formats
-def parse_date(date_str):
-    """Parse date string with multiple possible formats"""
+def parse_date(date_str: str) -> Optional[str]:
+    """Parse date string with multiple formats."""
     if pd.isna(date_str) or not date_str:
         return None
-    
     date_str = str(date_str).strip()
-    
-    # Try different date formats
-    formats = [
-        '%Y-%m-%d',           # 2024-01-02
-        '%Y-%m-%d %H:%M:%S',  # 2024-01-02 22:00:46
-        '%m/%d/%Y',           # 01/02/2024
-        '%m/%d/%y',           # 01/02/24
-        '%d-%b-%Y',           # 02-Jan-2024
-        '%d-%b-%y'            # 02-Jan-24
-    ]
-    
+    formats = ['%Y-%m-%d', '%Y-%m-%d %H:%M:%S', '%m/%d/%Y', '%m/%d/%y', '%d-%b-%Y', '%d-%b-%y']
     for fmt in formats:
         try:
             return datetime.strptime(date_str, fmt).strftime('%Y-%m-%d')
         except ValueError:
             continue
-    
-    # If all formats fail, log and return None
+    logger.debug(f"Failed to parse date: {date_str}")
     return None
 
-# Parse currency value
-def parse_currency(value):
-    """Convert currency string to float"""
+def parse_currency(value: str) -> float:
+    """Convert currency string to float."""
     if pd.isna(value) or not value:
         return 0.0
-    
     if isinstance(value, (int, float)):
         return float(value)
-    
-    # Remove currency symbols and commas
-    value_str = str(value).strip()
-    value_str = re.sub(r'[$,]', '', value_str)
-    
+    value_str = re.sub(r'[$,]', '', str(value).strip())
     try:
         return float(value_str)
     except ValueError:
         return 0.0
 
-# Load CSV files
-def load_csv_files(logger):
-    """
-    Load CSV files from input directory and return a list of policy dictionaries
-    
-    Maps:
-    - 'Policy Number' to 'policy_number' (required)
-    - 'Date' to 'effective_date' (add 'expiration_date' as +1 year)
-    - 'Broker Fee' to 'broker_fee'
-    - 'Commission' to 'commission'
-    - 'Agent' to 'broker'
-    - 'Policy Type' to 'policy_type'
-    - 'Carrier' to 'carrier'
-    """
+def normalize_column_name(col: str) -> str:
+    """Normalize column name to lowercase and remove special characters."""
+    if not col:
+        return ""
+    # Convert to string, lowercase, and replace spaces/special chars with underscores
+    return re.sub(r'[^a-z0-9_]', '_', str(col).lower().strip())
+
+def load_csv_files(logger: logging.Logger) -> List[Dict]:
+    """Load CSV files into policy dictionaries."""
     policies = []
-    csv_files = [f for f in os.listdir(INPUT_DIR) if f.endswith('.csv')]
-    
+    csv_files = list(INPUT_DIR.glob("*.csv"))
     if not csv_files:
         logger.warning(f"No CSV files found in {INPUT_DIR}")
         return policies
     
-    logger.info(f"Found {len(csv_files)} CSV files to process")
-    
-    for file_name in csv_files:
-        file_path = os.path.join(INPUT_DIR, file_name)
-        logger.debug(f"Processing file: {file_path}")
-        
+    logger.info(f"Processing {len(csv_files)} CSV files")
+    for file_path in csv_files:
         try:
-            # Read CSV file
             df = pd.read_csv(file_path)
+            # Log available columns for debugging
+            logger.debug(f"Available columns in {file_path.name}: {', '.join(df.columns)}")
             
-            # Create a mapping of normalized column names to original column names
-            column_mapping = {}
-            for col in df.columns:
-                normalized_col = normalize_column_name(col)
-                column_mapping[normalized_col] = col
+            # Create normalized column map
+            column_map = {normalize_column_name(col): col for col in df.columns}
+            logger.debug(f"Normalized column map: {column_map}")
             
-            logger.debug(f"Column mapping for {file_name}: {column_mapping}")
-            
-            # Check for required columns
-            required_columns = {
-                'policy number': 'policy_number',
+            # Define required and optional columns with variations
+            required = {
+                'policy_number': ['policy number', 'policy_number', 'policy', 'policy_no', 'policy_no_', 'policy_no_']
+            }
+            optional = {
+                'effective_date': ['date', 'effective_date', 'effective date', 'start date', 'policy date'],
+                'broker_fee': ['broker fee', 'broker_fee', 'brokerfee', 'broker_fee_amount'],
+                'commission': ['commission', 'commission_amount', 'comm'],
+                'broker': ['agent', 'broker', 'agent_name', 'broker_name'],
+                'policy_type': ['policy type', 'policy_type', 'type', 'policy_category'],
+                'carrier': ['carrier', 'carrier_name', 'insurance_company'],
+                'premium': ['charge amount', 'premium', 'amount', 'policy_amount']
             }
             
-            optional_columns = {
-                'date': 'effective_date',
-                'broker fee': 'broker_fee',
-                'commission': 'commission',
-                'agent': 'broker',
-                'policy type': 'policy_type',
-                'carrier': 'carrier',
-            }
+            # Check for required columns with variations
+            missing_required = []
+            for field, variations in required.items():
+                if not any(var in column_map for var in variations):
+                    missing_required.append(field)
             
-            # Verify required columns exist
-            missing_columns = []
-            for req_col, _ in required_columns.items():
-                if req_col not in column_mapping:
-                    missing_columns.append(req_col)
-            
-            if missing_columns:
-                logger.error(f"Missing required columns in {file_name}: {missing_columns}")
+            if missing_required:
+                logger.error(f"Missing required columns in {file_path.name}: {missing_required}")
                 continue
             
-            # Create a new DataFrame with the mapped columns
+            # Map columns with variations
             mapped_df = pd.DataFrame()
+            for field, variations in {**required, **optional}.items():
+                for var in variations:
+                    if var in column_map:
+                        mapped_df[field] = df[column_map[var]]
+                        break
             
-            # Map required columns
-            for source_col, target_col in required_columns.items():
-                if source_col in column_mapping:
-                    mapped_df[target_col] = df[column_mapping[source_col]]
-            
-            # Map optional columns
-            for source_col, target_col in optional_columns.items():
-                if source_col in column_mapping:
-                    mapped_df[target_col] = df[column_mapping[source_col]]
-            
-            # Process dates
-            if 'effective_date' in mapped_df.columns:
-                # Parse dates with multiple formats
+            if 'effective_date' in mapped_df:
                 mapped_df['effective_date'] = mapped_df['effective_date'].apply(parse_date)
-                
-                # Filter out rows with invalid dates
-                valid_date_mask = mapped_df['effective_date'].notna()
-                if not valid_date_mask.all():
-                    invalid_count = (~valid_date_mask).sum()
-                    logger.warning(f"Skipped {invalid_count} rows with invalid dates in {file_name}")
-                    mapped_df = mapped_df[valid_date_mask]
-                
-                # Calculate expiration date (1 year after effective date)
                 mapped_df['expiration_date'] = mapped_df['effective_date'].apply(
                     lambda x: (datetime.strptime(x, '%Y-%m-%d') + relativedelta(years=1)).strftime('%Y-%m-%d') if x else None
                 )
+                mapped_df = mapped_df.dropna(subset=['effective_date'])
             
-            # Process currency fields
-            if 'broker_fee' in mapped_df.columns:
-                mapped_df['broker_fee_amount'] = mapped_df['broker_fee'].apply(parse_currency)
+            for col in ['broker_fee', 'commission', 'premium']:
+                if col in mapped_df:
+                    mapped_df[f"{col}_amount" if col != 'premium' else col] = mapped_df[col].apply(parse_currency)
             
-            if 'commission' in mapped_df.columns:
-                mapped_df['commission_amount'] = mapped_df['commission'].apply(parse_currency)
-            
-            # Convert DataFrame to list of dictionaries
             file_policies = mapped_df.to_dict('records')
-            logger.debug(f"Extracted {len(file_policies)} policies from {file_name}")
-            
-            # Add source file information to each policy
             for policy in file_policies:
-                policy['source_file'] = file_name
-            
+                policy['source_file'] = file_path.name
             policies.extend(file_policies)
-            
+            logger.info(f"Loaded {len(file_policies)} policies from {file_path.name}")
         except Exception as e:
-            logger.error(f"Error processing file {file_name}: {str(e)}")
+            logger.error(f"Error processing {file_path}: {e}")
     
-    logger.info(f"Total policies loaded: {len(policies)}")
+    logger.info(f"Loaded {len(policies)} total policies")
     return policies
 
-# Fetch insureds from AMS API
-def fetch_ams_insureds(logger, use_cache=True):
-    """
-    Fetch insureds from AMS API with pagination
-    
-    Args:
-        logger: Logger instance
-        use_cache: Whether to use cached data if available
-    
-    Returns:
-        Dictionary mapping insured_name/email to name (ID)
-    """
-    insureds_map = {}
-    
-    # Check if cache file exists and use it if requested
-    if use_cache and os.path.exists(INSUREDS_CACHE_FILE):
+async def fetch_ams_data(endpoint: str, doctype: str, fields: List[str], cache_file: Path, logger: logging.Logger, use_cache: bool) -> Dict:
+    """Fetch AMS data asynchronously with pagination and caching."""
+    def safe_key(value) -> str:
+        """Convert any value to a string key safely."""
+        if value is None:
+            return ""
+        return str(value).lower()
+
+    if use_cache and cache_file.exists():
         try:
-            logger.debug(f"Loading insureds from cache: {INSUREDS_CACHE_FILE}")
-            df = pd.read_csv(INSUREDS_CACHE_FILE)
-            
-            # Create lookup dictionary from name and email to ID
-            for _, row in df.iterrows():
-                if not pd.isna(row['insured_name']):
-                    insureds_map[row['insured_name'].lower()] = row['name']
-                if not pd.isna(row['email']) and row['email']:
-                    insureds_map[row['email'].lower()] = row['name']
-            
-            logger.info(f"Loaded {len(df)} insureds from cache")
-            return insureds_map
-        except Exception as e:
-            logger.error(f"Error loading insureds from cache: {str(e)}")
-            # Continue to fetch from API if cache loading fails
-    
-    # Fetch from API
-    try:
-        all_insureds = []
-        page = 0
-        page_size = 1000
-        more_data = True
-        
-        while more_data:
-            page += 1
-            logger.debug(f"Fetching AMS insureds, page {page}...")
-            
-            # Prepare API request
-            payload = {
-                "doctype": "Insured",
-                "fields": ["name", "insured_name", "email"],
-                "limit_start": (page - 1) * page_size,
-                "limit_page_length": page_size
-            }
-            
-            # Make API request with retry logic
-            max_retries = 3
-            retry_delay = 2  # seconds
-            
-            for attempt in range(max_retries):
-                try:
-                    response = requests.post(
-                        f"{AMS_API_URL}/frappe.client.get_list",
-                        headers=AMS_API_HEADERS,
-                        json=payload,
-                        timeout=30  # 30 seconds timeout
-                    )
-                    
-                    response.raise_for_status()  # Raise exception for HTTP errors
-                    data = response.json()
-                    
-                    if "message" in data and isinstance(data["message"], list):
-                        insureds = data["message"]
-                        all_insureds.extend(insureds)
-                        logger.debug(f"Retrieved {len(insureds)} insureds on page {page}")
-                        
-                        # Check if we've reached the end
-                        if len(insureds) < page_size:
-                            more_data = False
-                            break
-                    else:
-                        logger.warning(f"Unexpected API response format: {data}")
-                        more_data = False
-                    
-                    # Successful request, break retry loop
-                    break
-                    
-                except requests.exceptions.RequestException as e:
-                    if attempt < max_retries - 1:
-                        logger.warning(f"API request failed (attempt {attempt+1}/{max_retries}): {str(e)}. Retrying in {retry_delay} seconds...")
-                        time.sleep(retry_delay)
-                        retry_delay *= 2  # Exponential backoff
-                    else:
-                        logger.error(f"Failed to fetch insureds: {str(e)}")
-                        # Try to use cache as fallback if it exists
-                        if os.path.exists(INSUREDS_CACHE_FILE):
-                            logger.info("Falling back to cached insureds data")
-                            return fetch_ams_insureds(logger, use_cache=True)
-                        more_data = False
-        
-        # Save to cache
-        if all_insureds:
-            try:
-                df = pd.DataFrame(all_insureds)
-                os.makedirs(os.path.dirname(INSUREDS_CACHE_FILE), exist_ok=True)
-                df.to_csv(INSUREDS_CACHE_FILE, index=False)
-                logger.debug(f"Saved {len(df)} insureds to cache")
-            except Exception as e:
-                logger.error(f"Error saving insureds to cache: {str(e)}")
-        
-        # Create lookup dictionary
-        for insured in all_insureds:
-            if "insured_name" in insured and insured["insured_name"]:
-                insureds_map[insured["insured_name"].lower()] = insured["name"]
-            if "email" in insured and insured["email"]:
-                insureds_map[insured["email"].lower()] = insured["name"]
-        
-        logger.info(f"Fetched {len(all_insureds)} insureds from AMS")
-        return insureds_map
-        
-    except Exception as e:
-        logger.error(f"Error fetching insureds: {str(e)}")
-        # Try to use cache as fallback if it exists
-        if os.path.exists(INSUREDS_CACHE_FILE):
-            logger.info("Falling back to cached insureds data due to error")
-            return fetch_ams_insureds(logger, use_cache=True)
-        return {}
-
-# Fetch carriers from AMS API
-def fetch_ams_carriers(logger, use_cache=True):
-    """
-    Fetch carriers from AMS API with pagination
-    
-    Args:
-        logger: Logger instance
-        use_cache: Whether to use cached data if available
-    
-    Returns:
-        Dictionary mapping carrier_name to {name, commission}
-    """
-    carriers_map = {}
-    
-    # Check if cache file exists and use it if requested
-    if use_cache and os.path.exists(CARRIERS_CACHE_FILE):
-        try:
-            logger.debug(f"Loading carriers from cache: {CARRIERS_CACHE_FILE}")
-            df = pd.read_csv(CARRIERS_CACHE_FILE)
-            
-            # Create lookup dictionary from carrier_name to {name, commission}
-            for _, row in df.iterrows():
-                if not pd.isna(row['carrier_name']):
-                    carriers_map[row['carrier_name'].lower()] = {
-                        'name': row['name'],
-                        'commission': row['commission'] if 'commission' in df.columns and not pd.isna(row['commission']) else 0.0
-                    }
-            
-            logger.info(f"Loaded {len(df)} carriers from cache")
-            return carriers_map
-        except Exception as e:
-            logger.error(f"Error loading carriers from cache: {str(e)}")
-            # Continue to fetch from API if cache loading fails
-    
-    # Fetch from API
-    try:
-        all_carriers = []
-        page = 0
-        page_size = 500
-        more_data = True
-        
-        while more_data:
-            page += 1
-            logger.debug(f"Fetching AMS carriers, page {page}...")
-            
-            # Prepare API request
-            payload = {
-                "doctype": "Carrier",
-                "fields": ["name", "carrier_name", "commission"],
-                "limit_start": (page - 1) * page_size,
-                "limit_page_length": page_size
-            }
-            
-            # Make API request with retry logic
-            max_retries = 3
-            retry_delay = 2  # seconds
-            
-            for attempt in range(max_retries):
-                try:
-                    response = requests.post(
-                        f"{AMS_API_URL}/frappe.client.get_list",
-                        headers=AMS_API_HEADERS,
-                        json=payload,
-                        timeout=30  # 30 seconds timeout
-                    )
-                    
-                    response.raise_for_status()  # Raise exception for HTTP errors
-                    data = response.json()
-                    
-                    if "message" in data and isinstance(data["message"], list):
-                        carriers = data["message"]
-                        all_carriers.extend(carriers)
-                        logger.debug(f"Retrieved {len(carriers)} carriers on page {page}")
-                        
-                        # Check if we've reached the end
-                        if len(carriers) < page_size:
-                            more_data = False
-                            break
-                    else:
-                        logger.warning(f"Unexpected API response format: {data}")
-                        more_data = False
-                    
-                    # Successful request, break retry loop
-                    break
-                    
-                except requests.exceptions.RequestException as e:
-                    if attempt < max_retries - 1:
-                        logger.warning(f"API request failed (attempt {attempt+1}/{max_retries}): {str(e)}. Retrying in {retry_delay} seconds...")
-                        time.sleep(retry_delay)
-                        retry_delay *= 2  # Exponential backoff
-                    else:
-                        logger.error(f"Failed to fetch carriers: {str(e)}")
-                        # Try to use cache as fallback if it exists
-                        if os.path.exists(CARRIERS_CACHE_FILE):
-                            logger.info("Falling back to cached carriers data")
-                            return fetch_ams_carriers(logger, use_cache=True)
-                        more_data = False
-        
-        # Save to cache
-        if all_carriers:
-            try:
-                df = pd.DataFrame(all_carriers)
-                os.makedirs(os.path.dirname(CARRIERS_CACHE_FILE), exist_ok=True)
-                df.to_csv(CARRIERS_CACHE_FILE, index=False)
-                logger.debug(f"Saved {len(df)} carriers to cache")
-            except Exception as e:
-                logger.error(f"Error saving carriers to cache: {str(e)}")
-        
-        # Create lookup dictionary
-        for carrier in all_carriers:
-            if "carrier_name" in carrier and carrier["carrier_name"]:
-                carriers_map[carrier["carrier_name"].lower()] = {
-                    'name': carrier["name"],
-                    'commission': carrier.get("commission", 0.0)
-                }
-        
-        logger.info(f"Fetched {len(all_carriers)} carriers from AMS")
-        return carriers_map
-        
-    except Exception as e:
-        logger.error(f"Error fetching carriers: {str(e)}")
-        # Try to use cache as fallback if it exists
-        if os.path.exists(CARRIERS_CACHE_FILE):
-            logger.info("Falling back to cached carriers data due to error")
-            return fetch_ams_carriers(logger, use_cache=True)
-        return {}
-
-def fetch_close_brokers(logger):
-    """
-    Returns a case-insensitive copy of the static broker to email mapping
-    
-    Args:
-        logger: Logger instance
-    
-    Returns:
-        Dictionary mapping broker_name (lowercase) to email
-    """
-    # Create a case-insensitive copy of the broker mapping
-    brokers_map = {k.lower(): v for k, v in BROKER_TO_EMAIL.items()}
-    
-    logger.info(f"Loaded {len(brokers_map)} brokers from static mapping")
-    return brokers_map
-
-def standardize_broker_name(broker):
-    """Standardize broker names to handle variations and typos"""
-    if pd.isna(broker) or broker is None:
-        return None
-    broker = str(broker).strip()
-    return BROKER_NAME_STANDARDIZATION.get(broker, broker)
-
-def get_broker_email(broker):
-    """Get broker email with standardized name mapping"""
-    if pd.isna(broker) or broker is None:
-        return None
-    
-    # Standardize broker name first
-    std_broker = standardize_broker_name(broker)
-    if std_broker is None:
-        return None
-        
-    # Get email from mapping
-    email = BROKER_EMAIL_MAPPING.get(std_broker)
-    if email is None:
-        logger.warning(f"No email mapping found for broker '{broker}' (standardized: '{std_broker}')")
-    return email
-
-def process_policies(policies, carriers_map, brokers_map, logger):
-    logger.info("Processing policies (premium calculation, status assignment, deduplication)")
-    
-    # Track policy numbers for deduplication
-    policy_numbers = {}
-    valid_policies = []
-    invalid_policies = []
-    unmapped_brokers = set()  # Track unique unmapped brokers
-    
-    # List of invalid policy number patterns
-    invalid_patterns = [
-        "audit", "refund", "2nd payment", "voided", "nan", "broker fee", 
-        "payment to carrier", "full refund", "additional broker fee", 
-        "limits endorsement", "payment declined", "monthly payment", 
-        "second payment", "payment", "gl monthly payment", "audit payment"
-    ]
-    
-    # Current date for status determination
-    current_date = datetime.strptime("2025-03-02", "%Y-%m-%d").date()
-    
-    for policy in policies:
-        # Get policy number and ensure it's a string
-        policy_number = policy.get('policy_number', '')
-        
-        # Convert policy_number to string if it's not already
-        if not isinstance(policy_number, str):
-            policy_number = str(policy_number)
-            policy['policy_number'] = policy_number
-        
-        # Map broker to email if brokers_map is provided - do this for ALL policies
-        if brokers_map and policy.get('broker'):
-            # Convert broker to string if it's not already
-            if not isinstance(policy['broker'], str):
-                policy['broker'] = str(policy['broker'])
-            
-            broker_name = policy['broker'].lower().strip()
-            if broker_name in brokers_map:
-                policy['broker_email'] = brokers_map[broker_name]
-                logger.debug(f"Mapped broker '{policy['broker']}' to email '{policy['broker_email']}'")
-            else:
-                unmapped_brokers.add(policy['broker'])
-                logger.warning(f"No email mapping found for broker '{policy['broker']}' in policy {policy_number}")
-        
-        # Check if this is an invalid policy number
-        is_invalid = False
-        if not policy_number or policy_number.lower().strip() in invalid_patterns:
-            is_invalid = True
-        else:
-            # Check if it matches any of the invalid patterns
-            for pattern in invalid_patterns:
-                if pattern in policy_number.lower():
-                    is_invalid = True
-                    break
-        
-        # Process invalid policies differently
-        if is_invalid:
-            logger.info(f"Moving policy with invalid number '{policy_number}' to invalid list")
-            invalid_policies.append(policy)
-            continue
-        
-        # For valid policies, calculate premium and assign status
-        
-        # 1. Calculate premium based on commission amount and carrier percentage
-        if 'commission_amount' in policy and policy['commission_amount']:
-            try:
-                commission_amount = float(policy['commission_amount'])
-                
-                # Get carrier commission percentage (default to 0.15 if missing or zero)
-                carrier_percentage = 0.15
-                if policy.get('carrier'):
-                    # Convert carrier to string if it's not already
-                    if not isinstance(policy['carrier'], str):
-                        policy['carrier'] = str(policy['carrier'])
-                    
-                    if policy['carrier'].lower() in carriers_map:
-                        carrier_info = carriers_map[policy['carrier'].lower()]
-                        if carrier_info.get('commission') and float(carrier_info['commission']) > 0:
-                            carrier_percentage = float(carrier_info['commission']) / 100.0  # Convert percentage to decimal
-                
-                # Calculate premium
-                if carrier_percentage > 0:
-                    policy['premium'] = round(commission_amount / carrier_percentage, 2)
-                else:
-                    policy['premium'] = round(commission_amount / 0.15, 2)  # Use default if percentage is zero
-                    logger.warning(f"Using default commission percentage (15%) for policy {policy_number}")
-            except (ValueError, TypeError) as e:
-                logger.error(f"Error calculating premium for policy {policy_number}: {str(e)}")
-                policy['premium'] = 0.0
-        else:
-            policy['premium'] = 0.0
-        
-        # 2. Assign status
-        policy['status'] = 'Active'  # Default
-        if policy.get('cancellation_date') and policy['cancellation_date']:
-            policy['status'] = 'Canceled'
-        elif policy.get('expiration_date'):
-            try:
-                expiration_date = datetime.strptime(str(policy['expiration_date']), "%Y-%m-%d").date()
-                logger.debug(f"Policy {policy_number}: expiration_date={expiration_date}, current_date={current_date}, active={expiration_date >= current_date}")
-                if expiration_date >= current_date:
-                    policy['status'] = 'Active'
-                else:
-                    policy['status'] = 'Expired'
-            except (ValueError, TypeError) as e:
-                logger.error(f"Error parsing expiration_date for policy {policy_number}: {str(e)}")
-        
-        # 3. Handle non-unique policy numbers
-        is_endorsement = policy_number.lower() == "endorsement"
-        is_duplicate = policy_number in policy_numbers
-        
-        if is_endorsement or is_duplicate:
-            # Only add suffix for endorsements
-            if is_endorsement:
-                suffix_base = "-E"
-                count = policy_numbers.get("endorsement", {}).get("count", 0) + 1
-                policy_numbers.setdefault("endorsement", {})["count"] = count
-                new_policy_number = f"{policy_number}{suffix_base}{count}"
-                logger.info(f"Renaming endorsement to {new_policy_number}")
-                policy['policy_number'] = new_policy_number
-                valid_policies.append(policy)
-            else:
-                # For other duplicates, determine which to keep based on date and completeness
-                existing_policy = policy_numbers[policy_number]["policy"]
-                
-                # Compare effective dates if available
-                keep_new = False
-                
-                if policy.get('effective_date') and existing_policy.get('effective_date'):
-                    try:
-                        new_date = None
-                        existing_date = None
-                        
-                        if isinstance(policy['effective_date'], str):
-                            new_date = datetime.strptime(policy['effective_date'], "%Y-%m-%d").date()
-                        elif isinstance(policy['effective_date'], datetime):
-                            new_date = policy['effective_date'].date()
-                            
-                        if isinstance(existing_policy['effective_date'], str):
-                            existing_date = datetime.strptime(existing_policy['effective_date'], "%Y-%m-%d").date()
-                        elif isinstance(existing_policy['effective_date'], datetime):
-                            existing_date = existing_policy['effective_date'].date()
-                        
-                        if new_date and existing_date and new_date > existing_date:
-                            keep_new = True
-                    except (ValueError, TypeError) as e:
-                        logger.error(f"Error comparing dates for duplicate policies: {str(e)}")
-                
-                # If dates are equal or can't be compared, check completeness
-                if not keep_new:
-                    # Count non-empty fields as a measure of completeness
-                    new_fields = sum(1 for k, v in policy.items() if v)
-                    existing_fields = sum(1 for k, v in existing_policy.items() if v)
-                    
-                    if new_fields > existing_fields:
-                        keep_new = True
-                
-                if keep_new:
-                    # Replace the existing policy with the new one
-                    logger.info(f"Replacing policy {policy_number} with more recent/complete version")
-                    # Move the existing policy to invalid list
-                    invalid_policies.append(existing_policy)
-                    # Update the tracking dictionary with the new policy
-                    policy_numbers[policy_number]["policy"] = policy
-                    valid_policies.append(policy)
-                else:
-                    # Keep the existing policy, move the new one to invalid list
-                    logger.info(f"Keeping existing policy {policy_number}, moving duplicate to invalid list")
-                    invalid_policies.append(policy)
-        else:
-            # First occurrence of this policy number
-            policy_numbers[policy_number] = {
-                "count": 1,
-                "policy": policy
-            }
-            valid_policies.append(policy)
-    
-    logger.info(f"Processed {len(valid_policies)} valid policies and {len(invalid_policies)} invalid policies")
-    
-    # Log summary of unmapped brokers
-    if unmapped_brokers:
-        logger.warning(f"Found {len(unmapped_brokers)} unmapped brokers: {', '.join(sorted(unmapped_brokers))}")
-    
-    return valid_policies, invalid_policies
-
-def fetch_ams_policies(logger, use_cache=True):
-    """Fetch existing policy numbers from AMS API"""
-    cache_file = os.path.join(CACHE_DIR, "ams_policies.csv")
-    policy_numbers = set()
-    
-    # Check if AMS API is properly configured
-    if not AMS_API_HEADERS:
-        logger.error("AMS API headers not configured. Please check token setup.")
-        return policy_numbers
-    
-    if use_cache and os.path.exists(cache_file):
-        try:
-            logger.debug(f"Loading policies from cache: {cache_file}")
             df = pd.read_csv(cache_file)
-            policy_numbers = set(df['policy_number'].dropna().astype(str))
-            logger.info(f"Loaded {len(policy_numbers)} policy numbers from cache")
-            return policy_numbers
+            # For single field fetches, use the field itself as the key
+            key_field = fields[0] if len(fields) == 1 else fields[1]
+            result = {}
+            for _, row in df.iterrows():
+                key = safe_key(row.get(key_field))
+                if key:  # Only add non-empty keys
+                    result[key] = {k: row.get(k, 0.0) for k in fields}
+            logger.info(f"Loaded {len(result)} {doctype}s from cache")
+            return result
         except Exception as e:
-            logger.error(f"Error loading policies from cache: {str(e)}")
+            logger.error(f"Cache load failed for {cache_file}: {e}")
     
-    logger.info("Fetching policy numbers from AMS API")
-    try:
-        all_policies = []
-        page = 0
-        page_size = 1000
-        more_data = True
-        
-        # Log API configuration
-        logger.debug(f"API URL: {AMS_API_URL}")
-        logger.debug(f"API Headers: {json.dumps({k: ('***' if k == 'Authorization' else v) for k, v in AMS_API_HEADERS.items()})}")
-        logger.debug(f"Authorization header format check: {AMS_API_HEADERS.get('Authorization', '').startswith('Token ')}")
-        
-        while more_data:
-            page += 1
-            logger.debug(f"Fetching AMS policies, page {page}...")
-            
-            payload = {
-                "doctype": "Policy",
-                "fields": ["policy_number"],
-                "limit_start": (page - 1) * page_size,
-                "limit_page_length": page_size
-            }
-            logger.debug(f"Request payload: {json.dumps(payload)}")
-            
-            max_retries = 3
-            retry_delay = 2
-            
-            for attempt in range(max_retries):
-                try:
-                    response = requests.post(
-                        f"{AMS_API_URL}/frappe.client.get_list",
-                        headers=AMS_API_HEADERS,
-                        json=payload,
-                        timeout=30
-                    )
-                    
-                    # Log detailed response information
-                    logger.debug(f"Response status code: {response.status_code}")
-                    logger.debug(f"Response headers: {dict(response.headers)}")
-                    
-                    # Try to parse response as JSON first
-                    try:
-                        response_data = response.json()
-                        logger.debug(f"Response data: {json.dumps(response_data)}")
-                    except json.JSONDecodeError:
-                        logger.debug(f"Raw response text: {response.text}")
-                        raise
-                    
-                    response.raise_for_status()
-                    
-                    if "message" in response_data and isinstance(response_data["message"], list):
-                        policies = response_data["message"]
-                        all_policies.extend(policies)
-                        logger.debug(f"Retrieved {len(policies)} policies on page {page}")
-                        
-                        if len(policies) < page_size:
-                            more_data = False
-                            break
-                    else:
-                        error_msg = response_data.get("error", "Unknown error")
-                        logger.warning(f"Unexpected API response format. Error: {error_msg}")
-                        more_data = False
-                    break
-                    
-                except requests.exceptions.RequestException as e:
-                    error_msg = str(e)
-                    if hasattr(e.response, 'text'):
-                        try:
-                            error_data = e.response.json()
-                            error_msg = error_data.get('error', error_msg)
-                        except:
-                            error_msg = e.response.text
-                    
-                    if attempt < max_retries - 1:
-                        logger.warning(f"API request failed (attempt {attempt+1}/{max_retries}): {error_msg}. Retrying in {retry_delay} seconds...")
-                        time.sleep(retry_delay)
-                        retry_delay *= 2
-                    else:
-                        logger.error(f"Failed to fetch policies after {max_retries} retries: {error_msg}")
-                        return policy_numbers
-                        
-                except json.JSONDecodeError as e:
-                    logger.error(f"Failed to parse API response as JSON: {str(e)}")
-                    if attempt < max_retries - 1:
-                        time.sleep(retry_delay)
-                        retry_delay *= 2
-                    else:
-                        return policy_numbers
-        
-        if all_policies:
-            try:
-                df = pd.DataFrame(all_policies)
-                os.makedirs(os.path.dirname(cache_file), exist_ok=True)
-                df.to_csv(cache_file, index=False)
-                logger.debug(f"Saved {len(all_policies)} policies to cache")
-            except Exception as e:
-                logger.error(f"Error saving policies to cache: {str(e)}")
-        
-        policy_numbers = set(policy.get("policy_number") for policy in all_policies if policy.get("policy_number"))
-        logger.info(f"Fetched {len(policy_numbers)} policy numbers from AMS")
-        return policy_numbers
-        
-    except Exception as e:
-        logger.error(f"Error fetching policies: {str(e)}")
-        return policy_numbers
-
-def save_policies_to_csv(policies, filename, logger):
-    """
-    Save policies to a CSV file
-    
-    Args:
-        policies: List of policy dictionaries
-        filename: Path to save the CSV file
-        logger: Logger instance
-    
-    Returns:
-        None
-    """
-    try:
-        # Create directory if it doesn't exist
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-        
-        # Convert list of dictionaries to DataFrame
-        df = pd.DataFrame(policies)
-        
-        # Save to CSV
-        df.to_csv(filename, index=False)
-        
-        logger.info(f"Saved {len(policies)} policies to {filename}")
-    except Exception as e:
-        logger.error(f"Error saving policies to {filename}: {str(e)}")
-
-def normalize_policy_type(policy_type):
-    """
-    Normalize policy type to match AMS-allowed options.
-    Uses pattern matching to handle variations, typos, and manual entry differences.
-    """
-    if not policy_type or not isinstance(policy_type, str):
-        return "Other"
-    
-    # Clean up the input
-    policy_type = policy_type.strip().lower()
-    
-    # Skip invalid/special cases
-    invalid_types = {
-        "test", "2nd payment", "refund", "broker fee", "payment", 
-        "monthly payment", "audit", "voided", "nan", "state endorsement",
-        "limits endorsement", "comp ops endorsement", "house of worship",
-        "per project endors", "ai endorsement", "non-eroding endors",
-        "multi unit endorsement", "class codes endors", "wos endorsement",
-        "state endorsement", "limits + comp ops endorsement", "gross & subs endorsement",
-        "med limit endorsement", "water endorsement", "non eroding limits",
-        "per project", "blanket ai endors", "states endorsement", "2nd paymet",
-        "borker fee", "gl monthly payment", "audit payment", "full refund",
-        "payment to carrier", "additional broker fee", "payment declined",
-        "second payment", "gl endorsement", "cg2010", "cg2010 endors",
-        "non-eroding limints", "specific endorsement", "single ai"
-    }
-    if policy_type in invalid_types or any(term in policy_type for term in ["payment", "endorsement", "endors", "limits"]):
-        return "Other"
-    
-    # Direct matches (case-insensitive)
-    policy_type_map = {
-        "bond": "Bond",
-        "simple bonds": "Bond",
-        "bond express": "Bond",
-        "bound": "Bond",
-        "sipmle bonds": "Bond",  # Handle typo found in CSV
-        "bonds express": "Bond",
-        "commercial auto": "Commercial Auto",
-        "auto": "Commercial Auto",
-        "automobile": "Commercial Auto",
-        "bolt access": "Commercial Auto",
-        "commercial property": "Commercial Property",
-        "excess": "Excess",
-        "excess policy": "Excess",
-        "general liability": "General Liability",
-        "gl": "General Liability",
-        "gl renewal": "General Liability",
-        "gl rewrite": "General Liability",
-        "general libaility": "General Liability",
-        "inland marine": "Inland Marine",
-        "equipment": "Inland Marine",
-        "equipment renewal": "Inland Marine",
-        "pollution liability": "Pollution Liability",
-        "professional liability": "Professional Liability",
-        "workers comp": "Workers Compensation",
-        "workers compensation": "Workers Compensation",
-        "wc renewal": "Workers Compensation",
-        "worker comp": "Workers Compensation",
-        "wc limits endorsement": "Workers Compensation"
-    }
-    
-    # Check for direct matches first
-    if policy_type in policy_type_map:
-        return policy_type_map[policy_type]
-    
-    # Handle common variations and combinations
-    if "workers" in policy_type and ("comp" in policy_type or "compensation" in policy_type):
-        return "Workers Compensation"
-    elif "general" in policy_type and "liability" in policy_type:
-        if "excess" in policy_type:
-            return "General Liability + Excess"
-        elif "inland" in policy_type and "marine" in policy_type:
-            return "General Liability + Inland Marine"
-        elif "builders" in policy_type and "risk" in policy_type:
-            return "General Liability + Builders Risk"
-        else:
-            return "General Liability"
-    elif policy_type.startswith("gl ") or policy_type == "gl":
-        return "General Liability"
-    elif "builders" in policy_type and "risk" in policy_type:
-        return "Builders Risk"
-    elif "inland" in policy_type and "marine" in policy_type:
-        return "Inland Marine"
-    elif "commercial" in policy_type and "auto" in policy_type:
-        return "Commercial Auto"
-    elif "commercial" in policy_type and "property" in policy_type:
-        return "Commercial Property"
-    elif "professional" in policy_type and "liability" in policy_type:
-        return "Professional Liability"
-    elif "pollution" in policy_type and "liability" in policy_type:
-        return "Pollution Liability"
-    elif "bond" in policy_type:
-        return "Bond"
-    elif "excess" in policy_type:
-        return "Excess"
-    elif "auto" in policy_type or "automobile" in policy_type:
-        return "Commercial Auto"
-    elif "equipment" in policy_type:
-        return "Inland Marine"
-    
-    # Default to "Other" if no match found
-    return "Other"
-
-def upload_to_ams(policy, logger):
-    """
-    Upload a policy to the AMS system via API.
-    
-    Args:
-        policy: Dictionary containing policy data
-        logger: Logger instance
-    
-    Returns:
-        bool: True if upload successful, False otherwise
-    """
-    if not AMS_API_HEADERS:
-        logger.error("AMS API headers not configured")
-        return False
-    
-    try:
-        # Prepare the payload
-        payload = {
-            "doctype": "Policy",
-            "policy_number": policy["policy_number"],
-            "effective_date": policy.get("effective_date"),
-            "expiration_date": policy.get("expiration_date"),
-            "status": policy.get("status", "Active"),
-            "premium": policy.get("premium", 0.0),
-            "broker": policy.get("broker_email", ""),  # Use broker email directly
-            "policy_type": normalize_policy_type(policy.get("policy_type")),
-            "carrier": policy.get("carrier"),
-            "commission_amount": policy.get("commission_amount", 0.0),
-            "broker_fee": policy.get("broker_fee_amount", 0.0)
-        }
-        
-        # Make API request with retry logic
-        max_retries = 3
-        retry_delay = 2  # seconds
-        
+    async def fetch_page(session: aiohttp.ClientSession, page: int, page_size: int) -> List[Dict]:
+        payload = {"doctype": doctype, "fields": fields, "limit_start": (page - 1) * page_size, "limit_page_length": page_size}
+        max_retries, retry_delay = 3, 2
         for attempt in range(max_retries):
             try:
-                response = requests.post(
-                    f"{AMS_API_URL}/policies",
-                    headers=AMS_API_HEADERS,
-                    json=payload
-                )
-                
-                if response.status_code == 201:
-                    logger.info(f"Successfully uploaded policy {policy['policy_number']}")
-                    return True
-                else:
-                    error_msg = f"Failed to upload policy {policy['policy_number']}"
-                    try:
-                        error_data = response.json()
-                        error_msg = f"{error_msg}: {error_data.get('error', 'Unknown error')}"
-                    except:
-                        error_msg = f"{error_msg}: HTTP {response.status_code}"
-                    
-                    if attempt < max_retries - 1:
-                        logger.warning(f"{error_msg}. Retrying in {retry_delay} seconds...")
-                        time.sleep(retry_delay)
-                        retry_delay *= 2
-                    else:
-                        logger.error(error_msg)
-                        return False
-            
-            except requests.exceptions.RequestException as e:
+                async with session.post(f"{AMS_API_URL}/frappe.client.get_list", json=payload, headers=AMS_API_HEADERS) as resp:
+                    resp.raise_for_status()
+                    data = await resp.json()
+                    return data.get("message", [])
+            except (aiohttp.ClientError, ValueError) as e:
                 if attempt < max_retries - 1:
-                    logger.warning(f"Request failed: {str(e)}. Retrying in {retry_delay} seconds...")
-                    time.sleep(retry_delay)
+                    logger.warning(f"Fetch failed for {doctype}, page {page}: {e}. Retrying...")
+                    await asyncio.sleep(retry_delay)
                     retry_delay *= 2
                 else:
-                    logger.error(f"Failed to upload policy after {max_retries} attempts: {str(e)}")
-                    return False
-        
+                    logger.error(f"Failed to fetch {doctype}: {e}")
+                    return []
+    
+    all_items = []
+    page, page_size = 0, 1000
+    async with aiohttp.ClientSession() as session:
+        while True:
+            page += 1
+            items = await fetch_page(session, page, page_size)
+            all_items.extend(items)
+            if len(items) < page_size:
+                break
+    
+    if all_items:
+        df = pd.DataFrame(all_items)
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        df.to_csv(cache_file, index=False)
+        logger.info(f"Fetched and cached {len(all_items)} {doctype}s")
+    
+    # For single field fetches, use the field itself as the key
+    key_field = fields[0] if len(fields) == 1 else fields[1]
+    result = {}
+    for item in all_items:
+        key = safe_key(item.get(key_field))
+        if key:  # Only add non-empty keys
+            result[key] = {k: item.get(k, 0.0) for k in fields}
+    return result
+
+def validate_policy(policy: Dict, carriers_map: Dict, logger: logging.Logger) -> bool:
+    """Validate a single policy."""
+    policy_number = str(policy.get('policy_number', '')).strip()
+    if not policy_number or policy_number.lower() in {'nan', 'none', 'null', 'refunded', 'voided', 'audit'} or 'refund' in policy_number.lower():
+        logger.debug(f"Invalid policy number: {policy_number}")
         return False
     
-    except Exception as e:
-        logger.error(f"Error uploading policy {policy.get('policy_number', 'unknown')}: {str(e)}")
+    carrier = str(policy.get('carrier', '')).strip()
+    if not carrier or carrier in NON_CARRIER_ENTRIES or CARRIER_MAPPING.get(carrier) is None:
+        logger.debug(f"Invalid or excluded carrier: {carrier}")
         return False
+    
+    policy_type = str(policy.get('policy_type', '')).strip()
+    if policy_type in NON_POLICY_TYPES or POLICY_TYPE_MAPPING.get(policy_type) is None:
+        logger.debug(f"Invalid or excluded policy type: {policy_type}")
+        return False
+    
+    if not policy.get('effective_date') or not policy.get('expiration_date'):
+        logger.debug(f"Missing dates for policy {policy_number}")
+        return False
+    
+    return True
 
-def push_to_github(logger):
-    """Push all changes to GitHub repository"""
-    try:
-        # Create a list of files to push
-        files_to_push = {
-            # Core files
-            "policy_migration.py": "policy_migration.py",
-            "README.md": "README.md",
-            "requirements.txt": "requirements.txt",
-            ".gitignore": ".gitignore",
-            "setup_env.py": "setup_env.py",
-            "init_git_repo.py": "init_git_repo.py",
+def normalize_policy_fields(policy: Dict, carriers_map: Dict, logger: logging.Logger) -> Dict:
+    """Normalize policy fields using mappings."""
+    policy['carrier'] = CARRIER_MAPPING.get(policy['carrier'], policy['carrier'])
+    policy_type = policy.get('policy_type', '')
+    if any(endors in str(policy['policy_number']).lower() for endors in ['endorsement', 'endors']):
+        policy['policy_type'] = 'Endorsement'
+    else:
+        policy['policy_type'] = POLICY_TYPE_MAPPING.get(policy_type, 'Other')
+    
+    broker = policy.get('broker', '')
+    policy['broker_email'] = BROKER_MAPPING.get(broker, None)
+    policy['broker'] = policy['broker_email']
+    
+    effective_date = datetime.strptime(policy['effective_date'], '%Y-%m-%d').date()
+    expiration_date = datetime.strptime(policy['expiration_date'], '%Y-%m-%d').date()
+    policy['effective_date'] = effective_date.strftime('%Y-%m-%d')
+    policy['expiration_date'] = expiration_date.strftime('%Y-%m-%d')
+    policy['status'] = 'Active' if expiration_date > datetime.now().date() else 'Expired'
+    
+    policy['premium'] = parse_currency(policy.get('premium', 0))
+    policy['broker_fee_amount'] = parse_currency(policy.get('broker_fee', 0))
+    policy['commission_amount'] = parse_currency(policy.get('commission', 0))
+    
+    return policy
+
+def process_policies(policies: List[Dict], carriers_map: Dict, logger: logging.Logger) -> Tuple[List[Dict], List[Dict]]:
+    """Process policies in batches with mappings."""
+    valid_policies, invalid_policies = [], []
+    unmapped = {'policy_types': set(), 'carriers': set(), 'brokers': set()}
+    
+    batch_size = 1000
+    for i in range(0, len(policies), batch_size):
+        batch = policies[i:i + batch_size]
+        logger.debug(f"Processing batch {i // batch_size + 1} ({len(batch)} policies)")
+        
+        for policy in batch:
+            if not validate_policy(policy, carriers_map, logger):
+                invalid_policies.append(policy)
+                continue
             
-            # Output files in data/reports
-            "data/reports/valid_policies.csv": os.path.join(OUTPUT_DIR, "valid_policies.csv"),
-            "data/reports/invalid_policies.csv": os.path.join(OUTPUT_DIR, "invalid_policies.csv"),
-            "data/reports/new_policies.csv": os.path.join(OUTPUT_DIR, "new_policies.csv"),
-            "data/reports/existing_policies.csv": os.path.join(OUTPUT_DIR, "existing_policies.csv"),
-            
-            # Log file
-            "logs/policy_upload_log.txt": LOG_FILE
+            try:
+                normalized_policy = normalize_policy_fields(policy.copy(), carriers_map, logger)
+                if normalized_policy['policy_type'] == 'Other':
+                    unmapped['policy_types'].add(policy['policy_type'])
+                if normalized_policy['carrier'] not in carriers_map:
+                    unmapped['carriers'].add(policy['carrier'])
+                if not normalized_policy['broker_email']:
+                    unmapped['brokers'].add(policy['broker'])
+                valid_policies.append(normalized_policy)
+            except Exception as e:
+                logger.error(f"Error normalizing policy {policy.get('policy_number', 'unknown')}: {e}")
+                invalid_policies.append(policy)
+    
+    for key, items in unmapped.items():
+        if items:
+            logger.warning(f"Unmapped {key}: {', '.join(sorted(str(i) for i in items))}")
+    
+    logger.info(f"Processed {len(valid_policies)} valid, {len(invalid_policies)} invalid policies")
+    return valid_policies, invalid_policies
+
+async def upload_to_ams(policies: List[Dict], logger: logging.Logger) -> int:
+    """Upload policies asynchronously."""
+    async def upload_one(session: aiohttp.ClientSession, policy: Dict) -> bool:
+        payload = {
+            "doctype": "Policy", "policy_number": policy["policy_number"],
+            "effective_date": policy["effective_date"], "expiration_date": policy["expiration_date"],
+            "status": policy["status"], "premium": policy["premium"], "broker": policy["broker_email"],
+            "policy_type": policy["policy_type"], "carrier": policy["carrier"],
+            "commission_amount": policy["commission_amount"], "broker_fee": policy["broker_fee_amount"]
         }
-        
-        # Create logs directory if it doesn't exist
-        os.makedirs("logs", exist_ok=True)
-        
-        # Copy log file to logs directory
-        import shutil
-        if os.path.exists(LOG_FILE):
-            shutil.copy2(LOG_FILE, "logs/policy_upload_log.txt")
-        
-        # Fixed repository name and description
-        repo_name = "insurance_policy_migration"
-        description = f"Insurance Policy Migration - Updated {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-        
-        # Push to GitHub
-        repo_url = create_github_repo(
-            repo_name=repo_name,
-            description=description,
-            files_dict=files_to_push,
-            private=False,
-            logger=logger,
-            include_all_files=True  # This will include all files in the workspace
-        )
-        
-        if repo_url:
-            logger.info(f"Successfully pushed changes to GitHub: {repo_url}")
-            return True
-        else:
-            logger.error("Failed to push changes to GitHub")
-            return False
-            
-    except Exception as e:
-        logger.error(f"Error pushing to GitHub: {str(e)}")
+        max_retries, retry_delay = 3, 2
+        for attempt in range(max_retries):
+            try:
+                async with session.post(f"{AMS_API_URL}/policies", json=payload, headers=AMS_API_HEADERS) as resp:
+                    if resp.status == 201:
+                        logger.debug(f"Uploaded {policy['policy_number']}")
+                        return True
+                    logger.warning(f"Failed {policy['policy_number']}: {resp.status}")
+            except aiohttp.ClientError as e:
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(retry_delay)
+                    retry_delay *= 2
+                else:
+                    logger.error(f"Failed {policy['policy_number']} after retries: {e}")
+                    return False
         return False
+    
+    upload_count = 0
+    async with aiohttp.ClientSession() as session:
+        tasks = [upload_one(session, policy) for policy in policies]
+        results = await asyncio.gather(*tasks)
+        upload_count = sum(results)
+    logger.info(f"Uploaded {upload_count} of {len(policies)} policies")
+    return upload_count
 
-def main():
-    """Main function"""
-    # Parse arguments
+def push_to_github(logger: logging.Logger, token: str) -> bool:
+    """Push files to GitHub dynamically."""
+    from glob import glob
+    files = {
+        "policy_migration.py": Path("policy_migration.py"),
+        **{f"data/reports/{f.name}": f for f in OUTPUT_DIR.glob("*.csv")},
+        "logs/policy_upload_log.txt": LOG_FILE
+    }
+    headers = {"Authorization": f"token {token}", "Accept": "application/vnd.github.v3+json"}
+    repo_name = "insurance_policy_migration"
+    
+    # Check if repo exists
+    resp = requests.get(f"{GITHUB_API_URL}/repos/{GITHUB_USERNAME}/{repo_name}", headers=headers)
+    if resp.status_code == 404:
+        create_resp = requests.post(f"{GITHUB_API_URL}/user/repos", headers=headers, json={"name": repo_name, "private": False})
+        if create_resp.status_code not in {200, 201}:
+            logger.error(f"Failed to create repository: {create_resp.status_code}")
+            return False
+    
+    for remote_path, local_path in files.items():
+        if not local_path.exists():
+            logger.debug(f"Skipping {local_path} (not found)")
+            continue
+            
+        try:
+            # Get current file content if it exists
+            get_resp = requests.get(f"{GITHUB_API_URL}/repos/{GITHUB_USERNAME}/{repo_name}/contents/{remote_path}", headers=headers)
+            sha = None
+            if get_resp.status_code == 200:
+                sha = get_resp.json().get('sha')
+            
+            # Read and encode new content
+            with local_path.open('rb') as f:
+                content = base64.b64encode(f.read()).decode('utf-8')
+            
+            # Prepare payload
+            payload = {
+                "message": f"Update {remote_path}",
+                "content": content,
+                "branch": "main"
+            }
+            
+            # Add SHA if updating existing file
+            if sha:
+                payload["sha"] = sha
+            
+            # Push file
+            resp = requests.put(
+                f"{GITHUB_API_URL}/repos/{GITHUB_USERNAME}/{repo_name}/contents/{remote_path}",
+                headers=headers,
+                json=payload
+            )
+            
+            if resp.status_code not in {200, 201}:
+                error_msg = resp.json().get('message', 'Unknown error')
+                logger.error(f"Failed to push {remote_path}: {resp.status_code} - {error_msg}")
+                return False
+                
+            logger.info(f"Successfully pushed {remote_path}")
+            
+        except Exception as e:
+            logger.error(f"Error pushing {remote_path}: {e}")
+            return False
+    
+    logger.info(f"Pushed files to GitHub: https://github.com/{GITHUB_USERNAME}/{repo_name}")
+    return True
+
+def setup_ams_api(args: argparse.Namespace) -> bool:
+    """Setup AMS API credentials."""
+    global AMS_API_TOKEN, AMS_API_HEADERS
+    token = args.ams_token or os.environ.get("AMS_API_TOKEN")
+    if not token:
+        logger.error("AMS API token missing")
+        return False
+    AMS_API_TOKEN = f"Token {token.strip()}" if not token.startswith("Token ") else token
+    AMS_API_HEADERS = {"Authorization": AMS_API_TOKEN, "Content-Type": "application/json"}
+    return True
+
+async def main():
     args = parse_arguments()
-    
-    # Setup logging
     logger = setup_logging()
+    logger.info("Starting Insurance Policy Migration")
     
-    # Log script start
-    logger.info("Insurance Policy Migration Script - Started")
-    logger.info(f"Dry run mode: {args.dry_run}")
+    # Initialize mappings after logger is set up
+    initialize_mappings()
     
-    # Setup AMS API token
-    if not setup_ams_api_token(args.ams_token, logger):
-        logger.error("Failed to set up AMS API token. Exiting.")
-        return None, None, None, None, None, None, None
+    if not setup_ams_api(args):
+        return
     
-    # Load CSV files
     policies = load_csv_files(logger)
+    insureds_map = await fetch_ams_data("insureds", "Insured", ["name", "insured_name", "email"], CACHE_DIR / "ams_insureds.csv", logger, not args.no_cache)
+    carriers_map = await fetch_ams_data("carriers", "Carrier", ["name", "carrier_name", "commission"], CACHE_DIR / "ams_carriers.csv", logger, not args.no_cache)
     
-    # Fetch AMS data
-    insureds_map = fetch_ams_insureds(logger, use_cache=not args.no_cache)
-    carriers_map = fetch_ams_carriers(logger, use_cache=not args.no_cache)
+    valid_policies, invalid_policies = process_policies(policies, carriers_map, logger)
+    existing_policy_numbers = await fetch_ams_data("policies", "Policy", ["policy_number"], CACHE_DIR / "ams_policies.csv", logger, not args.skip_ams_fetch and not args.no_cache)
     
-    # Fetch brokers from static mapping
-    brokers_map = fetch_close_brokers(logger)
+    new_policies = [p for p in valid_policies if p["policy_number"] not in existing_policy_numbers and p["premium"] > 0 and datetime.strptime(p["expiration_date"], '%Y-%m-%d').date() > datetime.now().date()]
+    existing_policies = [p for p in valid_policies if p["policy_number"] in existing_policy_numbers]
     
-    # Fetch existing policy numbers from AMS
-    existing_policy_numbers = set()
-    if not args.skip_ams_fetch:
-        existing_policy_numbers = fetch_ams_policies(logger, use_cache=not args.no_cache)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(valid_policies).to_csv(OUTPUT_DIR / "valid_policies.csv", index=False)
+    pd.DataFrame(invalid_policies).to_csv(OUTPUT_DIR / "invalid_policies.csv", index=False)
+    pd.DataFrame(new_policies).to_csv(OUTPUT_DIR / "new_policies.csv", index=False)
+    pd.DataFrame(existing_policies).to_csv(OUTPUT_DIR / "existing_policies.csv", index=False)
     
-    logger.info(f"Fetched {len(insureds_map)} insureds, {len(carriers_map)} carriers, {len(brokers_map)} brokers, and {len(existing_policy_numbers)} existing policies")
-    
-    # Process policies
-    valid_policies, invalid_policies = process_policies(policies, carriers_map, brokers_map, logger)
-    
-    # Split valid policies into new and existing
-    new_policies = []
-    existing_policies = []
-    
-    for policy in valid_policies:
-        policy_number = policy.get("policy_number", "").strip()
-        if policy_number in existing_policy_numbers:
-            existing_policies.append(policy)
-        else:
-            new_policies.append(policy)
-    
-    # Log results
-    logger.info(f"Successfully processed {len(policies)} total policies")
-    logger.info(f"Valid policies for upload: {len(valid_policies)}")
-    logger.info(f"New policies for upload: {len(new_policies)}")
-    logger.info(f"Existing policies in AMS: {len(existing_policies)}")
-    logger.info(f"Invalid policies for review: {len(invalid_policies)}")
-    
-    # Print sample policies
-    if valid_policies:
-        logger.info(f"Sample valid policy: {json.dumps(valid_policies[0], indent=2)}")
-    if invalid_policies:
-        logger.info(f"Sample invalid policy: {json.dumps(invalid_policies[0], indent=2)}")
-    
-    # Save policies to CSV files
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    valid_policies_file = os.path.join(OUTPUT_DIR, "valid_policies.csv")
-    invalid_policies_file = os.path.join(OUTPUT_DIR, "invalid_policies.csv")
-    new_policies_file = os.path.join(OUTPUT_DIR, "new_policies.csv")
-    existing_policies_file = os.path.join(OUTPUT_DIR, "existing_policies.csv")
-    
-    save_policies_to_csv(valid_policies, valid_policies_file, logger)
-    save_policies_to_csv(invalid_policies, invalid_policies_file, logger)
-    save_policies_to_csv(new_policies, new_policies_file, logger)
-    save_policies_to_csv(existing_policies, existing_policies_file, logger)
-    
-    # Upload new policies to AMS if not in dry run mode
     if not args.dry_run:
-        logger.info("Uploading new policies to AMS...")
-        upload_count = 0
-        for policy in new_policies:
-            if upload_to_ams(policy, logger):
-                upload_count += 1
-        logger.info(f"Successfully uploaded {upload_count} out of {len(new_policies)} new policies to AMS")
+        await upload_to_ams(new_policies, logger)
     
-    # Push changes to GitHub
-    push_to_github(logger)
+    # Only push to GitHub if we have a token
+    github_token = args.github_token or GITHUB_TOKEN
+    if github_token:
+        push_to_github(logger, github_token)
+    else:
+        logger.info("Skipping GitHub push - no token provided")
     
-    logger.info("Insurance Policy Migration Script - Completed")
-    return valid_policies, invalid_policies, new_policies, existing_policies, insureds_map, carriers_map, brokers_map
+    logger.info("Migration completed")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
