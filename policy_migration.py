@@ -214,9 +214,10 @@ def load_csv_files(logger: logging.Logger) -> List[Dict]:
                 )
                 mapped_df = mapped_df.dropna(subset=['effective_date'])
             
-            for col in ['broker_fee', 'commission', 'premium']:
+            # Only parse broker_fee and commission, leave premium for later
+            for col in ['broker_fee', 'commission']:
                 if col in mapped_df:
-                    mapped_df[f"{col}_amount" if col != 'premium' else col] = mapped_df[col].apply(parse_currency)
+                    mapped_df[f"{col}_amount"] = mapped_df[col].apply(parse_currency)
             
             file_policies = mapped_df.to_dict('records')
             for policy in file_policies:
@@ -410,9 +411,14 @@ def normalize_policy_fields(policy: Dict, carriers_map: Dict, logger: logging.Lo
     policy['expiration_date'] = expiration_date.strftime('%Y-%m-%d')
     policy['status'] = 'Active' if expiration_date > datetime.now().date() else 'Expired'
     
-    policy['premium'] = parse_currency(policy.get('premium', 0))
+    # Calculate premium and commission based on carrier mapping
+    raw_premium = parse_currency(policy.get('premium', 0))
+    carrier_commission = carriers_map.get(policy['carrier'], {}).get('commission', 0.0)
+    
+    # Calculate commission based on carrier rate
+    policy['commission_amount'] = raw_premium * (carrier_commission / 100.0) if carrier_commission else 0.0
+    policy['premium'] = raw_premium
     policy['broker_fee_amount'] = parse_currency(policy.get('broker_fee', 0))
-    policy['commission_amount'] = parse_currency(policy.get('commission', 0))
     
     return policy
 
