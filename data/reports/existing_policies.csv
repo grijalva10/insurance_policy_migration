@@ -9,6 +9,7 @@ policy_number,effective_date,broker_fee,commission,broker,policy_type,carrier,ex
 976896474,2024-01-27,$500.00,$0.00,grey@jmgia.com,Commercial Auto,Progressive,2025-01-27,500.0,0.0,Sales Epay 2024 - Sheet1.csv,grey@jmgia.com,Expired,0.0
 2089365,2024-01-30,$320.65,$0.00,randall@jmgia.com,Workers Compensation,Texas Mutual,2025-01-30,320.65,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
 100615136,2024-02-02,$150.00,$0.00,randall@jmgia.com,Bond,Bonds Express,2025-02-02,150.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
+2605 3710,2024-02-06,$400.00,$0.00,mike@jmgia.com,Workers Compensation,NYSIF,2025-02-06,400.0,0.0,Sales Epay 2024 - Sheet1.csv,mike@jmgia.com,Expired,0.0
 66525262,2024-02-08,$200.00,$0.00,randall@jmgia.com,Bond,Bonds Express,2025-02-08,200.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
 2058982,2024-02-09,$300.00,$0.00,randall@jmgia.com,Workers Compensation,Texas Mutual,2025-02-09,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Expired,0.0
 2106352,2024-02-14,$300.28,$0.00,chelsea@jmgia.com,Workers Compensation,Texas Mutual,2025-02-14,300.28,0.0,Sales Epay 2024 - Sheet1.csv,chelsea@jmgia.com,Expired,0.0
@@ -85,6 +86,7 @@ policy_number,effective_date,broker_fee,commission,broker,policy_type,carrier,ex
 67058660,2024-05-15,$200.00,$38.00,randall@jmgia.com,Bond,Simple Bonds,2025-05-15,200.0,38.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
 2110920,2024-05-16,$520.00,$0.00,eduardo@jmgia.com,Workers Compensation,Texas Mutual,2025-05-16,520.0,0.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
 67062042,2024-05-17,$200.00,$38.00,randall@jmgia.com,Bond,Simple Bonds,2025-05-17,200.0,38.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
+0100301983-0,2024-05-20,"$5,822.00","$5,000.00",eduardo@jmgia.com,General Liability,Appalachian Insurance Company,2025-05-20,5822.0,5000.0,Sales Epay 2024 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
 2093714,2024-05-20,$300.00,$0.00,randall@jmgia.com,Workers Compensation,Texas Mutual,2025-05-20,300.0,0.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
 67070654,2024-05-21,$200.00,$30.00,randall@jmgia.com,Bond,Simple Bonds,2025-05-21,200.0,30.0,Sales Epay 2024 - Sheet1.csv,randall@jmgia.com,Active,0.0
 981579461,2024-05-21,$300.00,$0.00,justin@jmgia.com,Commercial Auto,Bolt Insurance,2025-05-21,300.0,0.0,Sales Epay 2024 - Sheet1.csv,justin@jmgia.com,Active,0.0
@@ -231,6 +233,7 @@ policy_number,effective_date,broker_fee,commission,broker,policy_type,carrier,ex
 67320038,2025-01-14,$100.00,$34.00,chelsea@jmgia.com,Bond,Simple Bonds,2026-01-14,100.0,34.0,Sales Epay 2025 - Sheet1.csv,chelsea@jmgia.com,Active,0.0
 67323401,2025-01-17,$100.00,$23.00,eduardo@jmgia.com,Bond,Simple Bonds,2026-01-17,100.0,23.0,Sales Epay 2025 - Sheet1.csv,eduardo@jmgia.com,Active,0.0
 992012633,2025-01-17,$300.00,$0.00,grey@jmgia.com,Commercial Auto,Progressive,2026-01-17,300.0,0.0,Sales Epay 2025 - Sheet1.csv,grey@jmgia.com,Active,0.0
+0100347354-0,2025-01-21,$800.00,$500.00,clint@jmgia.com,General Liability,Appalachian Insurance Company,2026-01-21,800.0,500.0,Sales Epay 2025 - Sheet1.csv,clint@jmgia.com,Active,0.0
 0100347512-0,2025-01-21,$500.00,$259.90,clint@jmgia.com,Excess,Appalachian Insurance Company,2026-01-21,500.0,259.9,Sales Epay 2025 - Sheet1.csv,clint@jmgia.com,Active,0.0
 1000627789251,2025-01-22,$300.00,$0.00,mike@jmgia.com,General Liability,Btis,2026-01-22,300.0,0.0,Sales Epay 2025 - Sheet1.csv,mike@jmgia.com,Active,0.0
 0100346681-0,2025-01-22,$600.00,$525.00,mike@jmgia.com,General Liability,Appalachian Insurance Company,2026-01-22,600.0,525.0,Sales Epay 2025 - Sheet1.csv,mike@jmgia.com,Active,0.0
