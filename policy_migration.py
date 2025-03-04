@@ -396,6 +396,9 @@ def process_policies(policies: List[Dict], carriers_map: Dict, logger: logging.L
         try:
             normalized = normalize_policy_fields(policy.copy(), carriers_map, logger)
             
+            # Clean policy number for logging
+            policy_number = str(policy.get('policy_number', '')).strip().replace('\u200b', '')
+            
             # Log all mapping checks for debugging
             original_broker = policy.get('broker', '')
             cleaned_broker = clean_value(original_broker, field_type='broker')
@@ -409,7 +412,7 @@ def process_policies(policies: List[Dict], carriers_map: Dict, logger: logging.L
             cleaned_policy_type = clean_value(original_policy_type)
             mapped_policy_type = POLICY_TYPE_MAPPING.get(cleaned_policy_type)
             
-            logger.debug(f"Mapping checks for policy {policy.get('policy_number', 'unknown')}:")
+            logger.debug(f"Mapping checks for policy {policy_number}:")
             logger.debug(f"  Broker: Original='{original_broker}', Cleaned='{cleaned_broker}', Mapped='{mapped_broker}'")
             logger.debug(f"  Carrier: Original='{original_carrier}', Cleaned='{cleaned_carrier}', Mapped='{mapped_carrier}'")
             logger.debug(f"  Policy Type: Original='{original_policy_type}', Cleaned='{cleaned_policy_type}', Mapped='{mapped_policy_type}'")
