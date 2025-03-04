@@ -1,26 +1,37 @@
 # Insurance Policy Migration
 
-This script migrates insurance policy data from CSV files to an AMS (Agency Management System) via a Frappe API.
+This project migrates insurance policy data from CSV files to an AMS (Agency Management System) via a Frappe API.
 
 ## Project Structure
 
 ```
 insurance_policy_migration/
+├── src/
+│   └── insurance_migration/
+│       ├── __init__.py
+│       ├── __main__.py           # Entry point
+│       ├── ams_client.py         # AMS API client
+│       ├── data_loader.py        # CSV loading and transformation
+│       ├── policy_processor.py   # Policy processing logic
+│       ├── mapping_manager.py    # Mapping file handling
+│       ├── logger.py             # Logging configuration
+│       └── github_sync.py        # GitHub integration
 ├── data/
-│   ├── input/      # Place CSV files here for processing
-│   ├── cache/      # Temporary cache files
-│   └── reports/    # Generated report files
-├── policy_migration.py    # Main script
-├── setup_env.py          # Environment setup script
-├── init_git_repo.py      # Git repository initialization
-├── requirements.txt      # Python dependencies
-├── policy_upload_log.txt # Processing log
-└── .gitignore           # Git ignore rules
+│   ├── input/                    # Place CSV files here for processing
+│   ├── cache/                    # Temporary cache files
+│   ├── reports/                  # Generated report files
+│   └── mappings/                 # Mapping files
+├── logs/                         # Log files
+├── setup.py                      # Package configuration
+├── run_migration.py              # Simple entry point script
+├── recover_mappings.py           # Script to recover mapping data
+├── requirements.txt              # Python dependencies
+└── .gitignore                    # Git ignore rules
 ```
 
 ## Prerequisites
 
-- Python 3.7+
+- Python 3.8+
 - Git
 - AMS API access token
 - GitHub token (for repository management)
@@ -46,9 +57,20 @@ insurance_policy_migration/
    pip install -r requirements.txt
    ```
 
-4. Set up environment variables:
+4. Install the package in development mode:
    ```bash
-   python setup_env.py
+   pip install -e .
+   ```
+
+5. Set up environment variables:
+   ```bash
+   # Linux/Mac
+   export AMS_API_URL="https://ams.jmggo.com/api/method"
+   export AMS_API_TOKEN="your-token-here"
+   
+   # Windows
+   set AMS_API_URL=https://ams.jmggo.com/api/method
+   set AMS_API_TOKEN=your-token-here
    ```
 
 ## Usage
@@ -57,7 +79,12 @@ insurance_policy_migration/
 
 2. Run the script:
    ```bash
-   python policy_migration.py [options]
+   python run_migration.py [options]
+   ```
+
+   Or use the package entry point:
+   ```bash
+   python -m src.insurance_migration [options]
    ```
 
    Options:
@@ -72,7 +99,31 @@ insurance_policy_migration/
    - Invalid policies: `data/reports/invalid_policies.csv`
    - New policies: `data/reports/new_policies.csv`
    - Existing policies: `data/reports/existing_policies.csv`
-   - Processing log: `policy_upload_log.txt`
+   - Processing log: `logs/policy_upload_log.txt`
+
+## Mapping Files
+
+The project uses several mapping files to standardize data:
+
+1. **Carrier Mappings** (`data/mappings/carrier_mapping.json`):
+   - Maps carrier names to standardized values
+
+2. **Policy Type Mappings** (`data/mappings/policy_type_mapping.json`):
+   - Maps policy types to standardized values
+
+3. **Broker Mappings** (`data/mappings/broker_mapping.json`):
+   - Maps broker names to email addresses
+
+4. **Exclusion Mappings** (`data/mappings/exclusion_mapping.json`):
+   - Lists values that should be excluded from processing
+
+5. **Unmatched Values** (`data/mappings/unmatched_values.json`):
+   - Tracks values that couldn't be mapped for future improvement
+
+If mapping files are missing or corrupted, you can recover them using:
+```bash
+python recover_mappings.py
+```
 
 ## Policy Type Mapping
 
