@@ -343,7 +343,7 @@ def clean_value(value: str, field_type: str = 'default') -> str:
 
 def validate_policy(policy: Dict, carriers_map: Dict, logger: logging.Logger) -> bool:
     """Validate a single policy."""
-    policy_number = str(policy.get('policy_number', '')).strip()
+    policy_number = clean_policy_number(policy.get('policy_number', ''))
     # Allow endorsement variations as valid policy numbers
     if policy_number.lower() in {'endorsement', 'endorsements', 'limits endorsement'}:
         policy_number = 'Endorsement'  # Standardize to "Endorsement"
@@ -377,7 +377,7 @@ def normalize_policy_fields(policy: Dict, carriers_map: Dict, logger: logging.Lo
     policy['carrier'] = CARRIER_MAPPING.get(carrier, carrier)
     
     # Handle endorsement variations
-    policy_number = str(policy['policy_number']).strip()
+    policy_number = clean_policy_number(policy['policy_number'])
     if policy_number.lower() in {'endorsement', 'endorsements', 'limits endorsement'}:
         policy['policy_number'] = 'Endorsement'
         policy['policy_type'] = 'Endorsement'
@@ -614,6 +614,13 @@ def setup_ams_api(args: argparse.Namespace) -> bool:
     AMS_API_HEADERS = {"Authorization": AMS_API_TOKEN, "Content-Type": "application/json"}
     return True
 
+def clean_policy_number(policy_number: str) -> str:
+    """Clean policy number by removing zero-width spaces and other special characters."""
+    if not policy_number:
+        return ""
+    # Convert to string and remove zero-width spaces and other special characters
+    return str(policy_number).replace('\u200b', '').strip()
+
 async def main():
     args = parse_arguments()
     logger = setup_logging()
@@ -645,7 +652,8 @@ async def main():
     if valid_policies:
         logger.info("Sample of valid policies:")
         for p in valid_policies[:5]:
-            logger.info(f"Policy: {p['policy_number']}, Premium: {p['premium']}, Type: {p['policy_type']}")
+            clean_number = clean_policy_number(p['policy_number'])
+            logger.info(f"Policy: {clean_number}, Premium: {p['premium']}, Type: {p['policy_type']}")
     
     # Categorize policies with detailed logging
     now = datetime.now().date()
@@ -653,7 +661,7 @@ async def main():
     existing_policies = []
     
     for policy in valid_policies:
-        policy_number = policy["policy_number"]
+        policy_number = clean_policy_number(policy["policy_number"])
         premium = policy["premium"]
         is_existing = policy_number in existing_policy_numbers
         
