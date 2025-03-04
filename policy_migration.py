@@ -285,7 +285,7 @@ async def fetch_ams_data(endpoint: str, doctype: str, fields: List[str], cache_f
             result[key] = {k: item.get(k, 0.0) for k in fields}
     return result
 
-def clean_value(value: str) -> str:
+def clean_value(value: str, field_type: str = 'default') -> str:
     """Clean and normalize a value for mapping lookup."""
     if not value or pd.isna(value):
         return ""
@@ -293,6 +293,14 @@ def clean_value(value: str) -> str:
     # Convert to string and clean
     value = str(value).strip()
     
+    # Special handling for broker names
+    if field_type == 'broker':
+        # For brokers, we want to preserve the original format
+        # Just remove extra whitespace and normalize case
+        value = ' '.join(word.capitalize() for word in value.split())
+        return value.strip()
+    
+    # Default cleaning for other fields
     # Remove all types of whitespace and normalize to single space
     value = ' '.join(value.split())
     
@@ -351,7 +359,7 @@ def normalize_policy_fields(policy: Dict, carriers_map: Dict, logger: logging.Lo
     # Clean values before mapping
     carrier = clean_value(policy.get('carrier', ''))
     policy_type = clean_value(policy.get('policy_type', ''))
-    broker = clean_value(policy.get('broker', ''))
+    broker = clean_value(policy.get('broker', ''), field_type='broker')  # Use special broker cleaning
     
     policy['carrier'] = CARRIER_MAPPING.get(carrier, carrier)
     
