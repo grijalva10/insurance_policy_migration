@@ -626,8 +626,7 @@ async def main():
     new_policies = [
         p for p in valid_policies 
         if p["policy_number"] not in existing_policy_numbers 
-        and p["premium"] > 0 
-        and datetime.strptime(p["expiration_date"], '%Y-%m-%d').date() > now
+        and p["premium"] > 0
     ]
     existing_policies = [p for p in valid_policies if p["policy_number"] in existing_policy_numbers]
     
