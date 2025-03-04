@@ -48,55 +48,31 @@ NON_POLICY_TYPES = None
 NON_CARRIER_ENTRIES = None
 
 def load_mappings() -> Tuple[Dict[str, str], Dict[str, str], Dict[str, str], Set[str], Set[str]]:
-    """Load mapping files and exclusion sets with validation."""
+    """Load all mapping files and exclusion sets."""
+    mapping_files = {
+        'broker': 'broker_mapping.json',
+        'carrier': 'carrier_mapping.json',
+        'policy_type': 'policy_type_mapping.json',
+        'exclusion': 'exclusion_mapping.json'
+    }
+    
     try:
-        # Load broker mapping
-        broker_path = MAPPINGS_DIR / "broker_mapping.json"
-        if not broker_path.exists():
-            logger.error(f"Broker mapping file {broker_path} not found")
-            return {}, {}, {}, set(), set()
-        with broker_path.open('r') as f:
-            broker_mapping = json.load(f)
-            
-        # Load carrier mapping
-        carrier_path = MAPPINGS_DIR / "carrier_mapping.json"
-        if not carrier_path.exists():
-            logger.error(f"Carrier mapping file {carrier_path} not found")
-            return {}, {}, {}, set(), set()
-        with carrier_path.open('r') as f:
-            carrier_mapping = json.load(f)
-            
-        # Load policy type mapping
-        policy_type_path = MAPPINGS_DIR / "policy_type_mapping.json"
-        if not policy_type_path.exists():
-            logger.error(f"Policy type mapping file {policy_type_path} not found")
-            return {}, {}, {}, set(), set()
-        with policy_type_path.open('r') as f:
-            policy_type_mapping = json.load(f)
-            
-        # Exclusion sets from mapping script
-        NON_POLICY_TYPES = {
-            "2nd Payment", "2nd payment", "3rd payment", "Additional Broker Fee", "Additional Premium",
-            "Audit Payment", "Broker Fee", "Declined", "Full Refund", "Full refund", "GL 2nd Payment",
-            "GL 2nd Paymnet", "GL Monthly Payment", "GL+Excess 2nd payment", "Monthly Payment",
-            "Partial refund", "Payment Declined", "Payment disputed", "Payment to carrier", "Redunded",
-            "Refund", "Refunded", "VOIDED", "Voided", "new GL 2nd payment", "October Installment",
-            "Payment to Carrier", "Second Payment", "Second payment"
-        }
-        NON_CARRIER_ENTRIES = {
-            "2nd Payment", "2nd payment", "3rd payment", "Additional Broker Fee", "Additional Premium",
-            "Audit Payment", "Broker Fee", "Declined", "Full Refund", "Full refund", "Monthly Payment",
-            "Monthly payment", "October Installment", "Partial refund", "Payment Declined",
-            "Payment disputed", "Payment to Carrier", "Payment to carrier", "Refund", "Refunded",
-            "Second Payment", "Second payment", "VOIDED", "Voided"
-        }
+        mappings = {}
+        for key, filename in mapping_files.items():
+            path = MAPPINGS_DIR / filename
+            if not path.exists():
+                logger.error(f"Mapping file {path} not found")
+                return {}, {}, {}, set(), set()
+            with path.open('r') as f:
+                mappings[key] = json.load(f)
         
-        logger.info(f"Loaded mappings: {len(broker_mapping)} brokers, {len(carrier_mapping)} carriers, {len(policy_type_mapping)} policy types")
-        return broker_mapping, carrier_mapping, policy_type_mapping, NON_POLICY_TYPES, NON_CARRIER_ENTRIES
+        # Extract exclusion sets
+        non_policy_types = set(mappings['exclusion'].get('non_policy_types', []))
+        non_carrier_entries = set(mappings['exclusion'].get('non_carrier_entries', []))
         
-    except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse mapping file: {e}")
-        return {}, {}, {}, set(), set()
+        logger.info(f"Loaded mappings: {len(mappings['broker'])} brokers, {len(mappings['carrier'])} carriers, {len(mappings['policy_type'])} policy types")
+        return mappings['broker'], mappings['carrier'], mappings['policy_type'], non_policy_types, non_carrier_entries
+        
     except Exception as e:
         logger.error(f"Error loading mappings: {e}")
         return {}, {}, {}, set(), set()
@@ -358,29 +334,51 @@ def process_policies(policies: List[Dict], carriers_map: Dict, logger: logging.L
     valid_policies, invalid_policies = [], []
     unmapped = {'policy_types': set(), 'carriers': set(), 'brokers': set()}
     
-    batch_size = 1000
-    for i in range(0, len(policies), batch_size):
-        batch = policies[i:i + batch_size]
-        logger.debug(f"Processing batch {i // batch_size + 1} ({len(batch)} policies)")
-        
+    def process_policy(policy: Dict) -> Optional[Dict]:
+        if not validate_policy(policy, carriers_map, logger):
+            return None
+        try:
+            normalized = normalize_policy_fields(policy.copy(), carriers_map, logger)
+            if normalized['policy_type'] == 'Other':
+                unmapped['policy_types'].add(policy['policy_type'])
+            if normalized['carrier'] not in carriers_map:
+                unmapped['carriers'].add(policy['carrier'])
+            if not normalized['broker_email']:
+                unmapped['brokers'].add(policy['broker'])
+            return normalized
+        except Exception as e:
+            logger.error(f"Error normalizing policy {policy.get('policy_number', 'unknown')}: {e}")
+            return None
+    
+    # Process policies in batches
+    for i in range(0, len(policies), 1000):
+        batch = policies[i:i + 1000]
+        logger.debug(f"Processing batch {i // 1000 + 1} ({len(batch)} policies)")
         for policy in batch:
-            if not validate_policy(policy, carriers_map, logger):
-                invalid_policies.append(policy)
-                continue
-            
-            try:
-                normalized_policy = normalize_policy_fields(policy.copy(), carriers_map, logger)
-                if normalized_policy['policy_type'] == 'Other':
-                    unmapped['policy_types'].add(policy['policy_type'])
-                if normalized_policy['carrier'] not in carriers_map:
-                    unmapped['carriers'].add(policy['carrier'])
-                if not normalized_policy['broker_email']:
-                    unmapped['brokers'].add(policy['broker'])
-                valid_policies.append(normalized_policy)
-            except Exception as e:
-                logger.error(f"Error normalizing policy {policy.get('policy_number', 'unknown')}: {e}")
+            if normalized := process_policy(policy):
+                valid_policies.append(normalized)
+            else:
                 invalid_policies.append(policy)
     
+    # Update unmatched values
+    try:
+        unmatched_path = MAPPINGS_DIR / "unmatched_values.json"
+        existing = {}
+        if unmatched_path.exists():
+            with unmatched_path.open('r') as f:
+                existing = json.load(f)
+        
+        # Merge new unmapped values
+        for category, values in unmapped.items():
+            existing[category] = sorted(list(set(existing.get(category, []) + list(values))))
+        
+        with unmatched_path.open('w') as f:
+            json.dump(existing, f, indent=4)
+        logger.info(f"Updated unmatched values in {unmatched_path}")
+    except Exception as e:
+        logger.error(f"Failed to save unmatched values: {e}")
+    
+    # Log unmapped values
     for key, items in unmapped.items():
         if items:
             logger.warning(f"Unmapped {key}: {', '.join(sorted(str(i) for i in items))}")
@@ -506,34 +504,49 @@ async def main():
     logger = setup_logging()
     logger.info("Starting Insurance Policy Migration")
     
-    # Initialize mappings after logger is set up
+    # Initialize and setup
     initialize_mappings()
-    
     if not setup_ams_api(args):
         return
     
+    # Load and process data
     policies = load_csv_files(logger)
-    insureds_map = await fetch_ams_data("insureds", "Insured", ["name", "insured_name", "email"], CACHE_DIR / "ams_insureds.csv", logger, not args.no_cache)
-    carriers_map = await fetch_ams_data("carriers", "Carrier", ["name", "carrier_name", "commission"], CACHE_DIR / "ams_carriers.csv", logger, not args.no_cache)
+    carriers_map = await fetch_ams_data("carriers", "Carrier", ["name", "carrier_name", "commission"], 
+                                      CACHE_DIR / "ams_carriers.csv", logger, not args.no_cache)
     
     valid_policies, invalid_policies = process_policies(policies, carriers_map, logger)
-    existing_policy_numbers = await fetch_ams_data("policies", "Policy", ["policy_number"], CACHE_DIR / "ams_policies.csv", logger, not args.skip_ams_fetch and not args.no_cache)
     
-    new_policies = [p for p in valid_policies if p["policy_number"] not in existing_policy_numbers and p["premium"] > 0 and datetime.strptime(p["expiration_date"], '%Y-%m-%d').date() > datetime.now().date()]
+    # Get existing policies if needed
+    existing_policy_numbers = {}
+    if not args.skip_ams_fetch and not args.no_cache:
+        existing_policy_numbers = await fetch_ams_data("policies", "Policy", ["policy_number"], 
+                                                     CACHE_DIR / "ams_policies.csv", logger, True)
+    
+    # Categorize policies
+    now = datetime.now().date()
+    new_policies = [
+        p for p in valid_policies 
+        if p["policy_number"] not in existing_policy_numbers 
+        and p["premium"] > 0 
+        and datetime.strptime(p["expiration_date"], '%Y-%m-%d').date() > now
+    ]
     existing_policies = [p for p in valid_policies if p["policy_number"] in existing_policy_numbers]
     
+    # Save reports
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(valid_policies).to_csv(OUTPUT_DIR / "valid_policies.csv", index=False)
-    pd.DataFrame(invalid_policies).to_csv(OUTPUT_DIR / "invalid_policies.csv", index=False)
-    pd.DataFrame(new_policies).to_csv(OUTPUT_DIR / "new_policies.csv", index=False)
-    pd.DataFrame(existing_policies).to_csv(OUTPUT_DIR / "existing_policies.csv", index=False)
+    for name, data in [
+        ("valid_policies", valid_policies),
+        ("invalid_policies", invalid_policies),
+        ("new_policies", new_policies),
+        ("existing_policies", existing_policies)
+    ]:
+        pd.DataFrame(data).to_csv(OUTPUT_DIR / f"{name}.csv", index=False)
     
+    # Upload and push to GitHub if needed
     if not args.dry_run:
         await upload_to_ams(new_policies, logger)
     
-    # Only push to GitHub if we have a token
-    github_token = args.github_token or GITHUB_TOKEN
-    if github_token:
+    if github_token := (args.github_token or GITHUB_TOKEN):
         push_to_github(logger, github_token)
     else:
         logger.info("Skipping GitHub push - no token provided")
