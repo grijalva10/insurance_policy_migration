@@ -298,7 +298,7 @@ def clean_value(value: str) -> str:
     value = re.sub(r'\s*\(.*?\)', '', value)  # Remove parenthetical text
     value = re.sub(r'\s*,\s*.*$', '', value)  # Remove everything after comma
     
-    # Remove leading/trailing special characters
+    # Remove ALL whitespace and special characters from start and end
     value = re.sub(r'^[\s\-_\.]+|[\s\-_\.]+$', '', value)
     
     # Normalize common variations
@@ -311,7 +311,13 @@ def clean_value(value: str) -> str:
     # Remove any remaining multiple spaces
     value = re.sub(r'\s+', ' ', value)
     
-    return value.strip()
+    # Final strip to ensure no whitespace remains
+    value = value.strip()
+    
+    # Log the cleaning process for debugging
+    logger.debug(f"Cleaned value: '{value}'")
+    
+    return value
 
 def validate_policy(policy: Dict, carriers_map: Dict, logger: logging.Logger) -> bool:
     """Validate a single policy."""
