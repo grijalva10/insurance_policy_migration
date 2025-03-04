@@ -1,0 +1,15 @@
+README.md
+setup.py
+src/insurance_migration/__init__.py
+src/insurance_migration/__main__.py
+src/insurance_migration/ams_client.py
+src/insurance_migration/data_loader.py
+src/insurance_migration/github_sync.py
+src/insurance_migration/logger.py
+src/insurance_migration/policy_processor.py
+src/insurance_policy_migration.egg-info/PKG-INFO
+src/insurance_policy_migration.egg-info/SOURCES.txt
+src/insurance_policy_migration.egg-info/dependency_links.txt
+src/insurance_policy_migration.egg-info/entry_points.txt
+src/insurance_policy_migration.egg-info/requires.txt
+src/insurance_policy_migration.egg-info/top_level.txt
