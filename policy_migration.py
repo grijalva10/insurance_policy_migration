@@ -422,10 +422,12 @@ def normalize_policy_fields(policy: Dict, carriers_map: Dict, logger: logging.Lo
     
     # Log the premium calculation for debugging
     logger.debug(f"Premium calculation for policy {policy_number}:")
-    logger.debug(f"  Raw premium: {raw_premium}")
+    logger.debug(f"  Raw premium from input: {policy.get('premium', 0)}")
+    logger.debug(f"  Parsed premium: {raw_premium}")
     logger.debug(f"  Carrier: {policy['carrier']}")
     logger.debug(f"  Carrier commission rate: {carrier_commission}%")
     logger.debug(f"  Calculated commission: {policy['commission_amount']}")
+    logger.debug(f"  Final premium value: {policy['premium']}")
     
     return policy
 
