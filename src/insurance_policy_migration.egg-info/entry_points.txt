@@ -1,0 +1,2 @@
+[console_scripts]
+migrate-policies = insurance_migration.__main__:main
